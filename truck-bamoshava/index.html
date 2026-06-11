@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>טראק במושבה — קפה ומעדנים בלחם | בת שלמה וכרם מהר"ל</title>
-<meta name="description" content="טראק במושבה — רשת עגלות קפה. קרואסנדוויצ'ים, לחם רוסטיק, סלטים, פיצות מהטאבון, קפה משובח וגלידה. סניפים בבת שלמה ובכרם מהר״ל.">
+<title>טראק במושבה | קפה ומעדנים בלחם | בת שלמה וכרם מהר"ל</title>
+<meta name="description" content="טראק במושבה היא רשת עגלות קפה עם סניפים בבת שלמה ובכרם מהר״ל. קרואסנדוויצ'ים, לחם רוסטיק, סלטים, פיצות, קפה וגלידה.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -103,12 +103,7 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.2;margin:0;color:var(--in
 }
 .hero-inner{position:relative;z-index:1;max-width:760px;padding-inline:20px;margin:auto}
 .hero-logo{width:min(400px,66vw);margin-inline:auto}
-.hero-kicker{
-  display:inline-flex;align-items:center;gap:10px;margin-top:6px;
-  color:var(--sage-dark);font-weight:700;letter-spacing:.14em;font-size:.85rem;
-}
-.hero-kicker::before,.hero-kicker::after{content:"";width:34px;height:1px;background:var(--sage)}
-.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:900;margin-top:10px}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:900;margin-top:18px}
 .hero p.lead{font-size:clamp(1.05rem,2.4vw,1.3rem);color:var(--ink-soft);max-width:34em;margin:14px auto 0}
 .hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:30px}
 .btn{
@@ -134,41 +129,21 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.2;margin:0;color:var(--in
 .status-chip.open .status-dot{background:#4C8A4F;box-shadow:0 0 0 4px rgba(76,138,79,.15)}
 .status-chip.open strong{color:#36673A}
 .status-chip strong{color:var(--ink);font-weight:700}
-.scroll-hint{
-  position:absolute;bottom:26px;inset-inline:0;display:flex;justify-content:center;z-index:1;
-  color:var(--sage-dark);
-}
-.scroll-hint svg{animation:floaty 2.4s var(--ease-out) infinite}
-@keyframes floaty{0%,100%{transform:translateY(0);opacity:.85}50%{transform:translateY(8px);opacity:.4}}
 
 /* ============ Sections ============ */
 section{padding:clamp(64px,9vw,110px) 0;position:relative}
 .section-head{text-align:center;max-width:640px;margin:0 auto clamp(36px,5vw,56px)}
-.eyebrow{
-  display:inline-flex;align-items:center;gap:10px;color:var(--sage-dark);
-  font-weight:700;letter-spacing:.16em;font-size:.8rem;text-transform:uppercase;
-}
-.eyebrow svg{flex:none}
-.section-head h2{font-size:clamp(1.8rem,4.4vw,2.6rem);font-weight:900;margin-top:10px}
+.section-head h2{font-size:clamp(1.8rem,4.4vw,2.6rem);font-weight:900}
 .section-head p{color:var(--ink-soft);margin:12px auto 0;max-width:36em}
-.leaf-divider{display:flex;justify-content:center;margin:6px 0 0;color:var(--sage)}
+.section-head.start{text-align:start;margin-inline:0}
+.section-head.start p{margin-inline:0}
 
 /* ============ Story strip ============ */
 .story{background:var(--bg-deep);border-block:1px solid var(--line)}
-.story-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,32px)}
-.story-card{
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-  padding:30px 26px;text-align:center;box-shadow:var(--shadow-1);
-  transition:transform var(--dur-2) var(--ease-out),box-shadow var(--dur-2);
-}
-.story-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-2)}
-.story-icon{
-  width:58px;height:58px;border-radius:50%;background:rgba(121,165,167,.16);
-  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--sage-dark);
-}
-.story-card h3{font-size:1.25rem;font-weight:700}
-.story-card p{color:var(--ink-soft);margin:10px 0 0;font-size:.98rem}
-@media (max-width:760px){.story-grid{grid-template-columns:1fr}}
+.story-inner{max-width:660px}
+.story-inner h2{font-size:clamp(1.8rem,4.4vw,2.5rem);font-weight:900}
+.story-inner p{color:var(--ink-soft);font-size:1.08rem;margin:18px 0 0;max-width:38em}
+.story-inner p:first-of-type{margin-top:22px}
 
 /* ============ Menu ============ */
 .menu-nav{
@@ -242,16 +217,15 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 .hours-note strong{color:var(--ink)}
 
 /* ============ Contact ============ */
-.contact-cards{display:flex;justify-content:center;gap:clamp(14px,2.5vw,24px);flex-wrap:wrap}
-.contact-card{
-  display:flex;align-items:center;gap:14px;background:var(--surface);
-  border:1px solid var(--line);border-radius:var(--radius);padding:20px 28px;
-  text-decoration:none;color:var(--ink);font-weight:700;box-shadow:var(--shadow-1);min-height:64px;
-  transition:transform var(--dur-2) var(--ease-out),box-shadow var(--dur-2),border-color var(--dur-2);
+.social-row{display:flex;justify-content:center;gap:clamp(24px,5vw,56px);flex-wrap:wrap}
+.social-row a{
+  display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);
+  font-family:var(--font-head);font-weight:700;font-size:clamp(1.2rem,2.6vw,1.5rem);
+  padding:10px 4px;border-bottom:2px solid transparent;min-height:48px;
+  transition:color var(--dur-1),border-color var(--dur-1);
 }
-.contact-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-2);border-color:#CFE0DE}
-.contact-card svg{color:var(--sage-dark);flex:none}
-.contact-card small{display:block;font-weight:500;color:var(--ink-soft);font-size:.85rem}
+.social-row a:hover{color:var(--sage-dark);border-bottom-color:var(--sage)}
+.social-row svg{color:var(--sage-dark);flex:none}
 
 /* ============ Footer ============ */
 .site-footer{background:var(--ink);color:#D8DED6;padding:54px 0 30px}
@@ -293,7 +267,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 
 <header class="site-header" id="header">
   <div class="wrap header-inner">
-    <a class="brand" href="#top" aria-label="טראק במושבה — חזרה לראש הדף">
+    <a class="brand" href="#top" aria-label="טראק במושבה. חזרה לראש הדף">
       <img src="assets/truck_logo.png" alt="" width="120" height="60">
       <span>טראק במושבה</span>
     </a>
@@ -314,63 +288,27 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 <!-- ============ HERO ============ -->
 <section class="hero" id="top" aria-label="טראק במושבה">
   <div class="hero-inner">
-    <div class="reveal"><img class="hero-logo" src="assets/truck_logo.png" alt="הלוגו של טראק במושבה — משאית וינטג' עם סכין ומזלג" width="440" height="220" fetchpriority="high"></div>
-    <p class="hero-kicker reveal" data-d="1">קפה ומעדנים בלחם</p>
-    <h1 class="reveal" data-d="2">טעם של מושבה,<br>בצד הדרך.</h1>
-    <p class="lead reveal" data-d="3">רשת עגלות קפה — סניפים בבת שלמה ובכרם מהר״ל. קרואסנדוויצ'ים, לחם רוסטיק, פיצות מהטאבון וקפה משובח, באוויר הפתוח של הכרמל.</p>
-    <div class="hero-ctas reveal" data-d="4">
-      <a class="btn btn-primary" href="#menu">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h18M5 11l1.5 9h11L19 11M12 3v4M8 5l1 2M16 5l-1 2"/></svg>
-        לתפריט המלא
-      </a>
-      <a class="btn btn-ghost" href="#locations">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        איך מגיעים אלינו
-      </a>
+    <div class="reveal"><img class="hero-logo" src="assets/truck_logo.png" alt="הלוגו של טראק במושבה: משאית וינטג' עם סכין ומזלג" width="440" height="220" fetchpriority="high"></div>
+    <h1 class="reveal" data-d="1">טעם של מושבה,<br>בצד הדרך.</h1>
+    <p class="lead reveal" data-d="2">קפה טרי, מאפים חמים וכריכים על לחם רוסטיק. שתי עגלות, בבת שלמה ובכרם מהר״ל.</p>
+    <div class="hero-ctas reveal" data-d="3">
+      <a class="btn btn-primary" href="#menu">לתפריט המלא</a>
+      <a class="btn btn-ghost" href="#locations">איך מגיעים אלינו</a>
     </div>
-    <div class="hero-status reveal" data-d="5" id="statusChips" aria-live="polite">
+    <div class="hero-status reveal" data-d="4" id="statusChips" aria-live="polite">
       <span class="status-chip" data-branch="makura"><span class="status-dot" aria-hidden="true"></span><strong>סניף מקורה</strong><span class="chip-text">בודק שעות…</span></span>
       <span class="status-chip" data-branch="batshlomo"><span class="status-dot" aria-hidden="true"></span><strong>סניף בת שלמה</strong><span class="chip-text">בודק שעות…</span></span>
     </div>
-  </div>
-  <div class="scroll-hint" aria-hidden="true">
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
   </div>
 </section>
 
 <!-- ============ STORY ============ -->
 <section class="story" id="story">
   <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-8 8-10 5 2 8 6 8 10a7 7 0 0 1-7 7h-2z"/><path d="M12 21V11"/></svg>
-        מי אנחנו
-      </span>
-      <h2>עגלת קפה. נוף. ולחם טוב.</h2>
-      <p>טראק במושבה הוא עצירה קטנה ושקטה בלב הטבע — קפה שנטחן ברגע, מאפים שנאפים במקום, וכריכים שמורכבים מחומרי גלם מהאזור.</p>
-    </div>
-    <div class="story-grid">
-      <article class="story-card reveal">
-        <div class="story-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h2a3 3 0 0 1 0 6h-2"/><path d="M3 8h14v6a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8z"/><path d="M7 3v2M11 3v2M15 3v2"/></svg>
-        </div>
-        <h3>קפה משובח</h3>
-        <p>אספרסו, קפוצ'ינו, מאצ'ה וחליטות תה יזרעאל — כל כוס מוכנת בקפידה, גם בלב השדה.</p>
-      </article>
-      <article class="story-card reveal">
-        <div class="story-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14c0-4.4 3.6-8 8-8s8 3.6 8 8H4z"/><path d="M3 14h18v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-2z"/></svg>
-        </div>
-        <h3>נאפה במקום</h3>
-        <p>קרואסונים, לחם רוסטיק, בורקס טורקי ופיצות מבצק עבודת יד — הכול טרי, ישר מהתנור.</p>
-      </article>
-      <article class="story-card reveal">
-        <div class="story-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        </div>
-        <h3>בלב הטבע</h3>
-        <p>שני סניפים על דרכי הכרמל — בבת שלמה ובכרם מהר״ל. עוצרים, נושמים, וממשיכים בדרך.</p>
-      </article>
+    <div class="story-inner reveal">
+      <h2>עגלה, תנור, וחסה לאליק</h2>
+      <p>טראק במושבה התחיל מעגלת קפה אחת בצד הדרך. היום יש שתיים, בבת שלמה ובכרם מהר״ל, ושתיהן עובדות אותו דבר: טוחנים את הקפה ברגע ההזמנה, אופים קרואסונים ולחם רוסטיק במקום, וחותכים ירקות של הבוקר לכריכים ולסלטים.</p>
+      <p>אין מלצרים ואין מהומה. מזמינים בדלפק, מוצאים פינה מול הנוף, ומחכים שיקראו בשם.</p>
     </div>
   </div>
 </section>
@@ -378,12 +316,8 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 <!-- ============ MENU ============ -->
 <section id="menu" style="padding-top:clamp(64px,9vw,110px)">
   <div class="wrap section-head reveal">
-    <span class="eyebrow">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h18M5 11l1.5 9h11L19 11M12 3v4"/></svg>
-      התפריט
-    </span>
     <h2>מה אוכלים היום?</h2>
-    <p>הכול מוכן במקום, מחומרי גלם טריים. מנות טבעוניות וללא גלוטן מסומנות בתפריט.</p>
+    <p>הכול מוכן כאן, באותו בוקר. טבעוני וללא גלוטן מסומנים ליד כל מנה.</p>
   </div>
 
   <nav class="menu-nav" aria-label="קטגוריות תפריט">
@@ -436,7 +370,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
     <div class="menu-cat reveal" id="cat-salads">
       <div class="menu-cat-head"><h3>סלטים</h3><span class="rule" aria-hidden="true"></span></div>
       <div class="menu-grid">
-        <article class="dish"><div class="dish-top"><span class="dish-name">קערת ירקות <span class="diet diet-vegan"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-8 8-10 5 2 8 6 8 10a7 7 0 0 1-7 7h-2z"/></svg>טבעוני</span></span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">33 ₪</span></div><p class="dish-desc">ירקות חתוכים גס — מלפפון, פלפל, עגבנייה, צנונית, גזר וזיתי קלמטה בשמן זית ולימון</p></article>
+        <article class="dish"><div class="dish-top"><span class="dish-name">קערת ירקות <span class="diet diet-vegan"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-8 8-10 5 2 8 6 8 10a7 7 0 0 1-7 7h-2z"/></svg>טבעוני</span></span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">33 ₪</span></div><p class="dish-desc">ירקות חתוכים גס: מלפפון, פלפל, עגבנייה, צנונית, גזר וזיתי קלמטה בשמן זית ולימון</p></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">סלט קיסר</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">48 ₪</span></div><p class="dish-desc">חסה לאליק, מלפפון ירוק, קרוטונים, פרמז'ן ורוטב קיסר עשיר</p></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">סלט מוצרלה</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">48 ₪</span></div><p class="dish-desc">חסה לאליק, גבינת מוצרלה, שקדים, חמוציות וויניגרט הדרים</p></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">סלט חומוסים</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">48 ₪</span></div><p class="dish-desc">חסה לאליק, גרגרי חומוס, בצל סגול, זיתי קלמטה, פלפל קלוי, מלפפון, קרוטונים, נענע וגבינת פטה ברוטב שמן זית לימון</p></article>
@@ -465,7 +399,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
     <!-- פיצות -->
     <div class="menu-cat reveal" id="cat-pizza">
       <div class="menu-cat-head"><h3>פיצות</h3><span class="rule" aria-hidden="true"></span></div>
-      <p class="menu-note">מוגשות בימים שלישי עד חמישי בין השעות 14:00–20:00 · ניתן להזמין בצק פיצה ללא גלוטן — ללא תוספת תשלום</p>
+      <p class="menu-note">מוגשות בימים שלישי עד חמישי בין 14:00 ל־20:00. אפשר לבקש בצק ללא גלוטן, בלי תוספת תשלום.</p>
       <div class="menu-grid">
         <article class="dish"><div class="dish-top"><span class="dish-name">מרגריטה</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">49 ₪</span></div><p class="dish-desc">רוטב עגבניות, מיקס מוצרלה וצהובה ובזיליקום טרי.</p></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">שלוש גבינות ובטטה</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">59 ₪</span></div><p class="dish-desc">רוטב עגבניות, צהובה, גבינת בושה, בטטה אפויה, שקדים קלויים, עלי רוקט וזילוף דבש.</p></article>
@@ -473,13 +407,13 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
         <article class="dish"><div class="dish-top"><span class="dish-name">בלקנית <span class="diet diet-vegan"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-8 8-10 5 2 8 6 8 10a7 7 0 0 1-7 7h-2z"/></svg>אפשרות טבעונית</span></span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">59 ₪</span></div><p class="dish-desc">קרם חצילים, גבינת פטה, פלפלים קלויים, זיתי קלמטה, שמן זית, לימון ובזיליקום טרי.</p></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">פוקאצ'ה מטבלים <span class="diet diet-vegan"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-8 8-10 5 2 8 6 8 10a7 7 0 0 1-7 7h-2z"/></svg>טבעוני</span></span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">41 ₪</span></div><p class="dish-desc">פוקאצ'ה עשבי תיבול ושמן זית בליווי שלושה מתבלים משתנים</p></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">מתוקה</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">58 ₪</span></div><p class="dish-desc">נוטלה, מסקרפונה, שברי עוגיות וקצת מלח גס.</p></article>
-        <article class="dish"><div class="dish-top"><span class="dish-name">תוספות לפיצה בתשלום</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">6–9 ₪</span></div><p class="dish-desc">זיתים ירוקים, בצל סגול, עגבניות, פסטו — 6 ₪ · אקסטרא גבינה, פטה, פרמז'ן, ארטישוק אל רומנה, זיתי קלמטה — 9 ₪</p></article>
+        <article class="dish"><div class="dish-top"><span class="dish-name">תוספות לפיצה בתשלום</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">6-9 ₪</span></div><p class="dish-desc">זיתים ירוקים, בצל סגול, עגבניות ופסטו ב־6 ₪. אקסטרה גבינה, פטה, פרמז'ן, ארטישוק אל רומנה וזיתי קלמטה ב־9 ₪.</p></article>
       </div>
     </div>
 
     <!-- גלידה -->
     <div class="menu-cat reveal" id="cat-gelato">
-      <div class="menu-cat-head"><h3>גלידה — סטודיו ג'ילאטו</h3><span class="rule" aria-hidden="true"></span></div>
+      <div class="menu-cat-head"><h3>גלידה של סטודיו ג'ילאטו</h3><span class="rule" aria-hidden="true"></span></div>
       <div class="menu-grid">
         <article class="dish"><div class="dish-top"><span class="dish-name">גלידה במגוון טעמים</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">19 ₪</span></div><p class="dish-desc">שוקולד ג'אנדויה / וניל / בוטנים מלוחים / מנגו קוקוס <span class="diet diet-vegan"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-8 8-10 5 2 8 6 8 10a7 7 0 0 1-7 7h-2z"/></svg>טבעוני</span></p></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">אפוגטו</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">24 ₪</span></div><p class="dish-desc">גלידת וניל, דאבל אספרסו ושברי עוגיות</p></article>
@@ -528,7 +462,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
         <article class="dish"><div class="dish-top"><span class="dish-name">קפוצ'ינו קטן</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">14 ₪</span></div></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">קפוצ'ינו גדול</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">17 ₪</span></div></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">סיידר תפוחים פומרנץ</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">19 ₪</span></div><p class="dish-desc">עם מקל קינמון ותפוח מיובש</p></article>
-        <article class="dish"><div class="dish-top"><span class="dish-name">חליטות תה יזרעאל</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">16 ₪</span></div><p class="dish-desc">חמות / קרות, ללא סוכר — לואיזנענע / ג'ינג'ר לימון דבש / תה ירוק / כורכום הדרים / בדואית</p></article>
+        <article class="dish"><div class="dish-top"><span class="dish-name">חליטות תה יזרעאל</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">16 ₪</span></div><p class="dish-desc">חמות / קרות, ללא סוכר: לואיזנענע / ג'ינג'ר לימון דבש / תה ירוק / כורכום הדרים / בדואית</p></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">אמריקרו</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">17 ₪</span></div></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">קפה קר / שוקו קר</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">18 ₪</span></div></article>
         <article class="dish"><div class="dish-top"><span class="dish-name">קפה קר קרמל</span><span class="dish-dots" aria-hidden="true"></span><span class="dish-price">27 ₪</span></div></article>
@@ -543,27 +477,23 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 <!-- ============ LOCATIONS ============ -->
 <section class="locations" id="locations">
   <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-        סניפים ושעות
-      </span>
+    <div class="section-head start reveal">
       <h2>איפה תמצאו אותנו</h2>
-      <p>שתי עגלות, שתי נקודות נוף. בוחרים סניף, לוחצים על וויז — ויוצאים לדרך.</p>
+      <p>שתי עגלות על דרכי הכרמל. בוחרים סניף, לוחצים על הוויז ויוצאים.</p>
     </div>
     <div class="loc-grid">
       <article class="loc-card reveal">
         <div class="loc-head">
           <h3>סניף מקורה</h3>
-          <span class="status-chip" data-branch="makura"><span class="status-dot" aria-hidden="true"></span><span class="chip-text">—</span></span>
+          <span class="status-chip" data-branch="makura"><span class="status-dot" aria-hidden="true"></span><span class="chip-text">…</span></span>
         </div>
         <table class="hours">
           <caption class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">שעות פעילות סניף מקורה</caption>
           <tbody>
-            <tr><td>ראשון–שני</td><td>08:00–15:00</td></tr>
-            <tr><td>שלישי–חמישי</td><td>08:00–20:00</td></tr>
-            <tr><td>שישי</td><td>08:00–16:00</td></tr>
-            <tr><td>שבת</td><td>08:00–18:00</td></tr>
+            <tr><td>ראשון-שני</td><td>08:00-15:00</td></tr>
+            <tr><td>שלישי-חמישי</td><td>08:00-20:00</td></tr>
+            <tr><td>שישי</td><td>08:00-16:00</td></tr>
+            <tr><td>שבת</td><td>08:00-18:00</td></tr>
           </tbody>
         </table>
         <div class="loc-actions">
@@ -576,15 +506,15 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
       <article class="loc-card reveal">
         <div class="loc-head">
           <h3>סניף בת שלמה</h3>
-          <span class="status-chip" data-branch="batshlomo"><span class="status-dot" aria-hidden="true"></span><span class="chip-text">—</span></span>
+          <span class="status-chip" data-branch="batshlomo"><span class="status-dot" aria-hidden="true"></span><span class="chip-text">…</span></span>
         </div>
         <table class="hours">
           <caption style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">שעות פעילות סניף בת שלמה</caption>
           <tbody>
-            <tr><td>ראשון–שני</td><td>07:00–15:00</td></tr>
-            <tr><td>שלישי–חמישי</td><td>07:00–20:00</td></tr>
-            <tr><td>שישי</td><td>07:00–15:00</td></tr>
-            <tr><td>שבת</td><td>07:00–17:00</td></tr>
+            <tr><td>ראשון-שני</td><td>07:00-15:00</td></tr>
+            <tr><td>שלישי-חמישי</td><td>07:00-20:00</td></tr>
+            <tr><td>שישי</td><td>07:00-15:00</td></tr>
+            <tr><td>שבת</td><td>07:00-17:00</td></tr>
           </tbody>
         </table>
         <div class="loc-actions">
@@ -595,7 +525,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
         </div>
       </article>
     </div>
-    <p class="hours-note reveal"><strong>שימו לב:</strong> ייתכנו שינויים בשעות הפעילות — מומלץ להתעדכן ברשתות החברתיות שלנו.</p>
+    <p class="hours-note reveal">לפעמים השעות משתנות. שווה להציץ באינסטגרם לפני שיוצאים.</p>
   </div>
 </section>
 
@@ -603,21 +533,17 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 <section id="contact">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.36 8.5 8.5 0 0 1-3.4-.74L3 21l1.88-5.6A8.38 8.38 0 0 1 4 11.5a8.5 8.5 0 1 1 17 0z"/></svg>
-        נשארים בקשר
-      </span>
-      <h2>עקבו אחרינו</h2>
-      <p>עדכוני שעות, מנות חדשות והפתעות עונתיות — הכול קודם ברשתות.</p>
+      <h2>מתעדכנים אצלנו ברשתות</h2>
+      <p>שינויים בשעות, מנות חדשות והפתעות של עונה. הכול מתפרסם קודם באינסטגרם.</p>
     </div>
-    <div class="contact-cards reveal">
-      <a class="contact-card" href="https://www.instagram.com/truck_bamoshava/" target="_blank" rel="noopener">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor" stroke="none"/></svg>
-        <span>אינסטגרם<small>@truck_bamoshava</small></span>
+    <div class="social-row reveal">
+      <a href="https://www.instagram.com/truck_bamoshava/" target="_blank" rel="noopener">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor" stroke="none"/></svg>
+        @truck_bamoshava
       </a>
-      <a class="contact-card" href="https://www.facebook.com/truckbamoshava" target="_blank" rel="noopener">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-        <span>פייסבוק<small>truckbamoshava</small></span>
+      <a href="https://www.facebook.com/truckbamoshava" target="_blank" rel="noopener">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        טראק במושבה בפייסבוק
       </a>
     </div>
   </div>
@@ -640,7 +566,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
       </nav>
     </div>
     <div class="footer-bottom">
-      <span>© <span id="year">2026</span> טראק במושבה — קפה ומעדנים בלחם</span>
+      <span>© <span id="year">2026</span> טראק במושבה. קפה ומעדנים בלחם.</span>
       <span>בת שלמה · כרם מהר"ל</span>
     </div>
   </div>
