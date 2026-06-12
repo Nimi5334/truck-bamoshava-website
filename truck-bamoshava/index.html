@@ -8,7 +8,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@500;700;900&family=Amatic+SC:wght@700&display=swap" rel="stylesheet">
 <style>
 /* ============ Design tokens ============ */
 :root{
@@ -119,16 +119,28 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.2;margin:0;color:var(--in
 .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
 .btn-ghost:hover{background:var(--ink);color:var(--bg);transform:translateY(-2px)}
 .btn svg{flex:none}
-.hero-status{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.hero-status{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:36px}
+/* Chalkboard tags, like the sign on the truck's service window */
 .status-chip{
-  display:inline-flex;align-items:center;gap:8px;background:var(--surface);
-  border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:.92rem;
-  color:var(--ink-soft);box-shadow:var(--shadow-1);
+  display:inline-flex;flex-direction:column;align-items:center;gap:1px;
+  background:#2E3833;color:#EDE8D8;
+  border-radius:6px 9px 7px 8px;
+  padding:9px 18px 11px;
+  font-family:"Amatic SC",var(--font-head);font-weight:700;font-size:1.3rem;line-height:1.15;
+  letter-spacing:.04em;
+  box-shadow:0 3px 10px rgba(38,49,43,.28), inset 0 0 0 1.5px rgba(237,232,216,.22), inset 0 0 22px rgba(237,232,216,.05);
+  transform:rotate(-1.7deg);
+  transition:transform var(--dur-2) var(--ease-out);
 }
-.status-dot{width:9px;height:9px;border-radius:50%;background:#9aa79e;flex:none}
-.status-chip.open .status-dot{background:#4C8A4F;box-shadow:0 0 0 4px rgba(76,138,79,.15)}
-.status-chip.open strong{color:#36673A}
-.status-chip strong{color:var(--ink);font-weight:700}
+.status-chip:nth-child(even){transform:rotate(1.3deg)}
+.status-chip:hover{transform:rotate(0deg) scale(1.03)}
+.status-chip strong{font-weight:700;color:#fff;font-size:1.06em}
+.status-chip .chip-text{color:rgba(237,232,216,.82);font-size:.92em}
+.status-chip.open .chip-text{
+  color:#BFE3B0;
+  text-decoration:underline wavy rgba(191,227,176,.55) 1.5px;
+  text-underline-offset:4px;
+}
 
 /* ============ Sections ============ */
 section{padding:clamp(64px,9vw,110px) 0;position:relative}
@@ -137,6 +149,29 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 .section-head p{color:var(--ink-soft);margin:12px auto 0;max-width:36em}
 .section-head.start{text-align:start;margin-inline:0}
 .section-head.start p{margin-inline:0}
+
+/* ============ Photo bands (full-bleed, scroll-driven parallax) ============ */
+.photo-band{
+  position:relative;height:clamp(320px,58vh,560px);padding:0;overflow:hidden;
+  border-block:1px solid var(--line);
+}
+.photo-band img{
+  position:absolute;inset-inline:0;top:-12%;width:100%;height:124%;
+  object-fit:cover;will-change:transform;
+}
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+    .photo-band img{
+      animation:bandDrift linear both;
+      animation-timeline:view();
+      animation-range:cover 0% cover 100%;
+    }
+    @keyframes bandDrift{
+      from{transform:translateY(-5.5%)}
+      to{transform:translateY(5.5%)}
+    }
+  }
+}
 
 /* ============ Story strip ============ */
 .story{background:var(--bg-deep);border-block:1px solid var(--line)}
@@ -207,6 +242,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 .loc-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-2)}
 .loc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .loc-head h3{font-size:1.45rem;font-weight:900}
+.loc-desc{color:var(--ink-soft);font-size:.97rem;margin:0;line-height:1.55}
 .hours{width:100%;border-collapse:collapse;font-size:.98rem}
 .hours td{padding:9px 2px;border-bottom:1px dashed var(--line)}
 .hours tr:last-child td{border-bottom:0}
@@ -296,8 +332,8 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
       <a class="btn btn-ghost" href="#locations">איך מגיעים אלינו</a>
     </div>
     <div class="hero-status reveal" data-d="4" id="statusChips" aria-live="polite">
-      <span class="status-chip" data-branch="makura"><span class="status-dot" aria-hidden="true"></span><strong>סניף מקורה</strong><span class="chip-text">בודק שעות…</span></span>
-      <span class="status-chip" data-branch="batshlomo"><span class="status-dot" aria-hidden="true"></span><strong>סניף בת שלמה</strong><span class="chip-text">בודק שעות…</span></span>
+      <span class="status-chip" data-branch="makura"><strong>סניף מקורה</strong><span class="chip-text">בודק שעות…</span></span>
+      <span class="status-chip" data-branch="batshlomo"><strong>סניף בת שלמה</strong><span class="chip-text">בודק שעות…</span></span>
     </div>
   </div>
 </section>
@@ -307,10 +343,16 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   <div class="wrap">
     <div class="story-inner reveal">
       <h2>עגלה, תנור, וחסה לאליק</h2>
-      <p>טראק במושבה התחיל מעגלת קפה אחת בצד הדרך. היום יש שתיים, בבת שלמה ובכרם מהר״ל, ושתיהן עובדות אותו דבר: טוחנים את הקפה ברגע ההזמנה, אופים קרואסונים ולחם רוסטיק במקום, וחותכים ירקות של הבוקר לכריכים ולסלטים.</p>
+      <p>את העגלה הראשונה פתחו אלה ועמית אבני יחד עם זיו כהן, חבר ילדות של עמית, בסוף תקופת הקורונה. שלושתם הגיעו מעולם המסעדנות, ובחרו דווקא בבת שלמה הישנה, המושבה שבה אלה גדלה, מול הנוף של הר חורשן.</p>
+      <p>העגלה השנייה עומדת היום בכניסה לחוות מקורה, חווה אורגנית בין הכרמים של כרם מהר״ל. ובשתיהן אותו עניין: טוחנים את הקפה ברגע ההזמנה, אופים קרואסונים ולחם רוסטיק במקום, וחותכים ירקות של הבוקר לכריכים ולסלטים.</p>
       <p>אין מלצרים ואין מהומה. מזמינים בדלפק, מוצאים פינה מול הנוף, ומחכים שיקראו בשם.</p>
     </div>
   </div>
+</section>
+
+<!-- ============ PHOTO BAND 1 ============ -->
+<section class="photo-band" aria-label="פינת הישיבה בצל עץ השסק">
+  <img src="assets/photo-counter.jpg" alt="חצר הישיבה של העגלה: שולחנות פיקניק ושמשיות תחת עץ שסק גדול, והעגלה הלבנה-תכלת מימין" loading="lazy" width="1226" height="818">
 </section>
 
 <!-- ============ MENU ============ -->
@@ -474,6 +516,11 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   </div>
 </section>
 
+<!-- ============ PHOTO BAND 2 ============ -->
+<section class="photo-band" aria-label="העגלה והטרקטור בחווה">
+  <img src="assets/photo-tractor.jpg" alt="העגלה בחווה לצד טרקטור פורד 3930 כחול ישן, בין עצי רימון" loading="lazy" width="1600" height="1067">
+</section>
+
 <!-- ============ LOCATIONS ============ -->
 <section class="locations" id="locations">
   <div class="wrap">
@@ -485,8 +532,9 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
       <article class="loc-card reveal">
         <div class="loc-head">
           <h3>סניף מקורה</h3>
-          <span class="status-chip" data-branch="makura"><span class="status-dot" aria-hidden="true"></span><span class="chip-text">…</span></span>
+          <span class="status-chip" data-branch="makura"><span class="chip-text">…</span></span>
         </div>
+        <p class="loc-desc">בכניסה לחוות מקורה, חווה אורגנית בין הכרמים של כרם מהר״ל. ישיבה מקורה ומוצלת, מתאים גם ליום חם.</p>
         <table class="hours">
           <caption class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">שעות פעילות סניף מקורה</caption>
           <tbody>
@@ -506,8 +554,9 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
       <article class="loc-card reveal">
         <div class="loc-head">
           <h3>סניף בת שלמה</h3>
-          <span class="status-chip" data-branch="batshlomo"><span class="status-dot" aria-hidden="true"></span><span class="chip-text">…</span></span>
+          <span class="status-chip" data-branch="batshlomo"><span class="chip-text">…</span></span>
         </div>
+        <p class="loc-desc">בכניסה לבת שלמה הישנה, מול הנוף של הר חורשן. העגלה הראשונה, זאת שממנה הכול התחיל.</p>
         <table class="hours">
           <caption style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">שעות פעילות סניף בת שלמה</caption>
           <tbody>
@@ -534,7 +583,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   <div class="wrap">
     <div class="section-head reveal">
       <h2>מתעדכנים אצלנו ברשתות</h2>
-      <p>שינויים בשעות, מנות חדשות והפתעות של עונה. הכול מתפרסם קודם באינסטגרם.</p>
+      <p>שינויים בשעות, מנות חדשות, דוכני שישי ואירועים. הכול מתפרסם קודם באינסטגרם, ושם גם עונים הכי מהר על הודעות.</p>
     </div>
     <div class="social-row reveal">
       <a href="https://www.instagram.com/truck_bamoshava/" target="_blank" rel="noopener">
@@ -706,9 +755,9 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
       var txt = chip.querySelector(".chip-text");
       var open = rng && now.h >= rng[0] && now.h < rng[1];
       chip.classList.toggle("open", !!open);
-      if(open){ txt.textContent = "פתוח עכשיו · עד " + fmt(rng[1]); }
-      else if(rng && now.h < rng[0]){ txt.textContent = "סגור · נפתח ב־" + fmt(rng[0]); }
-      else { txt.textContent = "סגור עכשיו"; }
+      if(open){ txt.textContent = "פתוח עכשיו, עד " + fmt(rng[1]); }
+      else if(rng && now.h < rng[0]){ txt.textContent = "נפתח היום ב־" + fmt(rng[0]); }
+      else { txt.textContent = "סגור להיום, נתראה מחר"; }
     });
   }
   updateStatus();
