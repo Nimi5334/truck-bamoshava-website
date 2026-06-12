@@ -794,22 +794,24 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
       var p = (vh - r.top) / (vh + r.height);
       return Math.min(1, Math.max(0, p));
     }
+    function stepToward(factor){
+      var cur = video.currentTime;
+      var next = cur + (targetT - cur) * factor;
+      if(Math.abs(next - cur) > 0.004 && Math.abs(next - lastSet) > 0.004){
+        try{ video.currentTime = next; lastSet = next; }catch(e){}
+      }
+      return Math.abs(targetT - video.currentTime) > 0.01;
+    }
     function tick(){
       rafId = null;
       if(!ready || !video.duration) return;
-      var cur = video.currentTime;
-      var next = cur + (targetT - cur) * 0.22;
-      if(Math.abs(next - cur) > 0.004 && Math.abs(next - lastSet) > 0.004){
-        try{ video.currentTime = next; lastSet = next; }catch(e){}
-        rafId = requestAnimationFrame(tick);
-      } else if(Math.abs(targetT - cur) > 0.01){
-        rafId = requestAnimationFrame(tick);
-      }
+      if(stepToward(0.22)) rafId = requestAnimationFrame(tick);
     }
     function onScrub(){
       if(!ready || !video.duration) return;
       /* keep a hair away from the exact ends so the frame always renders */
       targetT = 0.01 + progress() * (video.duration - 0.06);
+      stepToward(0.35); /* immediate step per scroll event (rAF-independent) */
       if(rafId === null) rafId = requestAnimationFrame(tick);
     }
     video.addEventListener("loadedmetadata", function(){
@@ -817,22 +819,35 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
       try{ video.pause(); }catch(e){}
       onScrub();
     });
-    /* only start pulling the file when the band approaches the viewport */
+    /* Load as a blob when the band approaches: seeks are then served from
+       memory — instant scrubbing on any host (no Range-request dependency). */
+    var fetched = false;
+    function fetchVideo(){
+      if(fetched) return; fetched = true;
+      var src = video.querySelector("source").getAttribute("src");
+      fetch(src).then(function(r){
+        if(!r.ok) throw new Error(r.status);
+        return r.blob();
+      }).then(function(b){
+        video.src = URL.createObjectURL(b);
+        video.load();
+      }).catch(function(){ /* poster remains */ });
+    }
+    function maybeFetch(){
+      if(fetched) return;
+      var r = video.parentElement.getBoundingClientRect();
+      if(r.top < window.innerHeight * 2) fetchVideo();
+    }
     if("IntersectionObserver" in window){
       var loader = new IntersectionObserver(function(entries){
         entries.forEach(function(en){
-          if(en.isIntersecting){
-            video.preload = "auto";
-            video.load();
-            loader.disconnect();
-          }
+          if(en.isIntersecting){ fetchVideo(); loader.disconnect(); }
         });
       }, {rootMargin:"600px 0px"});
       loader.observe(video);
-    } else {
-      video.preload = "auto";
     }
-    window.addEventListener("scroll", onScrub, {passive:true});
+    maybeFetch();
+    window.addEventListener("scroll", function(){ maybeFetch(); onScrub(); }, {passive:true});
     window.addEventListener("resize", onScrub, {passive:true});
   })();
 
