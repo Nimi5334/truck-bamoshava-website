@@ -155,23 +155,26 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.2;margin:0;color:var(--in
   transition:transform var(--dur-2) var(--ease-out);
 }
 .status-chip:hover{transform:scale(1.03)}
-/* Hero signs hang from two cords meeting at a knot — like a little shop sign */
-.hero-status .status-chip{position:relative}
-.hero-status .status-chip::after{
-  content:"";position:absolute;z-index:-1;
-  left:18%;right:18%;top:-29px;height:31px;pointer-events:none;
-  background:
-    linear-gradient(to top right,transparent calc(50% - 0.9px),#2E3833 calc(50% - 0.9px),#2E3833 calc(50% + 0.9px),transparent calc(50% + 0.9px)),
-    linear-gradient(to top left, transparent calc(50% - 0.9px),#2E3833 calc(50% - 0.9px),#2E3833 calc(50% + 0.9px),transparent calc(50% + 0.9px));
-  background-size:50% 100%,50% 100%;
-  background-position:left top,right top;background-repeat:no-repeat;
+/* Hero signs hang from a hand-drawn string (SVG .sign-string) and swing like pendulums */
+.hero-status{position:relative;z-index:1}
+.hero-status .status-chip{
+  transform-origin:top center;
+  animation:signSwing 4.4s ease-in-out infinite;
+  will-change:transform;
 }
-.hero-status .status-chip::before{
-  content:"";position:absolute;z-index:1;
-  top:-33px;left:50%;width:9px;height:9px;margin-left:-4.5px;
-  border-radius:50%;background:#2E3833;
-  box-shadow:0 1px 2px rgba(38,49,43,.4),inset 0 1px 1px rgba(237,232,216,.25);
+.hero-status .status-chip[data-branch="batshlomo"]{animation-duration:5s;animation-delay:-1.2s}
+@keyframes signSwing{
+  0%  {transform:rotate(3.4deg)}
+  50% {transform:rotate(-3.4deg)}
+  100%{transform:rotate(3.4deg)}
 }
+.sign-string{
+  position:absolute;inset:0;width:100%;height:100%;
+  overflow:visible;pointer-events:none;z-index:-1;
+}
+.sign-string path,.sign-string line{fill:none;stroke:#2E3833;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.sign-string ellipse{fill:none;stroke:#2E3833;stroke-width:1.5}
+.sign-string .knot{fill:#2E3833;stroke:none}
 .status-chip strong{font-weight:700;color:#fff;font-size:1.06em}
 .status-chip .chip-text{color:rgba(237,232,216,.82);font-size:.92em}
 .status-chip.open .chip-text{
@@ -322,6 +325,22 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
   .reveal{opacity:1;transform:none}
+  .hero-status .status-chip{animation:none !important;transform:none !important}
+}
+
+/* ============ Menu as tabs: only the selected category is visible ============ */
+.menu-cat{display:none}
+.menu-cat.is-active{display:block;opacity:1;transform:none;margin-top:0}
+
+/* ============ Mobile: show the farm video in full (no crop) ============ */
+@media (max-width:680px){
+  .photo-band{height:auto;min-height:0}
+  .photo-band video{position:static;width:100%;height:auto;display:block}
+}
+/* Keep the two hanging signs side-by-side on narrow phones */
+@media (max-width:430px){
+  .hero-status{gap:16px}
+  .hero-status .status-chip{padding:8px 13px 10px;font-size:1.12rem}
 }
 </style>
 </head>
@@ -362,6 +381,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
       <span class="status-chip" data-branch="makura"><strong>סניף מקורה</strong><span class="chip-text">בודק שעות…</span></span>
       <span class="status-chip" data-branch="batshlomo"><strong>סניף בת שלמה</strong><span class="chip-text">בודק שעות…</span></span>
     </div>
+    <svg class="sign-string" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
   </div>
 </section>
 
@@ -740,41 +760,99 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
     }, {rootMargin:"0px 0px -8% 0px", threshold:0.08});
     revealEls.forEach(function(el){ io.observe(el); });
 
-    /* Stagger dish cards inside each category */
-    var dishObserver = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          var dishes = entry.target.querySelectorAll(".dish");
-          dishes.forEach(function(dish, i){
-            dish.style.transitionDelay = Math.min(i*40, 280) + "ms";
-          });
-          dishObserver.unobserve(entry.target);
-        }
-      });
-    }, {threshold:0.05});
-    document.querySelectorAll(".menu-cat").forEach(function(cat){ dishObserver.observe(cat); });
   }
 
-  /* Menu pill scrollspy */
+  /* Menu as tabs: clicking a pill shows only that category */
   var pills = Array.prototype.slice.call(document.querySelectorAll(".menu-pill"));
-  var cats = pills.map(function(p){ return document.querySelector(p.getAttribute("href")); });
-  if("IntersectionObserver" in window){
-    var spy = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
-          var id = "#" + entry.target.id;
-          pills.forEach(function(p){
-            var active = p.getAttribute("href") === id;
-            p.classList.toggle("active", active);
-            if(active && p.scrollIntoView){
-              p.scrollIntoView({block:"nearest", inline:"center", behavior: reduceMotion ? "auto" : "smooth"});
-            }
-          });
-        }
-      });
-    }, {rootMargin:"-30% 0px -60% 0px"});
-    cats.forEach(function(c){ if(c) spy.observe(c); });
+  var menuCats = Array.prototype.slice.call(document.querySelectorAll(".menu-cat"));
+  var pillsWrap = document.getElementById("menuPills");
+  if(pillsWrap) pillsWrap.setAttribute("role", "tablist");
+  menuCats.forEach(function(c){ c.setAttribute("role", "tabpanel"); });
+  function showTab(id, doScroll){
+    pills.forEach(function(p){
+      var on = p.getAttribute("href") === id;
+      p.classList.toggle("active", on);
+      p.setAttribute("role", "tab");
+      p.setAttribute("aria-selected", on ? "true" : "false");
+      if(on && doScroll && p.scrollIntoView){
+        p.scrollIntoView({block:"nearest", inline:"center", behavior: reduceMotion ? "auto" : "smooth"});
+      }
+    });
+    menuCats.forEach(function(c){ c.classList.toggle("is-active", ("#" + c.id) === id); });
+    if(doScroll){
+      var nav = document.querySelector(".menu-nav");
+      if(nav){
+        var top = nav.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({top: top, behavior: reduceMotion ? "auto" : "smooth"});
+      }
+    }
   }
+  pills.forEach(function(p){
+    p.addEventListener("click", function(e){
+      e.preventDefault();
+      showTab(p.getAttribute("href"), true);
+    });
+  });
+  if(pills.length){ showTab(pills[0].getAttribute("href"), false); }
+
+  /* Hand-drawn string that ties the two signs up to the "directions" button.
+     Drawn as SVG between the real DOM anchors; positions use offsets so the
+     swing rotation (transform) never detaches the string from its pivots. */
+  (function(){
+    var heroInner = document.querySelector(".hero-inner");
+    var svg = document.querySelector(".sign-string");
+    var btn = document.querySelector(".hero-ctas .btn-ghost");
+    if(!heroInner || !svg || !btn) return;
+    var signs = Array.prototype.slice.call(document.querySelectorAll(".hero-status .status-chip"));
+    if(!signs.length) return;
+
+    function posIn(el, root){
+      var x = 0, y = 0, node = el;
+      while(node && node !== root){ x += node.offsetLeft; y += node.offsetTop; node = node.offsetParent; }
+      return {x:x, y:y};
+    }
+    function bow(x, y){
+      return (
+        '<ellipse cx="'+(x-5)+'" cy="'+(y-1)+'" rx="5" ry="3.4" transform="rotate(-22 '+(x-5)+' '+(y-1)+')"/>'+
+        '<ellipse cx="'+(x+5)+'" cy="'+(y-1)+'" rx="5" ry="3.4" transform="rotate(22 '+(x+5)+' '+(y-1)+')"/>'+
+        '<line x1="'+x+'" y1="'+y+'" x2="'+(x-3.5)+'" y2="'+(y+7)+'"/>'+
+        '<line x1="'+x+'" y1="'+y+'" x2="'+(x+3.5)+'" y2="'+(y+7)+'"/>'+
+        '<circle class="knot" cx="'+x+'" cy="'+y+'" r="1.9"/>'
+      );
+    }
+    function layout(){
+      var W = heroInner.clientWidth, H = heroInner.clientHeight;
+      svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+      var bp = posIn(btn, heroInner);
+      var A = {x: bp.x + btn.offsetWidth/2, y: bp.y + btn.offsetHeight};
+      var pts = signs.map(function(s){
+        var p = posIn(s, heroInner);
+        return {x: p.x + s.offsetWidth/2, y: p.y}; /* top-centre = swing pivot */
+      });
+      pts.sort(function(a, b){ return a.x - b.x; });
+      var d;
+      if(pts.length >= 2){
+        var L = pts[0], R = pts[pts.length-1];
+        var sagL = Math.abs(L.y - A.y) * 0.16 + 9;
+        var sagR = Math.abs(R.y - A.y) * 0.16 + 9;
+        d = "M "+L.x+" "+L.y+
+            " Q "+((L.x+A.x)/2)+" "+(((L.y+A.y)/2)+sagL)+" "+A.x+" "+A.y+
+            " Q "+((A.x+R.x)/2)+" "+(((A.y+R.y)/2)+sagR)+" "+R.x+" "+R.y;
+      } else {
+        var P = pts[0];
+        d = "M "+P.x+" "+P.y+" Q "+((P.x+A.x)/2)+" "+(((P.y+A.y)/2)+10)+" "+A.x+" "+A.y;
+      }
+      var bows = "";
+      pts.forEach(function(p){ bows += bow(p.x, p.y); });
+      svg.innerHTML = '<path d="'+d+'"/>' + bows;
+    }
+    var rt;
+    function relayout(){ clearTimeout(rt); rt = setTimeout(layout, 60); }
+    window.addEventListener("resize", relayout, {passive:true});
+    if(document.fonts && document.fonts.ready){ document.fonts.ready.then(layout).catch(function(){}); }
+    window.addEventListener("load", function(){ layout(); setTimeout(layout, 400); setTimeout(layout, 1000); });
+    layout(); setTimeout(layout, 300);
+  })();
 
   /* Farm scene: autoplay looping video, no scroll interaction. */
   (function(){
