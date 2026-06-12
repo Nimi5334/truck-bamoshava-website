@@ -182,6 +182,10 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   position:absolute;inset-inline:0;top:-12%;width:100%;height:124%;
   object-fit:cover;
 }
+.photo-band video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;background:var(--bg-deep);
+}
 @supports (animation-timeline: view()){
   @media (prefers-reduced-motion: no-preference){
     .photo-band img{
@@ -538,9 +542,13 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   </div>
 </section>
 
-<!-- ============ PHOTO BAND 2 ============ -->
+<!-- ============ PHOTO BAND 2: scroll-scrubbed scene ============ -->
 <section class="photo-band" aria-label="העגלה והטרקטור בחווה">
-  <img src="assets/photo-tractor.jpg" alt="העגלה בחווה לצד טרקטור פורד 3930 כחול ישן, בין עצי רימון" loading="lazy" width="1600" height="1067">
+  <video id="farmScene" muted playsinline preload="metadata"
+         poster="assets/photo-tractor.jpg" width="1920" height="1080"
+         aria-label="העגלה בחווה לצד טרקטור פורד 3930 כחול ישן. בגלילה, האיש שליד הדלפק מסתובב, מחייך והולך שמאלה" disablepictureinpicture>
+    <source src="assets/farm-scene.mp4" type="video/mp4">
+  </video>
 </section>
 
 <!-- ============ LOCATIONS ============ -->
@@ -771,6 +779,62 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
     }, {rootMargin:"-30% 0px -60% 0px"});
     cats.forEach(function(c){ if(c) spy.observe(c); });
   }
+
+  /* Scroll-scrubbed farm scene: video playhead follows scroll position.
+     rAF-lerped currentTime = fluid scrubbing at any scroll speed, both directions. */
+  (function(){
+    var video = document.getElementById("farmScene");
+    if(!video || reduceMotion) return;
+    var ready = false, targetT = 0, rafId = null, lastSet = -1;
+
+    function progress(){
+      var r = video.parentElement.getBoundingClientRect();
+      var vh = window.innerHeight;
+      /* 0 when band's top enters the viewport bottom, 1 when band's bottom reaches the top */
+      var p = (vh - r.top) / (vh + r.height);
+      return Math.min(1, Math.max(0, p));
+    }
+    function tick(){
+      rafId = null;
+      if(!ready || !video.duration) return;
+      var cur = video.currentTime;
+      var next = cur + (targetT - cur) * 0.22;
+      if(Math.abs(next - cur) > 0.004 && Math.abs(next - lastSet) > 0.004){
+        try{ video.currentTime = next; lastSet = next; }catch(e){}
+        rafId = requestAnimationFrame(tick);
+      } else if(Math.abs(targetT - cur) > 0.01){
+        rafId = requestAnimationFrame(tick);
+      }
+    }
+    function onScrub(){
+      if(!ready || !video.duration) return;
+      /* keep a hair away from the exact ends so the frame always renders */
+      targetT = 0.01 + progress() * (video.duration - 0.06);
+      if(rafId === null) rafId = requestAnimationFrame(tick);
+    }
+    video.addEventListener("loadedmetadata", function(){
+      ready = true;
+      try{ video.pause(); }catch(e){}
+      onScrub();
+    });
+    /* only start pulling the file when the band approaches the viewport */
+    if("IntersectionObserver" in window){
+      var loader = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){
+            video.preload = "auto";
+            video.load();
+            loader.disconnect();
+          }
+        });
+      }, {rootMargin:"600px 0px"});
+      loader.observe(video);
+    } else {
+      video.preload = "auto";
+    }
+    window.addEventListener("scroll", onScrub, {passive:true});
+    window.addEventListener("resize", onScrub, {passive:true});
+  })();
 
   /* Live open/closed status (Asia/Jerusalem) */
   var HOURS = {
