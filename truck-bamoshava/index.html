@@ -525,9 +525,9 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 
 <!-- ============ PHOTO BAND: scroll-scrubbed scene ============ -->
 <section class="photo-band reveal" aria-label="העגלה והטרקטור בחווה">
-  <video id="farmScene" muted playsinline preload="metadata"
+  <video id="farmScene" autoplay loop muted playsinline preload="auto"
          poster="assets/photo-tractor.jpg" width="1920" height="1080"
-         aria-label="העגלה בחווה לצד טרקטור פורד 3930 כחול ישן. בגלילה, האיש שליד הדלפק מסתובב, מחייך והולך שמאלה" disablepictureinpicture>
+         aria-label="העגלה בחווה לצד טרקטור פורד 3930 כחול ישן" disablepictureinpicture>
     <source src="assets/farm-scene.mp4" type="video/mp4">
   </video>
 </section>
@@ -761,92 +761,13 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
     cats.forEach(function(c){ if(c) spy.observe(c); });
   }
 
-  /* Scroll-scrubbed farm scene: video playhead follows scroll position.
-     rAF-lerped currentTime = fluid scrubbing at any scroll speed, both directions.
-     On touch/mobile devices: autoplay+loop instead (currentTime scrubbing is
-     unreliable on iOS Safari and laggy on Android). */
+  /* Farm scene: autoplay looping video, no scroll interaction. */
   (function(){
     var video = document.getElementById("farmScene");
-    if(!video || reduceMotion) return;
-
-    var isMobile = window.matchMedia("(pointer:coarse)").matches ||
-                   ("ontouchstart" in window && !window.matchMedia("(pointer:fine)").matches);
-
-    /* ── Mobile path: just play the video on loop ── */
-    if(isMobile){
-      video.setAttribute("autoplay","");
-      video.setAttribute("loop","");
-      video.muted = true;
-      video.play().catch(function(){/* poster stays if blocked */});
-      return;
-    }
-
-    /* ── Desktop path: scroll-scrub ── */
-    var ready = false, targetT = 0, rafId = null, lastSet = -1;
-
-    function progress(){
-      var r = video.parentElement.getBoundingClientRect();
-      var vh = window.innerHeight;
-      /* 0 when band's top enters the viewport bottom, 1 when band's bottom reaches the top */
-      var p = (vh - r.top) / (vh + r.height);
-      return Math.min(1, Math.max(0, p));
-    }
-    function stepToward(factor){
-      var cur = video.currentTime;
-      var next = cur + (targetT - cur) * factor;
-      if(Math.abs(next - cur) > 0.004 && Math.abs(next - lastSet) > 0.004){
-        try{ video.currentTime = next; lastSet = next; }catch(e){}
-      }
-      return Math.abs(targetT - video.currentTime) > 0.01;
-    }
-    function tick(){
-      rafId = null;
-      if(!ready || !video.duration) return;
-      if(stepToward(0.22)) rafId = requestAnimationFrame(tick);
-    }
-    function onScrub(){
-      if(!ready || !video.duration) return;
-      /* 1.05 factor (was 0.7): animation plays 50% faster relative to scroll.
-         Small offset keeps a rendered frame at the very edges. */
-      targetT = 0.01 + progress() * (video.duration - 0.06) * 1.05;
-      stepToward(0.35); /* immediate step per scroll event (rAF-independent) */
-      if(rafId === null) rafId = requestAnimationFrame(tick);
-    }
-    video.addEventListener("loadedmetadata", function(){
-      ready = true;
-      try{ video.pause(); }catch(e){}
-      onScrub();
-    });
-    /* Load as a blob when the band approaches: seeks are then served from
-       memory — instant scrubbing on any host (no Range-request dependency). */
-    var fetched = false;
-    function fetchVideo(){
-      if(fetched) return; fetched = true;
-      var src = video.querySelector("source").getAttribute("src");
-      fetch(src).then(function(r){
-        if(!r.ok) throw new Error(r.status);
-        return r.blob();
-      }).then(function(b){
-        video.src = URL.createObjectURL(b);
-        video.load();
-      }).catch(function(){ /* poster remains */ });
-    }
-    function maybeFetch(){
-      if(fetched) return;
-      var r = video.parentElement.getBoundingClientRect();
-      if(r.top < window.innerHeight * 2) fetchVideo();
-    }
-    if("IntersectionObserver" in window){
-      var loader = new IntersectionObserver(function(entries){
-        entries.forEach(function(en){
-          if(en.isIntersecting){ fetchVideo(); loader.disconnect(); }
-        });
-      }, {rootMargin:"600px 0px"});
-      loader.observe(video);
-    }
-    maybeFetch();
-    window.addEventListener("scroll", function(){ maybeFetch(); onScrub(); }, {passive:true});
-    window.addEventListener("resize", onScrub, {passive:true});
+    if(!video) return;
+    video.muted = true;
+    video.loop = true;
+    video.play().catch(function(){/* poster stays if browser blocks autoplay */});
   })();
 
   /* Live open/closed status (Asia/Jerusalem) */
