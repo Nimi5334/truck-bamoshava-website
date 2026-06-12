@@ -762,10 +762,26 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   }
 
   /* Scroll-scrubbed farm scene: video playhead follows scroll position.
-     rAF-lerped currentTime = fluid scrubbing at any scroll speed, both directions. */
+     rAF-lerped currentTime = fluid scrubbing at any scroll speed, both directions.
+     On touch/mobile devices: autoplay+loop instead (currentTime scrubbing is
+     unreliable on iOS Safari and laggy on Android). */
   (function(){
     var video = document.getElementById("farmScene");
     if(!video || reduceMotion) return;
+
+    var isMobile = window.matchMedia("(pointer:coarse)").matches ||
+                   ("ontouchstart" in window && !window.matchMedia("(pointer:fine)").matches);
+
+    /* ── Mobile path: just play the video on loop ── */
+    if(isMobile){
+      video.setAttribute("autoplay","");
+      video.setAttribute("loop","");
+      video.muted = true;
+      video.play().catch(function(){/* poster stays if blocked */});
+      return;
+    }
+
+    /* ── Desktop path: scroll-scrub ── */
     var ready = false, targetT = 0, rafId = null, lastSet = -1;
 
     function progress(){
@@ -790,9 +806,9 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
     }
     function onScrub(){
       if(!ready || !video.duration) return;
-      /* 0.7 factor: the walk plays 30% slower relative to the scroll.
+      /* 1.05 factor (was 0.7): animation plays 50% faster relative to scroll.
          Small offset keeps a rendered frame at the very edges. */
-      targetT = 0.01 + progress() * (video.duration - 0.06) * 0.7;
+      targetT = 0.01 + progress() * (video.duration - 0.06) * 1.05;
       stepToward(0.35); /* immediate step per scroll event (rAF-independent) */
       if(rafId === null) rafId = requestAnimationFrame(tick);
     }
