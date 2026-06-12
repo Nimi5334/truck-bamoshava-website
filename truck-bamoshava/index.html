@@ -142,7 +142,7 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.2;margin:0;color:var(--in
 .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
 .btn-ghost:hover{background:var(--ink);color:var(--bg);transform:translateY(-2px)}
 .btn svg{flex:none}
-.hero-status{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:36px}
+.hero-status{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;margin-top:52px}
 /* Chalkboard tags, like the sign on the truck's service window */
 .status-chip{
   display:inline-flex;flex-direction:column;align-items:center;gap:1px;
@@ -155,6 +155,23 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.2;margin:0;color:var(--in
   transition:transform var(--dur-2) var(--ease-out);
 }
 .status-chip:hover{transform:scale(1.03)}
+/* Hero signs hang from two cords meeting at a knot — like a little shop sign */
+.hero-status .status-chip{position:relative}
+.hero-status .status-chip::after{
+  content:"";position:absolute;z-index:-1;
+  left:18%;right:18%;top:-29px;height:31px;pointer-events:none;
+  background:
+    linear-gradient(to top right,transparent calc(50% - 0.9px),#2E3833 calc(50% - 0.9px),#2E3833 calc(50% + 0.9px),transparent calc(50% + 0.9px)),
+    linear-gradient(to top left, transparent calc(50% - 0.9px),#2E3833 calc(50% - 0.9px),#2E3833 calc(50% + 0.9px),transparent calc(50% + 0.9px));
+  background-size:50% 100%,50% 100%;
+  background-position:left top,right top;background-repeat:no-repeat;
+}
+.hero-status .status-chip::before{
+  content:"";position:absolute;z-index:1;
+  top:-33px;left:50%;width:9px;height:9px;margin-left:-4.5px;
+  border-radius:50%;background:#2E3833;
+  box-shadow:0 1px 2px rgba(38,49,43,.4),inset 0 1px 1px rgba(237,232,216,.25);
+}
 .status-chip strong{font-weight:700;color:#fff;font-size:1.06em}
 .status-chip .chip-text{color:rgba(237,232,216,.82);font-size:.92em}
 .status-chip.open .chip-text{
