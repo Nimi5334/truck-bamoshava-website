@@ -173,32 +173,18 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 .section-head.start{text-align:start;margin-inline:0}
 .section-head.start p{margin-inline:0}
 
-/* ============ Photo bands (full-bleed, scroll-driven parallax) ============ */
+/* ============ Photo band (full-bleed, scroll-scrubbed) ============ */
 .photo-band{
   position:relative;height:clamp(320px,58vh,560px);padding:0;overflow:hidden;
   border-block:1px solid var(--line);
-}
-.photo-band img{
-  position:absolute;inset-inline:0;top:-12%;width:100%;height:124%;
-  object-fit:cover;
 }
 .photo-band video{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;background:var(--bg-deep);
 }
-@supports (animation-timeline: view()){
-  @media (prefers-reduced-motion: no-preference){
-    .photo-band img{
-      animation:bandDrift linear both;
-      animation-timeline:view();
-      animation-range:cover 0% cover 100%;
-    }
-    @keyframes bandDrift{
-      from{transform:translateY(-5.5%)}
-      to{transform:translateY(5.5%)}
-    }
-  }
-}
+/* the band fades in gently as it enters (slower, softer than content reveals) */
+.photo-band.reveal{transform:none;transition-duration:1100ms}
+.photo-band.reveal.in{transform:none}
 
 /* ============ Story strip ============ */
 .story{background:var(--bg-deep);border-block:1px solid var(--line)}
@@ -376,11 +362,6 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   </div>
 </section>
 
-<!-- ============ PHOTO BAND 1 ============ -->
-<section class="photo-band" aria-label="פינת הישיבה בצל עץ השסק">
-  <img src="assets/photo-counter.jpg" alt="חצר הישיבה של העגלה: שולחנות פיקניק ושמשיות תחת עץ שסק גדול, והעגלה הלבנה-תכלת מימין" loading="lazy" width="1226" height="818">
-</section>
-
 <!-- ============ MENU ============ -->
 <section id="menu" style="padding-top:clamp(64px,9vw,110px)">
   <div class="wrap section-head reveal">
@@ -542,8 +523,8 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   </div>
 </section>
 
-<!-- ============ PHOTO BAND 2: scroll-scrubbed scene ============ -->
-<section class="photo-band" aria-label="העגלה והטרקטור בחווה">
+<!-- ============ PHOTO BAND: scroll-scrubbed scene ============ -->
+<section class="photo-band reveal" aria-label="העגלה והטרקטור בחווה">
   <video id="farmScene" muted playsinline preload="metadata"
          poster="assets/photo-tractor.jpg" width="1920" height="1080"
          aria-label="העגלה בחווה לצד טרקטור פורד 3930 כחול ישן. בגלילה, האיש שליד הדלפק מסתובב, מחייך והולך שמאלה" disablepictureinpicture>
@@ -809,8 +790,9 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
     }
     function onScrub(){
       if(!ready || !video.duration) return;
-      /* keep a hair away from the exact ends so the frame always renders */
-      targetT = 0.01 + progress() * (video.duration - 0.06);
+      /* 0.7 factor: the walk plays 30% slower relative to the scroll.
+         Small offset keeps a rendered frame at the very edges. */
+      targetT = 0.01 + progress() * (video.duration - 0.06) * 0.7;
       stepToward(0.35); /* immediate step per scroll event (rAF-independent) */
       if(rafId === null) rafId = requestAnimationFrame(tick);
     }
