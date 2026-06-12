@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F4EC">
 <title>טראק במושבה | קפה ומעדנים בלחם | בת שלמה וכרם מהר"ל</title>
 <meta name="description" content="טראק במושבה היא רשת עגלות קפה עם סניפים בבת שלמה ובכרם מהר״ל. קרואסנדוויצ'ים, לחם רוסטיק, סלטים, פיצות, קפה וגלידה.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -35,7 +36,7 @@
 /* No transitions during first paint: prevents the hidden mobile nav
    (and anything else) from flashing/ghosting while the page loads */
 html.preload *,html.preload *::before,html.preload *::after{transition:none !important}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background:var(--bg);color-scheme:light}
 html:focus-within{scroll-behavior:smooth}
 body{
   margin:0;font-family:var(--font-body);font-size:17px;line-height:1.6;
