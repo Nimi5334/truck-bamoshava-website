@@ -172,7 +172,7 @@ function renderEditor() {
   $status = el("div", { class: "status-msg" });
 
   const topbar = el("div", { class: "topbar" },
-    el("span", { class: "title" }, "Leverage CMS"),
+    el("span", { class: "title" }, "Nimrod CMS"),
     el("span", { class: "site-id" }, site.brand?.name || state.siteId),
     el("span", { class: "spacer" }),
     $status,
