@@ -53,9 +53,9 @@ const server = createServer(async (req, res) => {
 
   // ---- API ----
   if (p === "/auth/login" && req.method === "POST") {
-    const { password } = JSON.parse((await readBody(req)) || "{}");
+    const { siteId, password } = JSON.parse((await readBody(req)) || "{}");
     if (password !== PASSWORD) return sendJson(res, 401, { error: "invalid credentials" });
-    return sendJson(res, 200, { token: TOKEN, siteId: "truck-bamoshava" });
+    return sendJson(res, 200, { token: TOKEN, siteId: siteId || "truck-bamoshava", expiresInSec: 60 * 60 * 12 });
   }
   if (p === "/content" && req.method === "GET") {
     const content = JSON.parse(await readFile(CONTENT, "utf8"));
@@ -82,8 +82,12 @@ const server = createServer(async (req, res) => {
   if (p === "/health") return sendJson(res, 200, { ok: true });
 
   // ---- static ----
+  // Mirror the production publish layout (_cms/ with templates/ alongside the
+  // admin) so the admin's `import("./templates/render.mjs")` resolves here too.
   if (p.startsWith("/site/")) return serveStatic(res, join(SITE_DIR, p.slice("/site/".length)));
   if (p === "/" || p === "/admin" || p === "/admin/") return serveStatic(res, join(CMS_DIR, "admin", "index.html"));
+  if (p.startsWith("/admin/templates/")) return serveStatic(res, join(CMS_DIR, "templates", p.slice("/admin/templates/".length)));
+  if (p.startsWith("/admin/")) return serveStatic(res, join(CMS_DIR, "admin", p.slice("/admin/".length)));
   return serveStatic(res, join(CMS_DIR, p.replace(/^\//, "")));
 });
 

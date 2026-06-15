@@ -54,6 +54,11 @@ Add the render step to the site's GitHub Action before the publish step
 - run: node leverage-cms/templates/render.mjs <siteDir>
 ```
 
+> **First client only — deploy the Worker once.** Steps 6–8 assume the shared
+> Worker is already live. If it isn't, follow `leverage-cms/worker/README.md`
+> (deploy it, then set `WORKER_URL` in `leverage-cms/admin/config.js` to the
+> deployed URL). One Worker serves every client; you only do this once.
+
 ## 6. Install the GitHub App
 Install the Leverage CMS GitHub App on the client's repo (Contents: read/write)
 and note the installation id.

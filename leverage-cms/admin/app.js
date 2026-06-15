@@ -1,17 +1,18 @@
 /**
  * Leverage CMS — admin editor (vanilla JS).
  *
- * Architecture (no backend server required):
- *   Login: PBKDF2(password) → AES-GCM decrypts the site's GitHub token.
- *   Read:  raw.githubusercontent.com (public, no token needed).
- *   Write: GitHub Actions workflow_dispatch (token used only to trigger it).
- *          The Action validates content server-side and commits with GITHUB_TOKEN.
- *   Upload: GitHub Contents API with the decrypted token (images only).
+ * Architecture (all GitHub access is behind the Worker — no token in the browser):
+ *   Login:   POST /auth/login {siteId, password} → short-lived session JWT.
+ *   Read:    GET  /content                       → {content, sha}.
+ *   Save:    PUT  /content {content, sha}         → commit (409 if stale).
+ *   Upload:  POST /upload {filename, contentType, dataBase64} → {relPath}.
  *   Preview: runs render() in the browser against the live template.html.
  *
- * The decrypted token lives only in memory — closing the tab logs out.
+ * The JWT lives only in memory — closing the tab logs out. The Worker resolves
+ * the repo from the JWT's siteId (KV registry), so the browser never sees a
+ * GitHub token and one client can never reach another's repo.
  */
-import { resolveTemplateUrl } from "./config.js";
+import { resolveWorkerUrl, resolveTemplateUrl, DEMO, DEMO_PASSWORD, demoContentUrl } from "./config.js";
 import { FONT_CHOICES, COLOR_LABELS, TAG_OPTIONS, SECTION_LABELS, DAY_NAMES, LABELS as L } from "./schema.js";
 
 /* ---------------- tiny DOM helper ---------------- */
@@ -35,90 +36,76 @@ const $app = document.getElementById("app");
 /* ---------------- state ---------------- */
 const state = {
   siteId: new URLSearchParams(location.search).get("site") || "",
-  token: null,       // decrypted GitHub token (in memory only)
-  siteConfig: null,  // the sites/<siteId>.json config
+  token: null,       // session JWT from the Worker (in memory only)
+  sha: null,         // blob sha of the loaded site.json (optimistic concurrency)
   site: null,
   dirty: false,
   busy: false,
 };
 
-/* ---------------- crypto: decrypt the stored token ---------------- */
-const b64ToBytes = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
-async function decryptToken(encryptedToken, password) {
-  const enc = new TextEncoder();
-  const salt = b64ToBytes(encryptedToken.salt);
-  const iv   = b64ToBytes(encryptedToken.iv);
-  const ct   = b64ToBytes(encryptedToken.ct);
-  const km = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
-  const key = await crypto.subtle.deriveKey(
-    { name: "PBKDF2", salt, iterations: 210000, hash: "SHA-256" },
-    km,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["decrypt"]
-  );
-  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, ct);
-  return new TextDecoder().decode(plain);
-}
+/* ---------------- Worker API client ---------------- */
+// One Worker serves every site. Base URL from ?worker= (dev) or config.js.
+const API = (resolveWorkerUrl(state.siteId) || "").replace(/\/$/, "");
 
-/* ---------------- GitHub API helpers ---------------- */
-const GH = "https://api.github.com";
-
-async function ghApi(path, { method = "GET", token, body } = {}) {
-  const h = { "User-Agent": "leverage-cms", "X-GitHub-Api-Version": "2022-11-28",
-               Accept: "application/vnd.github+json" };
-  if (token) h.Authorization = `Bearer ${token}`;
-  if (body) h["Content-Type"] = "application/json";
-  const res = await fetch(GH + path, { method, headers: h, body: body ? JSON.stringify(body) : undefined });
+async function api(path, { method = "GET", body, auth = true } = {}) {
+  const h = {};
+  if (auth && state.token) h.Authorization = `Bearer ${state.token}`;
+  if (body !== undefined) h["Content-Type"] = "application/json";
+  const res = await fetch(API + path, {
+    method, headers: h, body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
   const data = res.status === 204 ? null : await res.json().catch(() => null);
   if (!res.ok) {
-    const err = new Error((data?.message) || `GitHub API ${res.status}`);
+    const err = new Error(data?.error || data?.message || `API ${res.status}`);
     err.status = res.status; err.data = data; throw err;
   }
   return data;
 }
 
+const DEMO_KEY = `leverage-cms:demo:${new URLSearchParams(location.search).get("site") || "site"}`;
+
+async function login(siteId, password) {
+  if (DEMO) { // no backend — check the demo password locally
+    if (password !== DEMO_PASSWORD) throw Object.assign(new Error("invalid"), { status: 401 });
+    state.token = "demo";
+    return;
+  }
+  const r = await api("/auth/login", { method: "POST", auth: false, body: { siteId, password } });
+  state.token = r.token;
+}
+
 async function loadContent() {
-  const cfg = state.siteConfig;
-  // Public repo → raw URL works without a token, always fresh.
-  const url = `https://raw.githubusercontent.com/${cfg.repo}/main/${cfg.contentPath}`;
-  const res = await fetch(url + "?bust=" + Date.now());
-  if (!res.ok) throw new Error("Could not load site.json: " + res.status);
-  return res.json();
+  if (DEMO) {
+    // Prefer a draft the visitor saved in this browser; else the live content.
+    const saved = localStorage.getItem(DEMO_KEY);
+    if (saved) { try { return JSON.parse(saved); } catch {} }
+    const res = await fetch(demoContentUrl() + "?bust=" + Date.now());
+    if (!res.ok) throw new Error("could not load demo content: " + res.status);
+    return res.json();
+  }
+  const r = await api("/content");
+  state.sha = r.sha;
+  return r.content;
 }
 
-async function dispatchWrite(content) {
-  const cfg = state.siteConfig;
-  const minified = JSON.stringify(content);
-  const b64 = btoa(unescape(encodeURIComponent(minified)));
-  await ghApi(`/repos/${cfg.repo}/actions/workflows/${cfg.dispatchWorkflow}/dispatches`, {
+async function saveContent(content) {
+  if (DEMO) { // persist in the browser only — never touches the live site
+    localStorage.setItem(DEMO_KEY, JSON.stringify(content));
+    return { ok: true, demo: true };
+  }
+  const r = await api("/content", { method: "PUT", body: { content, sha: state.sha } });
+  state.sha = r.sha; // advance to the new sha so the next save isn't a false conflict
+  return r;
+}
+
+const bytesToB64 = (bytes) => { let s = ""; for (const b of bytes) s += String.fromCharCode(b); return btoa(s); };
+
+async function uploadImageToWorker(filename, contentType, bytes) {
+  const r = await api("/upload", {
     method: "POST",
-    token: state.token,
-    body: { ref: cfg.branch, inputs: { site_id: cfg.siteId, content_b64: b64 } },
+    body: { filename, contentType, dataBase64: bytesToB64(bytes) },
   });
-}
-
-async function uploadImageViaContents(filename, contentType, bytes) {
-  const cfg = state.siteConfig;
-  const safe = filename.replace(/[^A-Za-z0-9._-]/g, "_");
-  const path = `${cfg.uploadsPath}/${safe}`;
-  const b64 = btoa(bytes.reduce((s, b) => s + String.fromCharCode(b), ""));
-  // Try to get existing sha for update (file may not exist yet).
-  let sha;
-  try {
-    const existing = await ghApi(`/repos/${cfg.repo}/contents/${path}`, { token: state.token });
-    sha = existing.sha;
-  } catch (e) { if (e.status !== 404) throw e; }
-  await ghApi(`/repos/${cfg.repo}/contents/${path}`, {
-    method: "PUT", token: state.token,
-    body: { message: `cms(${cfg.siteId}): upload ${safe}`, content: b64, branch: cfg.branch,
-            ...(sha ? { sha } : {}), committer: { name: "Leverage CMS", email: "cms@leverage.local" } },
-  });
-  // Return the site-relative path (e.g. "assets/logo.png")
-  const siteParts = cfg.contentPath.split("/").slice(0, -2); // strip content/site.json
-  const fullParts = path.split("/");
-  let i = 0; while (i < siteParts.length && siteParts[i] === fullParts[i]) i++;
-  return fullParts.slice(i).join("/");
+  return r.relPath; // path as referenced inside site.json (e.g. "assets/logo.webp")
 }
 
 /* ---------------- status line ---------------- */
@@ -140,17 +127,7 @@ function renderLogin(errMsg) {
       e.preventDefault();
       btn.disabled = true; btn.textContent = "…";
       try {
-        // Load the site config (contains the encrypted token).
-        const cfgUrl = new URL(`./sites/${state.siteId}.json`, import.meta.url);
-        const cfgRes = await fetch(cfgUrl);
-        if (!cfgRes.ok) throw Object.assign(new Error("אתר לא ידוע"), { status: 404 });
-        const cfg = await cfgRes.json();
-        // Decrypt: wrong password causes AES-GCM to throw.
-        let token;
-        try { token = await decryptToken(cfg.encryptedToken, pw.value); }
-        catch { throw Object.assign(new Error("סיסמה שגויה."), { status: 401 }); }
-        state.siteConfig = cfg;
-        state.token = token;
+        await login(state.siteId, pw.value); // 401 if the site/password is wrong
         await boot();
       } catch (err) {
         msg.textContent = err.status === 401 ? "סיסמה שגויה." : "שגיאת התחברות: " + err.message;
@@ -160,12 +137,17 @@ function renderLogin(errMsg) {
     el("label", { class: "muted", style: "font-size:.85rem" }, `${L.password} · ${state.siteId || "—"}`),
     pw, btn, msg
   );
+  const demoHint = DEMO
+    ? el("p", { class: "muted", style: "font-size:.82rem;margin-top:14px;text-align:center" },
+        `מצב הדגמה · סיסמה: ${DEMO_PASSWORD}`)
+    : null;
   $app.replaceChildren(
     el("div", { class: "login-wrap" },
       el("div", { class: "card login-card" },
         el("h1", {}, L.login_title),
         el("p", {}, L.login_sub),
-        form
+        form,
+        demoHint
       )
     )
   );
@@ -207,9 +189,17 @@ function renderEditor() {
   );
 
   const saveBtn = el("button", { class: "btn btn-primary", onclick: save }, L.save);
-  const savebar = el("div", { class: "savebar" }, saveBtn, el("span", { class: "muted", style: "font-size:.85rem" }, "שינויים נשמרים ל-GitHub ומתפרסמים תוך כדקה."));
+  const savebarNote = DEMO
+    ? "מצב הדגמה — השינויים נשמרים בדפדפן בלבד ולא מתפרסמים."
+    : "שינויים נשמרים ל-GitHub ומתפרסמים תוך כדקה.";
+  const savebar = el("div", { class: "savebar" }, saveBtn, el("span", { class: "muted", style: "font-size:.85rem" }, savebarNote));
 
-  const left = el("div", {}, editor, savebar);
+  const demoBanner = DEMO
+    ? el("div", { style: "background:var(--warn);color:#1b1206;padding:8px 20px;font-size:.85rem;font-weight:600;text-align:center" },
+        "מצב הדגמה: אפשר לערוך ולראות תצוגה מקדימה. השינויים נשמרים בדפדפן שלך בלבד — האתר עצמו לא משתנה.")
+    : null;
+
+  const left = el("div", {}, demoBanner, editor, savebar);
   const preview = el("div", { class: "preview-pane hide" }, el("iframe", { title: "preview" }));
   $previewFrame = preview.querySelector("iframe");
 
@@ -578,11 +568,12 @@ async function save() {
   state.busy = true;
   setStatus(L.saving, "");
   try {
-    await dispatchWrite(state.site);
+    const r = await saveContent(state.site);
     state.dirty = false;
-    setStatus(L.saved, "ok");
+    setStatus(r?.demo ? "נשמר בדפדפן (מצב הדגמה) ✓" : L.saved, "ok");
   } catch (err) {
     if (err.status === 401) { state.token = null; renderLogin("התחברו מחדש."); }
+    else if (err.status === 409) setStatus("התוכן השתנה מאז שטענת. רעננו את הדף ונסו שוב.", "err");
     else setStatus("השמירה נכשלה: " + err.message, "err");
   } finally { state.busy = false; }
 }
@@ -594,8 +585,9 @@ async function uploadImage(file) {
     const r = await downscale(file, 1600);
     blob = r.blob; type = r.type; name = name.replace(/\.[^.]+$/, "") + (type === "image/webp" ? ".webp" : ".jpg");
   }
+  if (DEMO) return URL.createObjectURL(blob); // browser-only preview; not persisted
   const bytes = new Uint8Array(await blob.arrayBuffer());
-  return uploadImageViaContents(name, type, bytes);
+  return uploadImageToWorker(name, type, bytes);
 }
 
 function downscale(file, maxDim) {
@@ -667,8 +659,8 @@ function buildFontsHref(fonts) {
   return "https://fonts.googleapis.com/css2?" + [...fams].filter(Boolean).map((f) => "family=" + f).join("&") + "&display=swap";
 }
 function resolveAssetForPreview(p) {
-  if (/^https?:|^data:/.test(p)) return p;
-  const tplUrl = resolveTemplateUrl(state.siteId, state.siteConfig);
+  if (/^https?:|^data:|^blob:/.test(p)) return p;
+  const tplUrl = resolveTemplateUrl(state.siteId);
   if (!tplUrl) return p;
   const base = new URL(tplUrl);
   return base.origin + base.pathname.replace(/[^/]+$/, "") + p;

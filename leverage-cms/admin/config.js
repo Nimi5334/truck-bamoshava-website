@@ -1,28 +1,45 @@
 /**
  * Admin panel configuration.
  *
- * resolveTemplateUrl(siteId, cfg) — returns the URL of the site's template.html
- *   for the live preview iframe. Derived from the repo config (no hardcoding needed).
- *   Returns null to disable preview.
+ * resolveWorkerUrl(siteId) — base URL of the Cloudflare Worker that handles
+ *   auth + content + uploads for every site. One Worker serves all clients.
+ *   Override locally with ?worker=http://localhost:8799
  *
- * For local dev, override with ?tpl=http://localhost:8741/template.html
+ * resolveTemplateUrl(siteId) — URL of the site's template.html for the live
+ *   preview iframe. Returns null to disable preview.
+ *   Override locally with ?tpl=http://localhost:8799/site/template.html
  */
 const params = new URLSearchParams(location.search);
 
-// Map siteId -> live domain (the GitHub Pages custom domain if set, else ghpages URL).
-// The admin reads site.json from raw.githubusercontent.com and template.html from here.
+// The deployed Worker. After `wrangler deploy`, set this to the printed URL
+// (e.g. https://leverage-cms.<your-subdomain>.workers.dev) or a custom route.
+const WORKER_URL = "https://leverage-cms.example.workers.dev";
+
+// siteId -> live origin (custom domain if set, else the GitHub Pages URL).
+// The preview iframe loads template.html and assets from here. Add a line per
+// site you onboard (see leverage-cms/ONBOARDING.md step 7).
 const SITE_ORIGINS = {
   "truck-bamoshava": "https://truckbamoshava.co.il",
 };
 
-export function resolveTemplateUrl(siteId, cfg) {
+/* ---------------- demo mode ----------------
+ * ?demo=1 runs the editor with NO backend: local login, content read from the
+ * already-published site, saves kept in the browser only. Lets anyone try the
+ * full editing experience from one link — no account, no install, no Worker. */
+export const DEMO = params.get("demo") === "1";
+export const DEMO_PASSWORD = "demo";
+
+// In a published build the admin lives at <site>/_cms/, so the live content and
+// template sit one level up — same origin, public, no auth.
+export const demoContentUrl = () => new URL("../content/site.json", location.href).href;
+
+export function resolveWorkerUrl(/* siteId */) {
+  return params.get("worker") || WORKER_URL;
+}
+
+export function resolveTemplateUrl(siteId) {
   if (params.get("tpl")) return params.get("tpl");
-  // Try the registered custom domain first; fall back to GitHub Pages URL.
-  const custom = SITE_ORIGINS[siteId];
-  if (custom) return `${custom}/template.html`;
-  if (cfg?.repo) {
-    const [owner, repo] = cfg.repo.split("/");
-    return `https://${owner}.github.io/${repo}/template.html`;
-  }
-  return null;
+  if (DEMO) return new URL("../template.html", location.href).href; // same origin as /_cms/
+  const origin = SITE_ORIGINS[siteId];
+  return origin ? `${origin}/template.html` : null;
 }

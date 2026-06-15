@@ -64,10 +64,14 @@ leverage-cms/
 
 ## Quick start (local, no deploy)
 ```bash
-node leverage-cms/tools/dev-mock.mjs    # serves admin + mock API + pilot site
+node leverage-cms/tools/dev-mock.mjs           # serves admin + mock Worker API + pilot site
 # open the printed URL; log in with password "demo"
-node leverage-cms/worker && npm test    # run the Worker security/logic tests
+
+cd leverage-cms/worker && npm install && npm test   # run the Worker security/logic tests
 ```
+The dev-mock implements the **same** Worker API the admin talks to in production
+(`/auth/login`, `/content`, `/upload`), against local files instead of GitHub —
+so the editor you exercise locally is exactly the one that ships.
 
 Adding a new client: see [ONBOARDING.md](ONBOARDING.md). The pilot site
 (`truck-bamoshava/`) is a complete worked example.

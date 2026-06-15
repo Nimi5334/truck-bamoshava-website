@@ -30,15 +30,15 @@ jobs:
 
       - name: Bundle admin panel into publish directory
         # Copies the admin SPA to _cms/ so it's served at /<repo>/_cms/?site=…
+        # No secrets are published — the admin holds no token; all GitHub access
+        # is behind the Worker, keyed by the session JWT's siteId.
         run: |
-          mkdir -p truck-bamoshava/_cms/sites
+          mkdir -p truck-bamoshava/_cms/templates
           cp leverage-cms/admin/index.html truck-bamoshava/_cms/
           cp leverage-cms/admin/app.js     truck-bamoshava/_cms/
           cp leverage-cms/admin/config.js  truck-bamoshava/_cms/
           cp leverage-cms/admin/schema.js  truck-bamoshava/_cms/
-          cp leverage-cms/admin/sites/truck-bamoshava.json truck-bamoshava/_cms/sites/
           # Also publish the shared render module (used for live preview)
-          mkdir -p truck-bamoshava/_cms/templates
           cp leverage-cms/templates/render.mjs truck-bamoshava/_cms/templates/
 
       - name: Publish to gh-pages
