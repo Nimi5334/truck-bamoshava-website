@@ -1,0 +1,15 @@
+{
+  "name": "leverage-cms-worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Auth + commit Worker for the Leverage CMS (one Worker serves all client sites).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "wrangler": "^3.80.0"
+  }
+}
