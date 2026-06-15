@@ -18,6 +18,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Render site from content
+        # Bakes content/site.json into index.html via template.html.
+        # No dependencies — render.mjs uses only Node built-ins.
+        run: node leverage-cms/templates/render.mjs truck-bamoshava
+
+      - name: Bundle admin panel into publish directory
+        # Copies the admin SPA to _cms/ so it's served at /<repo>/_cms/?site=…
+        run: |
+          mkdir -p truck-bamoshava/_cms/sites
+          cp leverage-cms/admin/index.html truck-bamoshava/_cms/
+          cp leverage-cms/admin/app.js     truck-bamoshava/_cms/
+          cp leverage-cms/admin/config.js  truck-bamoshava/_cms/
+          cp leverage-cms/admin/schema.js  truck-bamoshava/_cms/
+          cp leverage-cms/admin/sites/truck-bamoshava.json truck-bamoshava/_cms/sites/
+          # Also publish the shared render module (used for live preview)
+          mkdir -p truck-bamoshava/_cms/templates
+          cp leverage-cms/templates/render.mjs truck-bamoshava/_cms/templates/
+
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:

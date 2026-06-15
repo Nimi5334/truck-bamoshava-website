@@ -1,0 +1,111 @@
+name: CMS — write content
+
+# Triggered by the admin panel when a client saves changes.
+# The GITHUB_TOKEN used here is auto-scoped to this repo only.
+# The gho_ OAuth token in the admin SPA is used ONLY to trigger this dispatch.
+on:
+  workflow_dispatch:
+    inputs:
+      site_id:
+        description: "Site identifier (e.g. truck-bamoshava)"
+        required: true
+        type: string
+      content_b64:
+        description: "Base64-encoded site.json (minified)"
+        required: true
+        type: string
+      upload_path:
+        description: "Optional upload path relative to site root"
+        required: false
+        type: string
+      upload_b64:
+        description: "Optional base64-encoded image bytes for an upload"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate site_id
+        run: |
+          # Only allow known site ids (add entries here as you onboard clients).
+          case "${{ inputs.site_id }}" in
+            truck-bamoshava) echo "site_id OK" ;;
+            *) echo "ERROR: unknown site_id '${{ inputs.site_id }}'"; exit 1 ;;
+          esac
+
+      - name: Decode and validate content
+        id: decode
+        run: |
+          node -e "
+          const b64 = process.argv[1];
+          const buf = Buffer.from(b64, 'base64');
+          const json = buf.toString('utf8');
+          let content;
+          try { content = JSON.parse(json); } catch(e) { console.error('JSON parse failed:', e.message); process.exit(1); }
+          // Run the same validation that's in the admin SPA
+          const { validateSite } = await import('./leverage-cms/worker/src/validate.mjs');
+          const r = validateSite(content);
+          if (!r.ok) { console.error('Validation failed:', r.errors); process.exit(1); }
+          // Write minified to the content file
+          const siteId = process.env.SITE_ID;
+          const contentPath = siteId + '/content/site.json';
+          const fs = require('fs');
+          fs.writeFileSync(contentPath, JSON.stringify(content, null, 2) + '\n', 'utf8');
+          console.log('content written to', contentPath, '(' + json.length + ' bytes)');
+          " "${{ inputs.content_b64 }}"
+        env:
+          SITE_ID: ${{ inputs.site_id }}
+
+      - name: Handle image upload (optional)
+        if: inputs.upload_path != '' && inputs.upload_b64 != ''
+        run: |
+          node -e "
+          const path = process.argv[1];
+          const b64 = process.argv[2];
+          const siteId = process.env.SITE_ID;
+          // Basic safety checks on the path
+          if (path.includes('..') || path.startsWith('/') || !/^[A-Za-z0-9._/\-]+\$/.test(path)) {
+            console.error('Invalid upload path:', path); process.exit(1);
+          }
+          const allowed = ['.png','.jpg','.jpeg','.webp','.gif','.svg'];
+          const ext = path.match(/\.[^.]+\$/)?.[0] || '';
+          if (!allowed.includes(ext.toLowerCase())) { console.error('Disallowed extension:', ext); process.exit(1); }
+          const buf = Buffer.from(b64, 'base64');
+          if (buf.length > 1.5 * 1024 * 1024) { console.error('Image too large'); process.exit(1); }
+          const fs = require('fs'); const nodePath = require('path');
+          const fullPath = nodePath.join(siteId, path);
+          fs.mkdirSync(nodePath.dirname(fullPath), { recursive: true });
+          fs.writeFileSync(fullPath, buf);
+          console.log('uploaded', fullPath, buf.length, 'bytes');
+          " "${{ inputs.upload_path }}" "${{ inputs.upload_b64 }}"
+        env:
+          SITE_ID: ${{ inputs.site_id }}
+
+      - name: Render site from updated content
+        run: node leverage-cms/templates/render.mjs ${{ inputs.site_id }}
+
+      - name: Copy admin panel into publish directory
+        run: |
+          mkdir -p ${{ inputs.site_id }}/_cms
+          cp leverage-cms/admin/index.html ${{ inputs.site_id }}/_cms/
+          cp -r leverage-cms/admin/*.js ${{ inputs.site_id }}/_cms/ 2>/dev/null || true
+          cp -r leverage-cms/admin/sites ${{ inputs.site_id }}/_cms/ 2>/dev/null || true
+
+      - name: Commit and push
+        run: |
+          git config user.name  "Leverage CMS"
+          git config user.email "cms@leverage.local"
+          git add .
+          git diff --cached --quiet || git commit -m "cms(${{ inputs.site_id }}): update content"
+          git push
