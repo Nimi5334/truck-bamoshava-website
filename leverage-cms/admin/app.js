@@ -744,72 +744,159 @@ function openTemplateGuide() {
 }
 
 function copyGuidePrompt() {
-  const prompt = `אתה עיצוב ליד של סטודיו המיוחד בעבודה שנראית מקורית ויחידה. הלקוח כבר דחה עבודה גנרית.
+  const prompt = `You are a design lead at a studio known for websites that win awards AND rank in search. You are paid for a specific point of view, not for taste in general.
 
-🎯 משימה: עיצוב תבנית אתר ל-CMS עשה-בעצמך שלנו.
+═══════════════════════════════════════════════════════════════════════════════
+TASK: Generate an HTML template for a Hebrew-first, self-edit CMS (Nimrod CMS)
+═══════════════════════════════════════════════════════════════════════════════
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GATE 1 — UNIQUENESS (עיצוב שלא נראה כמו כל אחד אחר)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The CMS uses a JSON data structure (site.json) with:
+- site.brand: { name, logo }
+- site.meta: { title, description, fontsHref }
+- site.theme: { colors: {}, fonts: { head, body }, radius }
+- site.nav: { links: [], cta: { label, href } }
+- site.sections: [] (reorderable content blocks)
+- site.footer: { logo, copyright, regions, links: [] }
 
-אסור על עיצוב אלה (לא תיקיות — התחל מחדש):
-• סימטריה מעגלת + גרדיינט קשת
-• בנטו גריד בלי תוכן תוצאה אמיתי
-• Trusted by לוגו בר
-• כרטיסי טסטימוניאל עם כוכבים
-• three-column feature grid
-• cream/terracotta צבע default
-• Inter/Poppins וגופנים סטנדרטיים
+SECTION TYPES available:
+- hero: { logo, background, headline, lead, ctas: [] }
+- richtext: { heading, paragraphs: [] }
+- menu: { heading, intro, currency, categories: [] }
+- media: { poster, video, sectionLabel, videoLabel }
+- locations: { heading, intro, footnote, branches: [] }
+- social: { heading, intro, links: [] }
 
-✅ חובה: הגדר קו עיצובי בסיסי מהעולם האמיתי (כלי, סימנים, מכתבים, מוזיקה — משהו פיזי).
-כל הצבע, ריווח, וטיפוגרפיה חייבים להישקף בקו זה.
+═══════════════════════════════════════════════════════════════════════════════
+GATE 1 — UNIQUENESS (not templated)
+═══════════════════════════════════════════════════════════════════════════════
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GATE 2 — PERFORMANCE & RESILIENCE (לא מנוסי לקוח)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BANNED patterns (restart if tempted):
+❌ Centered hero with pill + huge headline + two side-by-side buttons + screenshot
+❌ Three-column feature grid with icon in rounded square above
+❌ Greyscale "Trusted by" logo bar under hero
+❌ Floating testimonial cards with five gold stars
+❌ 01 / 02 / 03 numbering on non-sequence content
+❌ Alternating left-text / right-image bands
+❌ Bento grid as layout substitute
+❌ Sticky sidebar + card feed template
 
-• LCP < 2.0s עם Throttled 4G
-• Total animation JS < 40KB gzipped
-• CLS < 0.1 (תמיד aspect-ratio boxes)
-• Scroll animation: transform + opacity בלבד
-• טקסט כל בדום בעומס. לא render-in-JS headlines.
-• כל repeater עובד עם 1 item וגם עם 12
-• אפילו טקסט שגוי (3x אורך, Hebrew) לא שובר layout
+BANNED colors & type:
+❌ Cream (~#F4F1EA) + terracotta (~#D97757)
+❌ Inter, Poppins, Montserrat, Roboto, Open Sans, Lato as display face
+❌ One font family doing every job at three weights
+❌ Purple-to-blue gradients, gradient text fills
+❌ Glassmorphic cards floating over blurred blobs
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GATE 3 — RTL-NATIVE (יתרון תחרותי)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BANNED copy:
+❌ "Elevate", "Transform", "Unlock", "Seamlessly", "Empower"
+❌ "Take your X to the next level", "Where X meets Y"
+❌ "Your journey starts here", "Built different"
 
-• Logical properties בלבד: margin-inline-start, border-inline-end, inset-inline
-• Grid/flex עוקבים פלוס לוגיקה, לא hardcoded column order
-• הנעות anim flipped by [LOCALE_DIR]: entrance direction, parallax, cursor-follow
-• Glyphs flipped: arrows, chevrons, quotes. NO flip: logos, clocks, photos
-• מספרים + תאריכים LTR בעברית (bidi isolation)
-• Hebrew face ראשון-מקרא, לא fallback. Retune leading; יותר אל תשתמש בעברית italic/caps
-• Render both LTR+RTL side-by-side. RTL לא צריך להיות חלש יותר.
+✅ REQUIRED: Before designing, name ONE specific visual lineage from the real world (printed artifact, instrument, signage system, document type, tool, or material). State it in one line. Every colour, type, spacing, and layout decision must trace back to it. If your design works equally for any industry, it is generic. Restart.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CMS TOKENS (fill in for templates)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+═══════════════════════════════════════════════════════════════════════════════
+GATE 2 — ADMISSION (template must survive real client misuse)
+═══════════════════════════════════════════════════════════════════════════════
 
-[SCROLL_ANIMATION] — pinned horizontal rail, scrubbed sequence, 3-plane parallax, clip-path reveal, SVG line-draw
-[HOVER_EFFECT] — magnetic pull, cursor-follow preview, directional underline, card lift, duotone shift
-[LOCALE_DIR] — RTL/LTR based on page
-[BRAND_NAME] — name from CMS
-[PRIMARY_ACCENT] — color from theme.sage
-[DISPLAY_FACE] — Hebrew pair from theme.fonts.head
-[BODY_FACE] — HTML pair from theme.fonts.body
-[HERO_MEDIA] — poster image from hero section
+PERFORMANCE targets (non-negotiable):
+• LCP < 2.0s on throttled 4G, mid-tier Android. Hero media never blocker; poster first, media after.
+• Total animation JS < 40KB gzipped. No animation library for a single effect.
+• Scroll motion: transform + opacity only. No layout-triggering properties in scroll handlers.
+• IntersectionObserver over scroll listeners; rAF-throttle pointer-driven.
+• Images: explicit width/height, modern format (WebP), responsive srcset, lazy below fold, eager + fetchpriority="high" on LCP.
+• Fonts: subset (Latin + Hebrew), preloaded, font-display: swap, max two families.
+• CLS < 0.1. Every media slot has reserved aspect-ratio box.
+• Primary copy exists in DOM at load. Never render headline or body text in JS only.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RESILIENCE — render three times:
+a) Every text field at 3x expected length, in Hebrew.
+b) Every text field at one word. Optional sections empty.
+c) Wrong aspect ratios; portrait image where landscape expected; one missing image.
+If any breaks layout, overflows, clips text, or leaves orphaned empty section → fix DESIGN, not content.
 
-בדיקה סופית: אם זה היה עבור Shopify או SaaS, הייתי ממליץ משהו שונה לחלוטין?
-אם כן, בואו נעשה ספציפי להקשר המזון/אתר זה.`;
+Requirements:
+• No fixed heights on text containers. No text baked into images.
+• Every repeater works with 1 item and with 12.
+• Every optional section collapses cleanly to nothing.
+• prefers-reduced-motion: motion degrades to opacity or nothing.
+• No scroll hijacking. Pinned sections release predictably.
+
+ACCESS & CRAWL:
+• Semantic landmarks, one h1, logical heading order, visible keyboard focus
+• 4.5:1 contrast on body text, real focus order on interactive components
+• Schema.org JSON-LD per vertical. Per-page title/meta, canonical, Open Graph
+• Descriptive alt text describing content, not decoration
+
+═══════════════════════════════════════════════════════════════════════════════
+GATE 3 — RTL-NATIVE (the competitive moat)
+═══════════════════════════════════════════════════════════════════════════════
+
+This template sells into Hebrew-speaking market. RTL is the default, not a patch.
+
+CSS rules:
+• Logical properties ONLY: margin-inline-start, padding-inline, inset-inline-end, text-align: start, border-inline
+• Zero left/right in authored CSS
+• Grid and flex follow logical flow. No hardcoded column order.
+• Mirror motion vectors with dir="rtl": entrance direction, parallax drift, wipe, sweep, underline origin, carousel, pin/release edges, cursor-follow offset
+• Directional glyphs flip (arrows, chevrons, quotes, progress, breadcrumb). NO flip: logos, clocks, photographs, tool pictograms
+• Numbers, prices, phone, dates, codes, units, Latin brand names stay LTR inside Hebrew. Use bidi isolation, never manual spacing
+• Hebrew typeface is first-class, not fallback. Real character, retune leading up, remove positive tracking at display sizes
+• Hebrew has no uppercase or italic. Design equivalents with weight/width/size/color, never faux-caps or oblique
+• Render LTR and RTL side-by-side before shipping. RTL build must be visually equal quality.
+
+═══════════════════════════════════════════════════════════════════════════════
+TEMPLATE STRUCTURE (Liquid / template.html format)
+═══════════════════════════════════════════════════════════════════════════════
+
+Use \`{{{ data.key }}}\` to render CMS fields (HTML-escaped). Example:
+  <h1>{{{ site.brand.name }}}</h1>
+  <p>{{{ section.data.headline }}}</p>
+
+For image fields: {{{ data.image }}} outputs the relative path from CMS.
+For arrays (sections, nav.links, locations.branches): use <!-- loop --> <!-- /loop -->
+
+Use inline style attribute for theme colors:
+  <div style="background: {{{ site.theme.colors.bg }}}; color: {{{ site.theme.colors.ink }}};"></div>
+
+For fonts:
+  <link rel="preload" href="{{{ site.meta.fontsHref }}}" as="style">
+  <link rel="stylesheet" href="{{{ site.meta.fontsHref }}}">
+
+═══════════════════════════════════════════════════════════════════════════════
+OUTPUT FORMAT
+═══════════════════════════════════════════════════════════════════════════════
+
+Deliver a complete, self-contained HTML file:
+- <html lang="he" dir="rtl">
+- Full <!DOCTYPE html>, <head>, <meta viewport>, <style>, <body>
+- All CSS in <style> tag (no external stylesheets except fonts)
+- No JavaScript libraries (vanilla JS only if needed)
+- All CMS field bindings with {{{ }}} syntax
+- Semantic HTML5 (main, section, header, footer, nav)
+- One h1 per page
+- Logical property grid/flex for RTL
+- Prefers-reduced-motion support
+
+═══════════════════════════════════════════════════════════════════════════════
+DESIGN DIRECTION
+═══════════════════════════════════════════════════════════════════════════════
+
+Create a template that:
+1. Has a SPECIFIC visual lineage (print, tools, real world) — state it first
+2. Passes all three Gates without compromise
+3. Reflects the CMS's flexibility (any industry, any brand)
+4. Prioritizes Hebrew readability and RTL elegance
+5. Is performant enough to win Core Web Vitals
+6. Requires ZERO client tweaks for content misuse to not break layout
+
+Design for food/restaurant/truck businesses primarily, but must work for any single-location service business (salon, gym, studio, etc.).
+
+Begin.`;
 
   navigator.clipboard.writeText(prompt).then(() => {
-    setStatus("ה-Prompt הועתק ליצירת נייר", "ok");
+    setStatus("Prompt copied to clipboard ✓", "ok");
   }).catch(() => {
-    setStatus("שגיאה בהעתקה", "err");
+    setStatus("Copy failed", "err");
   });
 }
 
