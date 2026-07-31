@@ -682,16 +682,17 @@ function openTemplateGuide() {
   );
 
   const body = el("div", { class: "modal-body" },
-    el("p", {}, "אתה עומד ליצור תבנית אתר חדשה עם עיצוב ייחודי שאינו גנרי."),
+    el("p", {}, "אתה עומד ליצור תבנית אתר חדשה — עיצוב עתידני ומונע-אנימציה, ייחודי ולא גנרי."),
     el("p", {}, "הלחצן להלן מעתיק prompt מלא לעזר AI (Claude, ChatGPT, וכו') שיכול ליצור תבנית HTML בעלת:"),
     el("ul", {},
-      el("li", {}, "עיצוב ייחודי ולא גנרי"),
-      el("li", {}, "ביצועים מעולים (LCP < 2s, CLS < 0.1)"),
-      el("li", {}, "תמיכה RTL/Hebrew ראשונית"),
+      el("li", {}, "כיוון עתידני עם קו עיצובי ספציפי (לא קלישאות גלקסי/גרדיאנט)"),
+      el("li", {}, "אנימציית חתימה אחת מוקפדת — לא עומס אפקטים"),
+      el("li", {}, "ביצועים מעולים גם עם אנימציה כבדה (LCP < 2s, CLS < 0.1)"),
+      el("li", {}, "תמיכה RTL/Hebrew ראשונית — כולל כיווני אנימציה"),
       el("li", {}, "חוזק מול שימוש לא תקני של לקוחות")
     ),
     el("p", { class: "muted", style: "font-size:.85rem;margin-top:16px" },
-      "הפרומפט מכיל את כל הגבולות העיצובים, דרישות ביצוע, דרישות RTL, והוראות לפורמט HTML עבור ה-CMS שלנו.")
+      "הפרומפט מכיל את כל הגבולות העיצובים, תקציב האנימציה, דרישות RTL, והוראות לפורמט HTML עבור ה-CMS שלנו.")
   );
 
   const copyBtn = el("button", { class: "copy-btn", onclick: () => copyGuidePrompt() },
@@ -705,11 +706,17 @@ function openTemplateGuide() {
 }
 
 function copyGuidePrompt() {
-  const prompt = `You are a design lead at a studio known for websites that win awards AND rank in search. You are paid for a specific point of view, not for taste in general.
+  const prompt = `You are a design lead at a studio known for futuristic, motion-driven websites that win awards AND rank in search. You are paid for a specific point of view, not for taste in general.
 
 ═══════════════════════════════════════════════════════════════════════════════
-TASK: Generate an HTML template for a Hebrew-first, self-edit CMS (Nimrod CMS)
+TASK: Generate a FUTURISTIC, ANIMATED HTML template for a Hebrew-first,
+      self-edit CMS (Nimrod CMS)
 ═══════════════════════════════════════════════════════════════════════════════
+
+Direction: futuristic, high-motion, digital-native. Think interfaces, not
+brochures — HUD-like precision, kinetic type, depth via layering and motion
+rather than skeuomorphic shadow. Animation is not a garnish here, it is the
+product. But "futuristic" is not one look — see Gate 1.
 
 The CMS uses a JSON data structure (site.json) with:
 - site.brand: { name, logo }
@@ -731,39 +738,56 @@ SECTION TYPES available:
 GATE 1 — UNIQUENESS (not templated)
 ═══════════════════════════════════════════════════════════════════════════════
 
-BANNED patterns (restart if tempted):
-❌ Centered hero with pill + huge headline + two side-by-side buttons + screenshot
+BANNED patterns — the "futuristic" clichés everyone reaches for first
+(restart if tempted, do not repair):
+❌ Purple-to-blue or pink-to-cyan gradient mesh as the whole background
+❌ Glassmorphism / frosted panels over a blurred gradient blob
+❌ Generic "particle network" or floating dots-and-lines canvas
+❌ Neon outline text, chromatic-aberration glitch text as decoration only
+❌ Centered hero: eyebrow pill + huge headline + two buttons + screenshot
 ❌ Three-column feature grid with icon in rounded square above
-❌ Greyscale "Trusted by" logo bar under hero
-❌ Floating testimonial cards with five gold stars
-❌ 01 / 02 / 03 numbering on non-sequence content
-❌ Alternating left-text / right-image bands
-❌ Bento grid as layout substitute
-❌ Sticky sidebar + card feed template
+❌ Bento grid used as a substitute for having a layout idea
+❌ Generic dark-mode-only palette with a single neon accent and nothing else
+❌ Stock 3D globe / abstract blob mesh (Spline-default look)
+❌ Scroll-jacked full-page slides that trap the wheel
 
-BANNED colors & type:
-❌ Cream (~#F4F1EA) + terracotta (~#D97757)
-❌ Inter, Poppins, Montserrat, Roboto, Open Sans, Lato as display face
+BANNED type:
+❌ Inter, Poppins, Montserrat, Roboto, Open Sans, Lato as the display face
 ❌ One font family doing every job at three weights
-❌ Purple-to-blue gradients, gradient text fills
-❌ Glassmorphic cards floating over blurred blobs
+❌ Generic monospace-as-signifier-of-tech with no other typographic idea
 
 BANNED copy:
 ❌ "Elevate", "Transform", "Unlock", "Seamlessly", "Empower"
-❌ "Take your X to the next level", "Where X meets Y"
-❌ "Your journey starts here", "Built different"
+❌ "The future of X", "Take your X to the next level", "Where X meets Y"
+❌ "Your journey starts here", "Built different", "Powered by AI"
 
-✅ REQUIRED: Before designing, name ONE specific visual lineage from the real world (printed artifact, instrument, signage system, document type, tool, or material). State it in one line. Every colour, type, spacing, and layout decision must trace back to it. If your design works equally for any industry, it is generic. Restart.
+✅ REQUIRED — LINEAGE: "Futuristic" must be built from a SPECIFIC, named
+system, not a mood board. Before designing, pick ONE concrete lineage and
+state it in one line:
+  • an instrument panel / HUD from a real discipline (avionics, motorsport
+    telemetry, lab equipment, broadcast control room)
+  • a data-visualization tradition (radar, oscilloscope, seismograph, sonar)
+  • a signage/way-finding system built for speed-of-read (transit, airport,
+    mission control)
+  • a material or physical process (circuit trace, holography, fiber optics,
+    machined metal, anodized panel)
+Every colour, type choice, spacing rule, and — critically — every ANIMATION
+must trace back to that one lineage. A pinned counter that spins because
+"HUD numbers do that" is earned; a random parallax layer bolted on for
+flair is not. If the animation could be swapped onto an unrelated brief
+with zero changes, it is decoration, not the system. Restart.
 
 ═══════════════════════════════════════════════════════════════════════════════
 GATE 2 — ADMISSION (template must survive real client misuse)
 ═══════════════════════════════════════════════════════════════════════════════
 
-PERFORMANCE targets (non-negotiable):
+PERFORMANCE targets (non-negotiable — motion is the product, so it must
+be fast motion, not heavy motion):
 • LCP < 2.0s on throttled 4G, mid-tier Android. Hero media never blocker; poster first, media after.
-• Total animation JS < 40KB gzipped. No animation library for a single effect.
-• Scroll motion: transform + opacity only. No layout-triggering properties in scroll handlers.
-• IntersectionObserver over scroll listeners; rAF-throttle pointer-driven.
+• Total animation JS < 80KB gzipped (raised from a static-site budget because motion is the signature here) — but every KB must earn its place; prefer CSS animation/@property/scroll-timeline over JS where the effect allows it.
+• GPU-cheap properties only: transform + opacity (+ filter/clip-path sparingly). No animating width, height, top/left, or box-shadow spread on every frame.
+• IntersectionObserver over scroll listeners; rAF-throttle pointer-driven and canvas-driven effects.
+• If using <canvas>/WebGL for a hero effect (radar sweep, particle field tied to the lineage, etc.), cap it: pause when off-screen, pause on tab blur, degrade resolution on low-end/mobile, hard frame budget.
 • Images: explicit width/height, modern format (WebP), responsive srcset, lazy below fold, eager + fetchpriority="high" on LCP.
 • Fonts: subset (Latin + Hebrew), preloaded, font-display: swap, max two families.
 • CLS < 0.1. Every media slot has reserved aspect-ratio box.
@@ -779,8 +803,8 @@ Requirements:
 • No fixed heights on text containers. No text baked into images.
 • Every repeater works with 1 item and with 12.
 • Every optional section collapses cleanly to nothing.
-• prefers-reduced-motion: motion degrades to opacity or nothing.
-• No scroll hijacking. Pinned sections release predictably.
+• prefers-reduced-motion: motion degrades to opacity or nothing. The page must be fully legible and navigable with zero animation.
+• Pinned/scrubbed scroll sections are allowed as the signature device, but must release predictably, never trap touch scrolling, and never require more than one pinned section per page — restraint applies to motion too.
 
 ACCESS & CRAWL:
 • Semantic landmarks, one h1, logical heading order, visible keyboard focus
@@ -839,18 +863,34 @@ Deliver a complete, self-contained HTML file:
 - Prefers-reduced-motion support
 
 ═══════════════════════════════════════════════════════════════════════════════
+SIGNATURE MOTION — pick ONE, make it earn its place
+═══════════════════════════════════════════════════════════════════════════════
+
+Choose exactly one scroll/interaction device as the memorable thing, tied
+directly to the lineage you named in Gate 1. Everything else on the page
+stays quiet and disciplined — restraint is what separates "futuristic" from
+"busy." Examples of the category (adapt to your lineage, don't copy literally):
+  • pinned rail that scrubs like a scan-line or radar sweep on scroll progress
+  • counters/readouts that tick like telemetry when a section enters view
+  • a thin trace/circuit line that draws itself along the scroll path
+  • cursor-reactive HUD reticle or targeting bracket on interactive elements
+  • a status-board flicker/refresh transition between states
+Ten effects on one page reads as cheap and fails Gate 2 on performance and
+Gate 1 on restraint.
+
+═══════════════════════════════════════════════════════════════════════════════
 DESIGN DIRECTION
 ═══════════════════════════════════════════════════════════════════════════════
 
 Create a template that:
-1. Has a SPECIFIC visual lineage (print, tools, real world) — state it first
-2. Passes all three Gates without compromise
-3. Reflects the CMS's flexibility (any industry, any brand)
-4. Prioritizes Hebrew readability and RTL elegance
-5. Is performant enough to win Core Web Vitals
+1. Has a SPECIFIC futuristic lineage (instrument panel, data-viz tradition, way-finding system, or material/process) — state it first
+2. Passes all three Gates without compromise — fast, resilient, RTL-equal
+3. Uses ONE signature motion device tied to that lineage; everything else quiet
+4. Reflects the CMS's flexibility (any industry, any brand)
+5. Prioritizes Hebrew readability and RTL elegance — motion included
 6. Requires ZERO client tweaks for content misuse to not break layout
 
-Design for food/restaurant/truck businesses primarily, but must work for any single-location service business (salon, gym, studio, etc.).
+Design for food/restaurant/truck businesses primarily, but must work for any single-location service business (salon, gym, studio, etc.) without looking generic in either direction.
 
 Begin.`;
 
