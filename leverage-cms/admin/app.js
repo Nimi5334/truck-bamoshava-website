@@ -677,64 +677,25 @@ function openTemplateGuide() {
   const closeBtn = el("button", { class: "modal-close", onclick: () => overlay.remove() }, "✕");
 
   const header = el("div", { class: "modal-header" },
-    el("h2", {}, "מדריך תבניות אתר"),
+    el("h2", {}, "תבנית עיצוב — Prompt לעזר AI"),
     closeBtn
   );
 
-  const guideHtml = `
-    <h3>כללים לעיצוב תבנית שנראית מקורית</h3>
-    <p><strong>עקרון ראשון:</strong> כל תבנית צריכה להיות בעלת קו עיצובי <strong>ייחודי מאתר משפחת ו-SaaS</strong> — לא סימטריה מעגלת, לא בנטו גריד, לא גרדיינט קשתות.</p>
-
-    <h3>🚫 דברים שלא לעשות</h3>
-    <ul>
-      <li><strong>לייאוט:</strong> סימטריה רחבה במרכז, שלוש עמודות עם אייקונים עגולים, "Trusted by" לוגו בר, כרטיסי טסטימוניאל עם כוכבים זהובים</li>
-      <li><strong>צבעים:</strong> cream רקע + terracotta / שחור עם ירוק חומצי / גרדיינטים סגול-לכחול / גרייין noise בלבד</li>
-      <li><strong>טיפוגרפיה:</strong> Inter, Poppins, Montserrat, Robik כראשי / משפחה אחת בכל הגדלים / letter-spacing טריקים</li>
-      <li><strong>פרטים:</strong> rounded-2xl + shadow-lg בכל מקום / Feather אייקונים כעיצוב / אמוג'י כאיקונוגרפיה / רק padding כהפרדה בין סקציות</li>
-      <li><strong>טקסט:</strong> "Elevate", "Transform", "Unlock", "Where X meets Y", "Take your X to the next level"</li>
-    </ul>
-
-    <h3>✅ יסודות עיצוב טוב</h3>
-    <ul>
-      <li><strong>קו עיצובי ברור:</strong> לפני שמתחילים, הגדירו את קו-היסוד הוויזואלי מהעולם האמיתי — מכלי, מסמכים, סימנים, מוזיקה. כל צבע וריווח חייבים להיות תחת קו זה.</li>
-      <li><strong>ריכוז:</strong> הוציאו את הכוח לעיצוב <strong>אחד</strong> ייחודי. הכל השאר צריך להיות שקט ומשומר.</li>
-      <li><strong>RTL native:</strong> לא "תיקיות RTL" בקוד — RTL הוא ברירת-מחדל. logical properties בלבד: margin-inline-start, padding-inline, text-align: start.</li>
-      <li><strong>העברת וקטורים לפי כיוון:</strong> אם יש scroll animation, הוא צריך להעברת כיוון בהתאם [LOCALE_DIR].</li>
-      <li><strong>גופנים עברית:</strong> לא fallback — גופן עברי אמיתי עם דמות ייחודית. הגדילו את line-height, הסירו tracking ב-display sizes.</li>
-    </ul>
-
-    <h3>⚡ דרישות ביצוע</h3>
-    <ul>
-      <li><strong>LCP &lt; 2.0s:</strong> על Throttled 4G, mid-tier Android. תמונה ראשית לא צריכה להיות blocker.</li>
-      <li><strong>Animation JS &lt; 40KB:</strong> gzipped. לא libraries שלמות רק לאפקט אחד.</li>
-      <li><strong>Scroll motion:</strong> transform ו-opacity בלבד. אין layout-triggering properties בתוך scroll handlers.</li>
-      <li><strong>CLS &lt; 0.1:</strong> כל media slot צריך aspect-ratio box שמורה.</li>
-      <li><strong>טקסט בדום:</strong> עולה כבר בלחיצה. אל תעבדו צורה-בתמונה.</li>
-    </ul>
-
-    <h3>🌍 ציות RTL</h3>
-    <ul>
-      <li><strong>Logical properties בלבד:</strong> margin-inline-start, border-inline-end, inset-inline. אין left/right.</li>
-      <li><strong>Flip glyphs:</strong> חצים, חלילים, סימני ציטוט — flip. לוגוים, שעונים, תמונות — NO flip.</li>
-      <li><strong>מספרים ותאריכים:</strong> LTR בתוך טקסט עברי, bidi isolation.</li>
-      <li><strong>אנימציה:</strong> כיווני נכנסות, parallax drifts, pinch/release edges צריכים להישקף.</li>
-    </ul>
-
-    <h3>📋 רשימת בדיקה להשקה</h3>
-    <ul>
-      <li>✓ לא נראה כמו 4 דפים אחרים בתחום</li>
-      <li>✓ LCP &lt; 2s ו-CLS &lt; 0.1</li>
-      <li>✓ עברית תרגום בדיקה (3x lengthy, 1x single word, חסרים optionals)</li>
-      <li>✓ RTL ו-LTR נראים באותה איכות</li>
-      <li>✓ Prefers-reduced-motion קשור כראוי</li>
-      <li>✓ אל תערכו בתמונות; כל שדה הוא CMS</li>
-    </ul>
-  `;
-
-  const body = el("div", { class: "modal-body" }, el("div", { html: guideHtml }));
+  const body = el("div", { class: "modal-body" },
+    el("p", {}, "אתה עומד ליצור תבנית אתר חדשה עם עיצוב ייחודי שאינו גנרי."),
+    el("p", {}, "הלחצן להלן מעתיק prompt מלא לעזר AI (Claude, ChatGPT, וכו') שיכול ליצור תבנית HTML בעלת:"),
+    el("ul", {},
+      el("li", {}, "עיצוב ייחודי ולא גנרי"),
+      el("li", {}, "ביצועים מעולים (LCP < 2s, CLS < 0.1)"),
+      el("li", {}, "תמיכה RTL/Hebrew ראשונית"),
+      el("li", {}, "חוזק מול שימוש לא תקני של לקוחות")
+    ),
+    el("p", { class: "muted", style: "font-size:.85rem;margin-top:16px" },
+      "הפרומפט מכיל את כל הגבולות העיצובים, דרישות ביצוע, דרישות RTL, והוראות לפורמט HTML עבור ה-CMS שלנו.")
+  );
 
   const copyBtn = el("button", { class: "copy-btn", onclick: () => copyGuidePrompt() },
-    "📋 העתק prompt לעזר AI");
+    "📋 העתק Prompt");
 
   body.appendChild(copyBtn);
 
