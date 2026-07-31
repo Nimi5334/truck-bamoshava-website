@@ -177,6 +177,7 @@ function renderEditor() {
     el("span", { class: "spacer" }),
     $status,
     el("button", { class: "btn btn-sm", onclick: togglePreview }, L.preview),
+    el("button", { class: "btn btn-sm", onclick: openTemplateGuide }, "תבניות לאתר"),
     el("button", { class: "btn btn-sm", onclick: () => { state.token = null; renderLogin(); } }, L.logout)
   );
 
@@ -666,6 +667,151 @@ function resolveAssetForPreview(p) {
   return base.origin + base.pathname.replace(/[^/]+$/, "") + p;
 }
 function defaultHours() { const h = {}; for (let i = 0; i < 7; i++) h[String(i)] = [9, 17]; return h; }
+
+/* ────────────── template guide modal ─────────────── */
+function openTemplateGuide() {
+  const overlay = el("div", { class: "modal-overlay", onclick: (e) => {
+    if (e.target === overlay) overlay.remove();
+  }});
+
+  const closeBtn = el("button", { class: "modal-close", onclick: () => overlay.remove() }, "✕");
+
+  const header = el("div", { class: "modal-header" },
+    el("h2", {}, "מדריך תבניות אתר"),
+    closeBtn
+  );
+
+  const guideHtml = `
+    <h3>כללים לעיצוב תבנית שנראית מקורית</h3>
+    <p><strong>עקרון ראשון:</strong> כל תבנית צריכה להיות בעלת קו עיצובי <strong>ייחודי מאתר משפחת ו-SaaS</strong> — לא סימטריה מעגלת, לא בנטו גריד, לא גרדיינט קשתות.</p>
+
+    <h3>🚫 דברים שלא לעשות</h3>
+    <ul>
+      <li><strong>לייאוט:</strong> סימטריה רחבה במרכז, שלוש עמודות עם אייקונים עגולים, "Trusted by" לוגו בר, כרטיסי טסטימוניאל עם כוכבים זהובים</li>
+      <li><strong>צבעים:</strong> cream רקע + terracotta / שחור עם ירוק חומצי / גרדיינטים סגול-לכחול / גרייין noise בלבד</li>
+      <li><strong>טיפוגרפיה:</strong> Inter, Poppins, Montserrat, Robik כראשי / משפחה אחת בכל הגדלים / letter-spacing טריקים</li>
+      <li><strong>פרטים:</strong> rounded-2xl + shadow-lg בכל מקום / Feather אייקונים כעיצוב / אמוג'י כאיקונוגרפיה / רק padding כהפרדה בין סקציות</li>
+      <li><strong>טקסט:</strong> "Elevate", "Transform", "Unlock", "Where X meets Y", "Take your X to the next level"</li>
+    </ul>
+
+    <h3>✅ יסודות עיצוב טוב</h3>
+    <ul>
+      <li><strong>קו עיצובי ברור:</strong> לפני שמתחילים, הגדירו את קו-היסוד הוויזואלי מהעולם האמיתי — מכלי, מסמכים, סימנים, מוזיקה. כל צבע וריווח חייבים להיות תחת קו זה.</li>
+      <li><strong>ריכוז:</strong> הוציאו את הכוח לעיצוב <strong>אחד</strong> ייחודי. הכל השאר צריך להיות שקט ומשומר.</li>
+      <li><strong>RTL native:</strong> לא "תיקיות RTL" בקוד — RTL הוא ברירת-מחדל. logical properties בלבד: margin-inline-start, padding-inline, text-align: start.</li>
+      <li><strong>העברת וקטורים לפי כיוון:</strong> אם יש scroll animation, הוא צריך להעברת כיוון בהתאם [LOCALE_DIR].</li>
+      <li><strong>גופנים עברית:</strong> לא fallback — גופן עברי אמיתי עם דמות ייחודית. הגדילו את line-height, הסירו tracking ב-display sizes.</li>
+    </ul>
+
+    <h3>⚡ דרישות ביצוע</h3>
+    <ul>
+      <li><strong>LCP &lt; 2.0s:</strong> על Throttled 4G, mid-tier Android. תמונה ראשית לא צריכה להיות blocker.</li>
+      <li><strong>Animation JS &lt; 40KB:</strong> gzipped. לא libraries שלמות רק לאפקט אחד.</li>
+      <li><strong>Scroll motion:</strong> transform ו-opacity בלבד. אין layout-triggering properties בתוך scroll handlers.</li>
+      <li><strong>CLS &lt; 0.1:</strong> כל media slot צריך aspect-ratio box שמורה.</li>
+      <li><strong>טקסט בדום:</strong> עולה כבר בלחיצה. אל תעבדו צורה-בתמונה.</li>
+    </ul>
+
+    <h3>🌍 ציות RTL</h3>
+    <ul>
+      <li><strong>Logical properties בלבד:</strong> margin-inline-start, border-inline-end, inset-inline. אין left/right.</li>
+      <li><strong>Flip glyphs:</strong> חצים, חלילים, סימני ציטוט — flip. לוגוים, שעונים, תמונות — NO flip.</li>
+      <li><strong>מספרים ותאריכים:</strong> LTR בתוך טקסט עברי, bidi isolation.</li>
+      <li><strong>אנימציה:</strong> כיווני נכנסות, parallax drifts, pinch/release edges צריכים להישקף.</li>
+    </ul>
+
+    <h3>📋 רשימת בדיקה להשקה</h3>
+    <ul>
+      <li>✓ לא נראה כמו 4 דפים אחרים בתחום</li>
+      <li>✓ LCP &lt; 2s ו-CLS &lt; 0.1</li>
+      <li>✓ עברית תרגום בדיקה (3x lengthy, 1x single word, חסרים optionals)</li>
+      <li>✓ RTL ו-LTR נראים באותה איכות</li>
+      <li>✓ Prefers-reduced-motion קשור כראוי</li>
+      <li>✓ אל תערכו בתמונות; כל שדה הוא CMS</li>
+    </ul>
+  `;
+
+  const body = el("div", { class: "modal-body" }, el("div", { html: guideHtml }));
+
+  const copyBtn = el("button", { class: "copy-btn", onclick: () => copyGuidePrompt() },
+    "📋 העתק prompt לעזר AI");
+
+  body.appendChild(copyBtn);
+
+  const content = el("div", { class: "modal-content template-guide" }, header, body);
+  overlay.appendChild(content);
+  document.body.appendChild(overlay);
+}
+
+function copyGuidePrompt() {
+  const prompt = `אתה עיצוב ליד של סטודיו המיוחד בעבודה שנראית מקורית ויחידה. הלקוח כבר דחה עבודה גנרית.
+
+🎯 משימה: עיצוב תבנית אתר ל-CMS עשה-בעצמך שלנו.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GATE 1 — UNIQUENESS (עיצוב שלא נראה כמו כל אחד אחר)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+אסור על עיצוב אלה (לא תיקיות — התחל מחדש):
+• סימטריה מעגלת + גרדיינט קשת
+• בנטו גריד בלי תוכן תוצאה אמיתי
+• Trusted by לוגו בר
+• כרטיסי טסטימוניאל עם כוכבים
+• three-column feature grid
+• cream/terracotta צבע default
+• Inter/Poppins וגופנים סטנדרטיים
+
+✅ חובה: הגדר קו עיצובי בסיסי מהעולם האמיתי (כלי, סימנים, מכתבים, מוזיקה — משהו פיזי).
+כל הצבע, ריווח, וטיפוגרפיה חייבים להישקף בקו זה.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GATE 2 — PERFORMANCE & RESILIENCE (לא מנוסי לקוח)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• LCP < 2.0s עם Throttled 4G
+• Total animation JS < 40KB gzipped
+• CLS < 0.1 (תמיד aspect-ratio boxes)
+• Scroll animation: transform + opacity בלבד
+• טקסט כל בדום בעומס. לא render-in-JS headlines.
+• כל repeater עובד עם 1 item וגם עם 12
+• אפילו טקסט שגוי (3x אורך, Hebrew) לא שובר layout
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GATE 3 — RTL-NATIVE (יתרון תחרותי)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Logical properties בלבד: margin-inline-start, border-inline-end, inset-inline
+• Grid/flex עוקבים פלוס לוגיקה, לא hardcoded column order
+• הנעות anim flipped by [LOCALE_DIR]: entrance direction, parallax, cursor-follow
+• Glyphs flipped: arrows, chevrons, quotes. NO flip: logos, clocks, photos
+• מספרים + תאריכים LTR בעברית (bidi isolation)
+• Hebrew face ראשון-מקרא, לא fallback. Retune leading; יותר אל תשתמש בעברית italic/caps
+• Render both LTR+RTL side-by-side. RTL לא צריך להיות חלש יותר.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CMS TOKENS (fill in for templates)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[SCROLL_ANIMATION] — pinned horizontal rail, scrubbed sequence, 3-plane parallax, clip-path reveal, SVG line-draw
+[HOVER_EFFECT] — magnetic pull, cursor-follow preview, directional underline, card lift, duotone shift
+[LOCALE_DIR] — RTL/LTR based on page
+[BRAND_NAME] — name from CMS
+[PRIMARY_ACCENT] — color from theme.sage
+[DISPLAY_FACE] — Hebrew pair from theme.fonts.head
+[BODY_FACE] — HTML pair from theme.fonts.body
+[HERO_MEDIA] — poster image from hero section
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+בדיקה סופית: אם זה היה עבור Shopify או SaaS, הייתי ממליץ משהו שונה לחלוטין?
+אם כן, בואו נעשה ספציפי להקשר המזון/אתר זה.`;
+
+  navigator.clipboard.writeText(prompt).then(() => {
+    setStatus("ה-Prompt הועתק ליצירת נייר", "ok");
+  }).catch(() => {
+    setStatus("שגיאה בהעתקה", "err");
+  });
+}
 
 /* ---------------- start ---------------- */
 if (!state.siteId) {

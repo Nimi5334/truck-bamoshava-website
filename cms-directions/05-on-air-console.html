@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>05 · The On-Air Console</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--booth:#101318;--module:#191E26;--module2:#1F2530;--panel:#EDF0F4;--legend:#98A2B0;
+ --mag:#E0338C;--magT:#F45BA6;--cue:#3EA8C9;--line:#28303B}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--booth);color:var(--panel);font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:15px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 64px}
+.top{display:flex;align-items:center;gap:14px;padding:18px 0;border-bottom:1px solid var(--line)}
+.brand{font-family:'Antonio',sans-serif;font-weight:700;font-size:22px;letter-spacing:.02em;text-transform:uppercase}
+.brand small{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--legend);text-transform:none;font-weight:400;margin-top:2px}
+.newbtn{margin-left:auto;background:none;border:1.5px solid var(--cue);color:var(--cue);border-radius:2px;padding:10px 18px;font-weight:600;font-size:14px;cursor:pointer;font-family:inherit}
+.newbtn:hover{background:var(--cue);color:#101318}
+.onair{display:flex;align-items:center;gap:18px;margin:20px 0;padding:16px 20px;background:var(--module);border:1px solid var(--line);border-left:4px solid var(--mag);border-radius:3px}
+.onair .lamp{width:13px;height:13px;border-radius:50%;background:var(--mag);box-shadow:0 0 12px rgba(224,51,140,.7);flex:none}
+.onair h1{font-family:'Antonio',sans-serif;font-size:20px;letter-spacing:.09em;text-transform:uppercase}
+.onair p,.onair .cue{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--legend)}
+.onair .cue{margin-left:auto;color:var(--magT);text-align:right}
+.rl{display:flex;align-items:center;gap:10px;margin:24px 0 8px}
+.rl h2{font-family:'Antonio',sans-serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--legend)}
+.rl hr{flex:1;border:none;border-top:1px solid var(--line)}
+.rack{border:1px solid var(--line);border-radius:3px;overflow:hidden;background:var(--module)}
+.mod{display:grid;grid-template-columns:172px 1fr 150px 128px;align-items:center;gap:16px;min-height:48px;padding:7px 16px 7px 0;border-bottom:1px solid var(--line)}
+.mod:last-child{border-bottom:none}
+.mod:hover{background:var(--module2)}
+.mod.cued{background:rgba(224,51,140,.05)}
+.strip{display:flex;align-items:center;gap:10px;padding-left:16px;border-left:3px solid transparent}
+.mod.cued .strip{border-left-color:var(--mag)}
+.fader{width:78px;height:26px;border:1.5px solid #39424F;border-radius:2px;background:#12161C;position:relative;cursor:pointer;flex:none}
+.knob{position:absolute;top:2px;bottom:2px;width:34px;background:#39424F;transition:left .18s,background .18s;left:2px}
+.fader[data-on="1"] .knob{left:calc(100% - 36px);background:var(--mag)}
+.fstate{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.07em;color:var(--legend);width:56px}
+.fader[data-on="1"] + .fstate{color:var(--magT)}
+.lamp2{width:9px;height:9px;border-radius:50%;flex:none;background:#39424F}
+.lamp2.on{background:var(--mag);animation:p 1.6s ease-in-out infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.lamp2.on{animation:none}}
+.ttl{font-weight:500}
+.ttl small{display:block;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--magT);margin-top:2px}
+.state{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;gap:7px}
+.state i{width:10px;height:10px;flex:none}
+.state.live{color:var(--magT)}.state.live i{background:var(--mag);border-radius:50%}
+.state.review{color:#FA8CC0}.state.review i{background:#FA8CC0;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.state.draft{color:var(--cue)}.state.draft i{background:var(--cue);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.date{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--legend);text-align:right}
+.open{justify-self:end;background:none;border:1.5px solid #39424F;color:var(--panel);border-radius:2px;padding:6px 14px;font-weight:600;font-size:13.5px;cursor:pointer;font-family:inherit}
+.open:hover{border-color:var(--panel)}
+.note{margin-top:28px;font-size:13.5px;color:var(--legend);max-width:660px;border-top:1px solid var(--line);padding-top:14px}
+.note b{font-family:'Antonio';font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--magT);display:block;margin-bottom:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Bright Smile Dental<small>studio console · 12 channels</small></div>
+    <button class="newbtn">+ New page</button>
+  </header>
+  <div class="onair">
+    <i class="lamp"></i>
+    <div><h1>On air</h1><p id="liveCount"></p></div>
+    <div class="cue" id="cueCount"></div>
+  </div>
+  <div class="rl"><h2>Cued — check before airing</h2><hr></div>
+  <div class="rack" id="rackA"></div>
+  <div class="rl"><h2>Rack</h2><hr></div>
+  <div class="rack" id="rackB"></div>
+  <p class="note"><b>Signature — the fader</b>Publishing is a fader you slide, not a switch you tap, and
+  both ends are spelled out: OFF AIR and LIVE. The deliberate gesture is the point — accidental
+  publishing is the scariest thing a small business owner can do. Cued rows carry a pulsing lamp and the words.</p>
+</div>
+<script src="data.js"></script>
+<script>
+const cls = s => s==='published'?'live':s;
+const label = s => s==='published'?'On air':s==='draft'?'Off air · draft':'Cued · check';
+function mod(it){
+  const cued = needsAttention(it), on = it.status==='published' ? 1 : 0;
+  return `<div class="mod ${cued?'cued':''}">
+    <div class="strip"><i class="lamp2 ${cued?'on':''}"></i>
+      <div class="fader" data-on="${on}" role="switch" aria-checked="${!!on}" tabindex="0"><i class="knob"></i></div>
+      <span class="fstate">${on?'LIVE':'OFF AIR'}</span></div>
+    <div class="ttl">${it.title}${it.reason?`<small>${it.reason}</small>`:''}</div>
+    <div><span class="state ${cls(it.status)}"><i></i>${label(it.status)}</span></div>
+    <div class="date">${niceDate(it.edited)}</div>
+    <button class="open">Open</button></div>`;
+}
+rackA.innerHTML = sorted().filter(needsAttention).map(mod).join('');
+rackB.innerHTML = sorted().filter(i=>!needsAttention(i)).map(mod).join('');
+const c = counts();
+liveCount.textContent = c.live + ' pages are live on your website right now';
+cueCount.innerHTML = c.attention + ' cued<br>' + c.draft + ' off air';
+document.querySelectorAll('.fader').forEach(f => {
+  const flip = () => {
+    const on = f.dataset.on === '1' ? '0' : '1';
+    f.dataset.on = on; f.setAttribute('aria-checked', on === '1');
+    f.nextElementSibling.textContent = on === '1' ? 'LIVE' : 'OFF AIR';
+  };
+  f.addEventListener('click', flip);
+  f.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); flip(); } });
+});
+</script>
+</body>
+</html>

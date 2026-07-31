@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>03 · The Tide Chart — Bright Smile Dental</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Karla:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --shallow:#F2F6F5; --deep:#14312F; --mid:#4A6C68;
+  --teal:#0C7C74; --plum:#7A2E6B; --band:#D5E3E0; --paper:#FFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--shallow);color:var(--deep);font-family:'Karla',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px 70px}
+
+.top{display:flex;align-items:flex-end;gap:16px;padding:26px 0 16px;border-bottom:1.5px solid var(--band)}
+.brand{font-family:'Fraunces',serif;font-variation-settings:'opsz' 96;font-weight:600;font-size:24px;letter-spacing:-.015em}
+.brand small{display:block;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mid);margin-top:4px}
+.newbtn{margin-left:auto;background:var(--teal);color:#fff;border:none;border-radius:20px;padding:11px 20px;font-family:'Karla';font-weight:600;font-size:14.5px;cursor:pointer}
+.newbtn:hover{background:#095F59}
+
+.legend{display:flex;align-items:center;gap:22px;padding:14px 0 8px;font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.05em;color:var(--mid);text-transform:uppercase}
+.legend b{color:var(--plum);font-weight:700}
+
+/* chart shell */
+.chart{background:var(--paper);border:1.5px solid var(--band);border-radius:10px;overflow:hidden;position:relative}
+.axis{display:grid;grid-template-columns:1fr 44%;border-bottom:1.5px solid var(--band);background:#FAFCFB}
+.axis .l{padding:9px 18px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mid)}
+.axis .r{position:relative;padding:9px 18px 9px 0}
+.axis .tick{position:absolute;top:9px;font-family:'Space Mono',monospace;font-size:11px;color:var(--mid);transform:translateX(-50%)}
+
+.row{display:grid;grid-template-columns:1fr 44%;align-items:center;border-bottom:1px solid #EAF1EF;min-height:52px}
+.row:last-child{border-bottom:none}
+.row:hover{background:#F6FAF9}
+.left{display:flex;align-items:center;gap:14px;padding:8px 18px}
+.ttl{font-weight:600;font-size:15.5px}
+.ttl small{display:block;font-family:'Karla';font-weight:400;font-size:13px;color:var(--plum);margin-top:1px}
+
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 8px;border-radius:12px;white-space:nowrap;flex:none;min-width:118px}
+.chip i{width:9px;height:9px;flex:none}
+.chip.live{color:#075E58;background:#E3F1EF;border:1.5px solid var(--teal)}
+.chip.live i{background:var(--teal);border-radius:50%}
+.chip.review{color:#612255;background:#F6EBF4;border:1.5px solid var(--plum)}
+.chip.review i{background:var(--plum);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.chip.draft{color:#3C4B49;background:#EFF3F2;border:1.5px solid #A9BBB8}
+.chip.draft i{background:#6C807D;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+
+/* SIGNATURE — the waterline */
+.track{position:relative;height:52px;margin-right:18px}
+.track:before{content:"";position:absolute;left:0;right:0;top:50%;height:1.5px;background:var(--band)}
+.waterline{position:absolute;right:0;top:0;bottom:0;width:2px;background:var(--teal)}
+.mark{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:7px}
+.mark .dot{width:11px;height:11px;border-radius:50%;background:var(--teal);border:2px solid #fff;box-shadow:0 0 0 1.5px var(--teal)}
+.mark.over .dot{background:var(--plum);box-shadow:0 0 0 1.5px var(--plum);border-radius:0;clip-path:polygon(50% 0,100% 100%,0 100%);width:13px;height:12px;border:none}
+.mark span{font-family:'Space Mono',monospace;font-size:11px;color:var(--mid);white-space:nowrap}
+.mark.over span{color:var(--plum);font-weight:700}
+.due{position:absolute;top:50%;transform:translate(-50%,-50%);width:1.5px;height:16px;background:#B7CBC8}
+
+.foot{display:flex;gap:10px;padding:12px 18px;border-top:1.5px solid var(--band);background:#FAFCFB;align-items:center}
+.foot span{font-family:'Space Mono',monospace;font-size:11.5px;color:var(--mid)}
+.note{margin-top:30px;font-size:13.5px;color:var(--mid);max-width:660px;border-top:1.5px solid var(--band);padding-top:14px}
+.note b{font-family:'Fraunces',serif;font-variation-settings:'opsz' 20;color:var(--deep)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Bright Smile Dental<small>Tide chart · 12 pages</small></div>
+    <button class="newbtn">+ New page</button>
+  </header>
+
+  <div class="legend">
+    <span>◀ older ————— last edited ————— today ▶</span>
+    <span>│ = when this page is due a look</span>
+    <span><b>▲ past due</b></span>
+  </div>
+
+  <div class="chart">
+    <div class="axis">
+      <div class="l">Page</div>
+      <div class="r" id="ticks"></div>
+    </div>
+    <div id="rows"></div>
+    <div class="foot"><span id="summary"></span></div>
+  </div>
+
+  <p class="note"><b>Signature — the waterline.</b> Every row shares one time axis. The teal line on the
+  right is today; the small grey notch is when that page is due a look. Anything whose marker has fallen
+  behind its own notch turns plum and rises to the top. It answers the question a busy owner never
+  thinks to ask: what has quietly gone stale?</p>
+</div>
+
+<script src="data.js"></script>
+<script>
+const MAX = 280; // days of chart width
+const pos = d => (1 - Math.min(d, MAX) / MAX) * 100;
+
+document.getElementById('ticks').innerHTML =
+  [270,180,90,30,0].map(d => `<i class="tick" style="left:${pos(d)}%">${d===0?'today':d+'d'}</i>`).join('');
+
+const chip = s => `<span class="chip ${s==='published'?'live':s}"><i></i>${STATUS_WORD[s]}</span>`;
+
+document.getElementById('rows').innerHTML = sorted().map(it => {
+  const over = isOverdue(it);
+  return `<div class="row">
+    <div class="left">${chip(it.status)}
+      <div class="ttl">${it.title}${it.reason?`<small>${it.reason}</small>`:''}</div>
+    </div>
+    <div class="track">
+      <i class="due" style="left:${pos(it.cadence)}%"></i>
+      <div class="mark ${over?'over':''}" style="left:${pos(it.days)}%">
+        <i class="dot"></i><span>${over?'Past due · ':''}${agoWords(it.days)}</span>
+      </div>
+      <i class="waterline"></i>
+    </div>
+  </div>`;
+}).join('');
+
+const c = counts();
+document.getElementById('summary').textContent =
+  `${c.attention} of 12 pages are past due · ${c.live} live · ${c.draft} drafts`;
+</script>
+</body>
+</html>

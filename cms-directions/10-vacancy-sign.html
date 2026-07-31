@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>10 · The Roadside Vacancy Sign — Bright Smile Dental</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Manrope:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dusk:#0D1220; --panel:#151C2E; --panel2:#1B2338;
+  --sign:#EFF3F8; --road:#93A0B8;
+  --neon:#2FD8E6; --bulb:#F26A8D; --line:#242E45;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--dusk);color:var(--sign);font-family:'Manrope',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 66px}
+
+.top{display:flex;align-items:center;gap:18px;padding:24px 0 18px;border-bottom:1px solid var(--line)}
+.sgn{font-family:'Alfa Slab One',serif;font-size:26px;letter-spacing:.01em;color:var(--neon);
+     text-shadow:0 0 18px rgba(47,216,230,.45);line-height:1}
+.brand small{display:block;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--road);margin-top:6px}
+.brand b{font-weight:700;font-size:15px}
+.newbtn{margin-left:auto;background:var(--neon);color:#0D1220;border:none;border-radius:6px;padding:11px 20px;
+        font-family:'Manrope';font-weight:700;font-size:14.5px;cursor:pointer}
+.newbtn:hover{background:#57E4EF}
+
+.board{display:flex;gap:12px;padding:18px 0 10px;font-family:'DM Mono',monospace;font-size:12px;color:var(--road)}
+.board b{color:var(--sign)}
+
+.list{border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.row{display:grid;grid-template-columns:112px 1fr 150px 104px;align-items:center;gap:16px;min-height:56px;
+     padding:6px 14px 6px 0;background:var(--panel);border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.row:hover{background:var(--panel2)}
+
+/* SIGNATURE — the status plate. All neon is quarantined here. */
+.plate{width:96px;height:40px;margin-left:8px;display:flex;align-items:center;justify-content:center;
+       border-radius:4px;font-family:'Alfa Slab One',serif;font-size:12.5px;letter-spacing:.05em;flex:none;
+       border:2px solid;text-align:center;line-height:1.05}
+.plate.live{color:var(--neon);border-color:var(--neon);background:rgba(47,216,230,.08);
+            box-shadow:0 0 16px rgba(47,216,230,.28),inset 0 0 10px rgba(47,216,230,.12);
+            text-shadow:0 0 10px rgba(47,216,230,.6)}
+.plate.draft{color:#8C99B2;border-color:#2E3A54;background:#131A29}   /* unlit: luminance, not hue */
+.plate.fix{color:var(--bulb);border-color:var(--bulb);background:rgba(242,106,141,.1);
+           box-shadow:0 0 14px rgba(242,106,141,.3);animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+@media (prefers-reduced-motion:reduce){.plate.fix{animation:none}}
+
+.ttl{font-weight:600;font-size:15.5px}
+.ttl small{display:block;font-family:'DM Mono',monospace;font-size:12px;color:var(--bulb);margin-top:3px;font-weight:400}
+.ttl em{font-style:normal;color:var(--road)}
+.meta{font-family:'DM Mono',monospace;font-size:12px;color:var(--road);text-align:right}
+.act{justify-self:end;background:none;border:1.5px solid #2E3A54;color:var(--sign);border-radius:6px;padding:8px 15px;
+     font-family:'Manrope';font-weight:700;font-size:13.5px;cursor:pointer;white-space:nowrap}
+.act:hover{border-color:var(--sign)}
+.act.prime{background:var(--bulb);border-color:var(--bulb);color:#0D1220}
+
+.note{margin-top:30px;font-size:13.5px;color:var(--road);max-width:700px;border-top:1px solid var(--line);padding-top:15px}
+.note b{font-family:'Manrope';font-weight:700;color:var(--sign)}
+.note code{font-family:'DM Mono',monospace;font-size:12.5px;color:var(--neon)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="sgn">VACANCY</div>
+    <div class="brand"><b>Bright Smile Dental</b><small>12 pages · what's switched on</small></div>
+    <button class="newbtn">+ New page</button>
+  </header>
+
+  <div class="board" id="board"></div>
+  <div class="list" id="rows"></div>
+
+  <p class="note"><b>Signature — the status plate.</b> Three literal plates: <code>LIVE</code> lit,
+  <code>DRAFT</code> visibly unlit, <code>FIX ME</code> blinking. Lit vs unlit is a luminance difference,
+  so it reads instantly and without colour. All glow is confined to a 96px column — the rest of the row
+  is flat and plain so density and legibility survive. Strip every glow and the direction still works.</p>
+</div>
+
+<script src="data.js"></script>
+<script>
+function plateOf(it){
+  if (needsAttention(it)) return { k:'fix',   t:'FIX ME' };
+  if (it.status === 'published') return { k:'live',  t:'LIVE' };
+  return { k:'draft', t:'DRAFT' };
+}
+
+document.getElementById('rows').innerHTML = sorted().map(it => {
+  const p = plateOf(it);
+  return `<div class="row">
+    <div class="plate ${p.k}" role="status" aria-label="${p.t}">${p.t}</div>
+    <div class="ttl">${it.title}
+      <small>${it.reason ? it.reason
+        : p.k === 'fix' ? 'Not touched in ' + agoWords(it.days).replace(' ago','')
+        : `<em>${p.k==='live'?'On your website now':'Not on your website yet'}</em>`}</small></div>
+    <div class="meta">${niceDate(it.edited)}<br>${agoWords(it.days)}</div>
+    <button class="act ${p.k==='fix'?'prime':''}">${p.k==='fix'?'Fix it':'Edit'}</button>
+  </div>`;
+}).join('');
+
+const c = counts();
+document.getElementById('board').innerHTML =
+  `<span><b>${c.live}</b> LIVE</span><span>·</span><span><b>${c.draft}</b> DRAFT</span>
+   <span>·</span><span style="color:#F26A8D"><b style="color:#F26A8D">${c.attention}</b> FIX ME</span>`;
+</script>
+</body>
+</html>
