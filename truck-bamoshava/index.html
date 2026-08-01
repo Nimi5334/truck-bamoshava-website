@@ -96,11 +96,9 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.2;margin:0;color:var(--in
   position:relative;min-height:100svh;display:flex;
   text-align:center;padding:100px 0 80px;overflow:hidden;
 }
-/* Background image is CMS-editable: it rides on --hero-bg set per-site by the
-   renderer. No image set = a clean, color-only hero. */
 .hero::before{
   content:"";position:absolute;inset:0;
-  background:var(--hero-bg,none) center/cover no-repeat;
+  background:url("assets/background.png") center/cover no-repeat;
   opacity:.5;
 }
 .hero::after{
@@ -109,7 +107,7 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.2;margin:0;color:var(--in
 }
 .hero-inner{position:relative;z-index:1;max-width:760px;padding-inline:20px;margin:auto}
 .hero-logo{width:min(400px,66vw);margin-inline:auto}
-/* The logo drives off to the right as you scroll down from the top.
+/* The truck drives off to the right as you scroll down from the top.
    Scroll-linked on the compositor (transform only): smooth at any fps. */
 @supports (animation-timeline: scroll()){
   @media (prefers-reduced-motion: no-preference){
@@ -164,7 +162,7 @@ h1,h2,h3,h4{font-family:var(--font-head);line-height:1.2;margin:0;color:var(--in
   animation:signSwing 4.4s ease-in-out infinite;
   will-change:transform;
 }
-.hero-status .status-chip:nth-child(2){animation-duration:5s;animation-delay:-1.2s}
+.hero-status .status-chip[data-branch="batshlomo"]{animation-duration:5s;animation-delay:-1.2s}
 @keyframes signSwing{
   0%  {transform:rotate(3.4deg)}
   50% {transform:rotate(-3.4deg)}
@@ -193,7 +191,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 .section-head.start{text-align:start;margin-inline:0}
 .section-head.start p{margin-inline:0}
 
-/* ============ Photo band (full-bleed) ============ */
+/* ============ Photo band (full-bleed, scroll-scrubbed) ============ */
 .photo-band{
   position:relative;height:clamp(320px,58vh,560px);padding:0;overflow:hidden;
   border-block:1px solid var(--line);
@@ -261,19 +259,6 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 .diet svg{flex:none}
 .diet-vegan{background:rgba(124,138,98,.16);color:#55633C}
 .diet-gf{background:rgba(193,154,91,.16);color:#8A6A33}
-
-/* ============ Gallery ============ */
-.gallery-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));
-  gap:clamp(10px,1.6vw,18px);
-}
-.gallery-item{
-  margin:0;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;
-  background:var(--bg-deep);border:1px solid var(--line);box-shadow:var(--shadow-1);
-  transition:transform var(--dur-2) var(--ease-out),box-shadow var(--dur-2);
-}
-.gallery-item:hover{transform:translateY(-3px);box-shadow:var(--shadow-2)}
-.gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* ============ Locations ============ */
 .locations{background:var(--bg-deep);border-block:1px solid var(--line)}
@@ -347,7 +332,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 .menu-cat{display:none}
 .menu-cat.is-active{display:block;opacity:1;transform:none;margin-top:0}
 
-/* ============ Mobile: show the video band in full (no crop) ============ */
+/* ============ Mobile: show the farm video in full (no crop) ============ */
 @media (max-width:680px){
   .photo-band{height:auto;min-height:0}
   .photo-band video{position:static;width:100%;height:auto;display:block}
@@ -382,7 +367,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
 </header>
 
 <main id="main">
-<section class="hero has-bg" id="top" aria-label="טראק במושבה" style="--hero-bg:url('assets/background.png')">
+<section class="hero" id="top" aria-label="טראק במושבה">
   <div class="hero-inner">
     <div class="reveal"><img class="hero-logo" src="assets/truck_logo.png" alt="הלוגו של טראק במושבה: משאית וינטג' עם סכין ומזלג" width="440" height="220" fetchpriority="high"></div>
     <h1 class="reveal" data-d="1">טעם של מושבה,<br>בצד הדרך.<br></h1>
@@ -704,8 +689,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   }, {passive:true});
 
   /* Current year */
-  var yearEl = document.getElementById("year");
-  if(yearEl) yearEl.textContent = new Date().getFullYear();
+  document.getElementById("year").textContent = new Date().getFullYear();
 
   /* Header elevation */
   var header = document.getElementById("header");
@@ -804,13 +788,13 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   });
   if(pills.length){ showTab(pills[0].getAttribute("href"), false); }
 
-  /* Hand-drawn string that ties the hanging signs up to the "ghost" CTA button.
+  /* Hand-drawn string that ties the two signs up to the "directions" button.
      Drawn as SVG between the real DOM anchors; positions use offsets so the
      swing rotation (transform) never detaches the string from its pivots. */
   (function(){
     var heroInner = document.querySelector(".hero-inner");
     var svg = document.querySelector(".sign-string");
-    var btn = document.querySelector(".hero-ctas .btn-ghost") || document.querySelector(".hero-ctas .btn");
+    var btn = document.querySelector(".hero-ctas .btn-ghost");
     if(!heroInner || !svg || !btn) return;
     var signs = Array.prototype.slice.call(document.querySelectorAll(".hero-status .status-chip"));
     if(!signs.length) return;
@@ -863,7 +847,7 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
     layout(); setTimeout(layout, 300);
   })();
 
-  /* Video band: autoplay looping video, no scroll interaction. */
+  /* Farm scene: autoplay looping video, no scroll interaction. */
   (function(){
     var video = document.getElementById("farmScene");
     if(!video) return;
@@ -889,11 +873,8 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   function updateStatus(){
     var now = ilNow();
     document.querySelectorAll(".status-chip[data-branch]").forEach(function(chip){
-      var branch = HOURS[chip.getAttribute("data-branch")];
-      if(!branch) return;
-      var rng = branch[now.day];
+      var rng = HOURS[chip.getAttribute("data-branch")][now.day];
       var txt = chip.querySelector(".chip-text");
-      if(!txt) return;
       var open = rng && now.h >= rng[0] && now.h < rng[1];
       chip.classList.toggle("open", !!open);
       if(open){ txt.textContent = "פתוח עכשיו, עד " + fmt(rng[1]); }
@@ -905,6 +886,5 @@ section{padding:clamp(64px,9vw,110px) 0;position:relative}
   setInterval(updateStatus, 60000);
 })();
 </script>
-<script type="application/json" id="cms-data">{"nav":{"cta":{"href":"#menu","label":"לתפריט המלא"},"links":[{"href":"#story","label":"הסיפור"},{"href":"#menu","label":"התפריט"},{"href":"#locations","label":"סניפים ושעות"},{"href":"#contact","label":"צרו קשר"}]},"meta":{"dir":"rtl","lang":"he","title":"טראק במושבה | קפה ומעדנים בלחם | בת שלמה וכרם מהר\"ל","favicon":"assets/favicon.svg","fontsHref":"https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@500;700;900&family=Amatic+SC:wght@700&display=swap","themeColor":"#F6F4EC","description":"טראק במושבה היא רשת עגלות קפה עם סניפים בבת שלמה ובכרם מהר״ל. קרואסנדוויצ'ים, לחם רוסטיק, סלטים, פיצות, קפה וגלידה."},"brand":{"logo":"assets/truck_logo.png","name":"טראק במושבה"},"theme":{"fonts":{"body":"\"Assistant\",sans-serif","head":"\"Frank Ruhl Libre\",serif"},"colors":{"bg":"#F6F4EC","ink":"#26312B","line":"#DDD8C6","sage":"#79A5A7","olive":"#7C8A62","bgDeep":"#EEEBDD","inkSoft":"#54625B","surface":"#FFFFFF","sageDark":"#33585B","sageDeep":"#49777A"},"radius":"14px"},"footer":{"logo":"assets/truck_logo.png","links":[{"href":"#menu","label":"התפריט"},{"href":"#locations","label":"סניפים ושעות"},{"href":"https://www.instagram.com/truck_bamoshava/","label":"אינסטגרם","external":true},{"href":"https://www.facebook.com/truckbamoshava","label":"פייסבוק","external":true},{"href":"https://truckbamoshava.co.il/accessibility.html","label":"הצהרת נגישות","external":true}],"logoAlt":"טראק במושבה","regions":"בת שלמה · כרם מהר\"ל","copyright":"טראק במושבה. קפה ומעדנים בלחם."},"siteId":"truck-bamoshava","sections":[{"id":"top","data":{"ctas":[{"href":"#menu","label":"לתפריט המלא","style":"primary"},{"href":"#locations","label":"איך מגיעים אלינו","style":"ghost"}],"lead":"קפה טרי, מאפים חמים וכריכים על לחם רוסטיק. שתי עגלות, בבת שלמה ובכרם מהר״ל.","logo":"assets/truck_logo.png","logoAlt":"הלוגו של טראק במושבה: משאית וינטג' עם סכין ומזלג","headline":"טעם של מושבה,\nבצד הדרך.\n","background":"assets/background.png"},"type":"hero","visible":true},{"id":"story","data":{"heading":"עגלה, תנור, וחסה לאליק","paragraphs":["את העגלה הראשונה פתחו אלה ועמית אבני יחד עם זיו כהן, חבר ילדות של עמית, בסוף תקופת הקורונה. שלושתם הגיעו מעולם המסעדנות, ובחרו דווקא בבת שלמה הישנה, המושבה שבה אלה גדלה, מול הנוף של הר חורשן.","העגלה השנייה עומדת היום בכניסה לחוות מקורה, חווה אורגנית בין הכרמים של כרם מהר״ל. ובשתיהן אותו עניין: טוחנים את הקפה ברגע ההזמנה, אופים קרואסונים ולחם רוסטיק במקום, וחותכים ירקות של הבוקר לכריכים ולסלטים.","אין מלצרים ואין מהומה. מזמינים בדלפק, מוצאים פינה מול הנוף, ומחכים שיקראו בשם."]},"type":"richtext","visible":true},{"id":"menu","data":{"intro":"הכול מוכן כאן, באותו בוקר. טבעוני וללא גלוטן מסומנים ליד כל מנה.","heading":"מה אוכלים היום?","currency":"₪","categories":[{"id":"cat-sandwiches","title":"כריכים","groups":[{"items":[{"desc":"גבינת שמנת, סלמון מעושן, בצל סגול, צנונית וחסה לאליק בקרואסון חמאה","name":"סלמון","price":"39"},{"desc":"גבינת מוצרלה, עגבניה, בזיליקום ובלסמי מצומצם בקרואסון חמאה","name":"קפרזה","tags":["gf"],"price":"39"},{"desc":"איולי שיפקה פיקנטי, קורנביף, גבינת גאודה, חסה לאליק ובצל סגול בקרואסון חמאה","name":"קורנביף גאודה","price":"39"},{"desc":"גבינת ברי, ריבת בצל, שברי פקאן ועלי רוקט","name":"גבינת ברי וריבת בצל","price":"39"}],"subhead":"קרואסנדוויצ'ים"},{"items":[{"desc":"חציל שרוף, פלפל קלוי, פסטו, צנונית, זיתי קלמטה וחסה לאליק","name":"חציל שרוף ופלפל קלוי","tags":["vegan","gf"],"price":"40"},{"desc":"גבינת פטה טבעונית, טפנד זיתים, ויניגרט הדרים, בלסמי מצומצם, עגבניה, צנונית וחסה לאליק","name":"פטה טבעוני","tags":["vegan"],"price":"45"},{"desc":"טונה, לימון כבוש, אריסה, איולי שיפקה פיקנטי, בצל סגול, קורנישונים, זיתי קלמטה וחסה לאליק","name":"טונה","price":"48"},{"desc":"גבינת בושה, פסטו, בטטה קלויה, שקדים וממרח תמרים","name":"ממרח תמרים","price":"54"},{"desc":"הודו איטלקי, ארטישוק אה לה רומנה, חסה לאליק, בצל סגול, מלפפון ירוק ורוטב קיסר","name":"קיסר","price":"55"}],"subhead":"לחם רוסטיק מלא"},{"items":[{"desc":"הודו איטלקי, קורנביף, איולי חרדל-דבש, איולי שיפקה פיקנטי, כרוב אפוי, עגבנייה, קורנישונים וחסה לאליק","name":"הודו איטלקי וקורנביף","price":"55"},{"desc":"חזה אווז מעושן, גבינת גאודה, איולי שום, איולי שיפקה פיקנטי, כרוב אפוי, עגבנייה, קורנישונים וחסה לאליק","name":"אווז גאודה","price":"55"},{"name":"תוספת לחמנייה ללא גלוטן","price":"2"},{"name":"תוספת גבינת מוצרלה / גאודה / פטה / פטה טבעונית","price":"9"}],"subhead":"לחם רוסטיק לבן"}],"navLabel":"כריכים"},{"id":"cat-salads","title":"סלטים","groups":[{"items":[{"desc":"ירקות חתוכים גס: מלפפון, פלפל, עגבנייה, צנונית, גזר וזיתי קלמטה בשמן זית ולימון","name":"קערת ירקות","tags":["vegan"],"price":"33"},{"desc":"חסה לאליק, מלפפון ירוק, קרוטונים, פרמז'ן ורוטב קיסר עשיר","name":"סלט קיסר","price":"48"},{"desc":"חסה לאליק, גבינת מוצרלה, שקדים, חמוציות וויניגרט הדרים","name":"סלט מוצרלה","price":"48"},{"desc":"חסה לאליק, גרגרי חומוס, בצל סגול, זיתי קלמטה, פלפל קלוי, מלפפון, קרוטונים, נענע וגבינת פטה ברוטב שמן זית לימון","name":"סלט חומוסים","price":"48"},{"desc":"חסה לאליק, בזיליקום, פקאנים, מלפפון ירוק, ארטישוק א-לה-רומנה, גבינת בושה, שמן זית, לימון ודבש","name":"סלט בושה וארטישוק","price":"54"},{"name":"תוספת לחם / גבינה","price":"9"}]}],"navLabel":"סלטים"},{"id":"cat-kids","title":"ילדים","groups":[{"items":[{"desc":"טוסט גבינת גאודה בלחמנייה. מוגש עם ירקות שילדים אוהבים.","name":"טוסט ילדים","tags":["gf"],"price":"26"}]}],"navLabel":"ילדים"},{"id":"cat-burekas","note":"מוגש בשני הסניפים","title":"בורקס","groups":[{"items":[{"desc":"בורקס גבינה טורקי הנאפה במקום עם רסק עגבניות, אריסה, זיתים וקורנישונים.","name":"בורקס גבינה (עד גמר המלאי)","price":"35"}]}],"navLabel":"בורקס"},{"id":"cat-pizza","note":"מוגשות בימים שלישי עד חמישי בין 14:00 ל־20:00. אפשר לבקש בצק ללא גלוטן, בלי תוספת תשלום.","title":"פיצות","groups":[{"items":[{"desc":"רוטב עגבניות, מיקס מוצרלה וצהובה ובזיליקום טרי.","name":"מרגריטה","price":"49"},{"desc":"רוטב עגבניות, צהובה, גבינת בושה, בטטה אפויה, שקדים קלויים, עלי רוקט וזילוף דבש.","name":"שלוש גבינות ובטטה","price":"59"},{"desc":"רוטב עגבניות, מיקס מוצרלה וצהובה, פפרוני בקר ובזיליקום טרי.","name":"טראק במושבה","price":"59"},{"desc":"קרם חצילים, גבינת פטה, פלפלים קלויים, זיתי קלמטה, שמן זית, לימון ובזיליקום טרי.","name":"בלקנית","tags":["vegan-option"],"price":"59"},{"desc":"פוקאצ'ה עשבי תיבול ושמן זית בליווי שלושה מתבלים משתנים","name":"פוקאצ'ה מטבלים","tags":["vegan"],"price":"41"},{"desc":"נוטלה, מסקרפונה, שברי עוגיות וקצת מלח גס.","name":"מתוקה","price":"58"},{"desc":"זיתים ירוקים, בצל סגול, עגבניות ופסטו ב־6 ₪. אקסטרה גבינה, פטה, פרמז'ן, ארטישוק אל רומנה וזיתי קלמטה ב־9 ₪.","name":"תוספות לפיצה בתשלום","price":"6-9"}]}],"navLabel":"פיצות"},{"id":"cat-gelato","title":"גלידה של סטודיו ג'ילאטו","groups":[{"items":[{"desc":"שוקולד ג'אנדויה / וניל / בוטנים מלוחים / מנגו קוקוס","name":"גלידה במגוון טעמים","tags":["vegan"],"price":"19"},{"desc":"גלידת וניל, דאבל אספרסו ושברי עוגיות","name":"אפוגטו","price":"24"}]}],"navLabel":"גלידה"},{"id":"cat-sweets","title":"מאפים ומתוקים","groups":[{"items":[{"name":"כדור תמרים","tags":["vegan"],"price":"5"},{"desc":"3 עוגיות לבחירה","name":"צלחת עוגיות","price":"5"},{"desc":"פרח ריבת תות / אלפחורס","name":"עוגיות ללא גלוטן","tags":["gf"],"price":"6"},{"name":"בראוניז","price":"6"},{"desc":"בננה שוקולד (טבעוני) / טריקולד / גזר (טבעוני)","name":"מאפינס","price":"25"},{"desc":"בריוש שוקולד / קרואסון שקדים / דייניש קינמון עם/בלי גלייז","name":"מאפים","price":"25"}]}],"navLabel":"מאפים ומתוקים"},{"id":"cat-cold","title":"משקאות קרים","groups":[{"items":[{"name":"סודה / מינרלים","price":"11"},{"name":"קולה / קולה זירו","price":"13"},{"desc":"חליטת צמחים, תפוח מיובש, סיידר תפוחים ומקל קינמון.","name":"טראק במושבה אייס טי","price":"18"},{"name":"כוס סודה גדולה","price":"9"},{"desc":"רימונדה / תפוזים / תפוחים","name":"מיץ טבעי פומרנץ","price":"18"},{"name":"גזוז דובדבן","price":"18"},{"desc":"מכיל מחית תות / מנגו","name":"גזוז פירות","price":"18"},{"name":"מאצ'ה","price":"22"},{"desc":"תות / מנגו / קרמל","name":"מאצ'ה ספיישל","price":"27"}]}],"navLabel":"משקאות קרים"},{"id":"cat-hot","title":"משקאות חמים","groups":[{"items":[{"name":"שחור","price":"8"},{"name":"אספרסו כפול / מקיאטו כפול / קורטדו כפול","price":"12"},{"name":"אמריקנו קטן","price":"13"},{"name":"אמריקנו גדול","price":"16"},{"name":"שוקו קטן","price":"14"},{"name":"שוקו גדול","price":"17"},{"name":"קפוצ'ינו קטן","price":"14"},{"name":"קפוצ'ינו גדול","price":"17"},{"desc":"עם מקל קינמון ותפוח מיובש","name":"סיידר תפוחים פומרנץ","price":"19"},{"desc":"חמות / קרות, ללא סוכר: לואיזנענע / ג'ינג'ר לימון דבש / תה ירוק / כורכום הדרים / בדואית","name":"חליטות תה יזרעאל","price":"16"},{"name":"אמריקרו","price":"17"},{"name":"קפה קר / שוקו קר","price":"18"},{"name":"קפה קר קרמל","price":"27"},{"desc":"חם / קר","name":"צ'אי","price":"20"},{"name":"ק\"ג פולי קפה","price":"130"}]}],"navLabel":"משקאות חמים"}]},"type":"menu","visible":true},{"id":"photo-band","data":{"video":"assets/farm-scene.mp4","poster":"assets/photo-tractor.jpg","videoLabel":"העגלה בחווה לצד טרקטור פורד 3930 כחול ישן","sectionLabel":"העגלה והטרקטור בחווה"},"type":"media","visible":true,"studioOnly":true},{"id":"locations","data":{"intro":"שתי עגלות על דרכי הכרמל. בוחרים סניף, לוחצים על הוויז ויוצאים.","heading":"איפה תמצאו אותנו","branches":[{"id":"makura","desc":"בכניסה לחוות מקורה, חווה אורגנית בין הכרמים של כרם מהר״ל. ישיבה מקורה ומוצלת, מתאים גם ליום חם.","name":"סניף מקורה","waze":{"lat":32.639415,"lng":34.991777},"hours":{"0":[8,15],"1":[8,15],"2":[8,20],"3":[8,20],"4":[8,20],"5":[8,16],"6":[8,18]}},{"id":"batshlomo","desc":"בכניסה לבת שלמה הישנה, מול הנוף של הר חורשן. העגלה הראשונה, זאת שממנה הכול התחיל.","name":"סניף בת שלמה","waze":{"lat":32.596886,"lng":35.003922},"hours":{"0":[7,15],"1":[7,15],"2":[7,20],"3":[7,20],"4":[7,20],"5":[7,15],"6":[7,17]}}],"footnote":"לפעמים השעות משתנות. שווה להציץ באינסטגרם לפני שיוצאים."},"type":"locations","visible":true},{"id":"contact","data":{"intro":"שינויים בשעות, מנות חדשות, דוכני שישי ואירועים. הכול מתפרסם קודם באינסטגרם, ושם גם עונים הכי מהר על הודעות.","links":[{"url":"https://www.instagram.com/truck_bamoshava/","label":"@truck_bamoshava","network":"instagram"},{"url":"https://www.facebook.com/truckbamoshava","label":"טראק במושבה בפייסבוק","network":"facebook"}],"heading":"מתעדכנים אצלנו ברשתות"},"type":"social","visible":true}],"schemaVersion":1}</script>
 </body>
 </html>
