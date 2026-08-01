@@ -139,14 +139,14 @@ function renderEditor() {
     panelFooter(site)
   );
 
-  const saveBtn = el(“button”, { class: “btn”, onclick: save }, L.save);
-  const ghBtn   = el(“button”, { class: “btn btn-primary”, onclick: publishToGitHub }, “פרסם לאינטרנט”);
-  const dlBtn   = el(“button”, { class: “btn”, onclick: downloadFile }, L.publish);
-  const note    = el(“span”, { class: “muted”, style: “font-size:.82rem” },
+  const saveBtn = el("button", { class: "btn", onclick: save }, L.save);
+  const ghBtn   = el("button", { class: "btn btn-primary", onclick: publishToGitHub }, "פרסם לאינטרנט");
+  const dlBtn   = el("button", { class: "btn", onclick: downloadFile }, L.publish);
+  const note    = el("span", { class: "muted", style: "font-size:.82rem" },
     GITHUB_TOKEN
-      ? “פרסם לאינטרנט ← Vercel מעדכן את האתר תוך שניות.”
-      : “הורדת קובץ ← שלחו למוכר האתר לפרסום.”);
-  const savebar = el(“div”, { class: “savebar” }, ghBtn, dlBtn, saveBtn, note);
+      ? "פרסם לאינטרנט ← Vercel מעדכן את האתר תוך שניות."
+      : "הורדת קובץ ← שלחו למוכר האתר לפרסום.");
+  const savebar = el("div", { class: "savebar" }, ghBtn, dlBtn, saveBtn, note);
 
   const left = el("div", {}, editor, savebar);
   const preview = el("div", { class: "preview-pane hide" }, el("iframe", { title: "preview" }));
@@ -361,28 +361,105 @@ function panelFooter(site) {
 }
 
 /* ---------------- sections ---------------- */
+// How many "items" a zone holds, for the count badge. null = not applicable.
+function zoneCount(s) {
+  const d = s.data || {};
+  switch (s.type) {
+    case "hero": return (d.ctas || []).length;
+    case "richtext": return (d.paragraphs || []).filter((p) => p && p.trim()).length;
+    case "menu": return (d.categories || []).reduce((n, c) => n + (c.groups || []).reduce((m, g) => m + (g.items || []).length, 0), 0);
+    case "gallery": return (d.images || []).length;
+    case "locations": return (d.branches || []).length;
+    case "social": return (d.links || []).length;
+    default: return null; // e.g. "media"
+  }
+}
+// Whether a zone has enough content to be considered ready.
+function zoneComplete(s) {
+  const d = s.data || {};
+  switch (s.type) {
+    case "hero": return !!(d.headline && d.headline.trim());
+    case "richtext": return (d.paragraphs || []).some((p) => p && p.trim());
+    case "media": return !!(d.poster || d.video);
+    default: {
+      const n = zoneCount(s);
+      return n == null ? true : n > 0;
+    }
+  }
+}
+function countSiteImages(site) {
+  const has = (v) => typeof v === "string" && v.trim();
+  let n = 0;
+  if (has(site.brand?.logo)) n++;
+  if (has(site.footer?.logo)) n++;
+  if (has(site.meta?.favicon)) n++;
+  for (const s of site.sections || []) {
+    const d = s.data || {};
+    if (s.type === "hero") { if (has(d.logo)) n++; if (has(d.background)) n++; }
+    if (s.type === "gallery") n += (d.images || []).filter((im) => has(im.src)).length;
+    if (s.type === "media" && has(d.poster)) n++;
+  }
+  return n;
+}
+
 function panelSections(site) {
   site.sections = site.sections || [];
+  let openZone = null; // the section object currently expanded
+  let menuZone = null;  // the section object whose "..." menu is open
   const container = el("div", {});
   function draw() {
     container.replaceChildren();
+
+    const total = site.sections.length;
+    const incomplete = site.sections.filter((s) => !zoneComplete(s)).length;
+    container.append(el("div", { class: "zones-stats" },
+      el("div", { class: "zone-stat stat-warn" }, el("span", { class: "num" }, String(incomplete)), el("span", { class: "lbl" }, "דורש השלמה")),
+      el("div", { class: "zone-stat" }, el("span", { class: "num" }, String(countSiteImages(site))), el("span", { class: "lbl" }, "תמונות")),
+      el("div", { class: "zone-stat stat-clay" }, el("span", { class: "num" }, String(total)), el("span", { class: "lbl" }, "אזורי תוכן"))));
+
+    const list = el("div", { class: "zone-list" });
     site.sections.forEach((s, i) => {
-      const head = el("div", { class: "item-head" },
-        el("span", { class: "grip" },
-          el("span", { class: "section-type" }, SECTION_LABELS[s.type] || s.type)),
-        el("label", { class: "toggle" }, checkbox(s, "visible", true), L.visible),
-        el("div", { class: "icon-btns" },
-          el("button", { class: "btn btn-sm", type: "button", disabled: i === 0, onclick: () => { move(site.sections, i, -1); draw(); markDirty(); } }, L.up),
-          el("button", { class: "btn btn-sm", type: "button", disabled: i === site.sections.length - 1, onclick: () => { move(site.sections, i, 1); draw(); markDirty(); } }, L.down),
-          el("button", { class: "btn btn-sm btn-danger", type: "button", onclick: () => { if (confirm("למחוק את האזור הזה?")) { site.sections.splice(i, 1); draw(); markDirty(); } } }, "✕"))
-      );
-      container.append(el("div", { class: "repeater-item" }, head, sectionEditor(s)));
+      const count = zoneCount(s);
+      const complete = zoneComplete(s);
+      const isOpen = openZone === s;
+      const row = el("div", { class: "zone-row " + (complete ? "status-ok" : "status-warn") + (isOpen ? " open" : "") });
+
+      const menuBtn = el("button", { class: "btn btn-sm", type: "button", title: "פעולות" }, "⋯");
+      menuBtn.addEventListener("click", (e) => { e.stopPropagation(); menuZone = menuZone === s ? null : s; draw(); });
+      const menuWrap = el("div", { class: "zone-menu-wrap" }, menuBtn);
+      if (menuZone === s) {
+        menuWrap.append(el("div", { class: "zone-menu" },
+          el("button", { type: "button", disabled: i === 0, onclick: (e) => { e.stopPropagation(); move(site.sections, i, -1); menuZone = null; draw(); markDirty(); } }, "↑ " + "הזזה למעלה"),
+          el("button", { type: "button", disabled: i === site.sections.length - 1, onclick: (e) => { e.stopPropagation(); move(site.sections, i, 1); menuZone = null; draw(); markDirty(); } }, "↓ " + "הזזה למטה"),
+          el("hr"),
+          el("button", { type: "button", class: "danger", onclick: (e) => {
+            e.stopPropagation();
+            if (confirm("למחוק את האזור הזה?")) { if (openZone === s) openZone = null; site.sections.splice(i, 1); menuZone = null; draw(); markDirty(); }
+          } }, "✕ מחיקה")));
+      }
+
+      const head = el("div", { class: "zone-row-head", onclick: () => { openZone = isOpen ? null : s; menuZone = null; draw(); } },
+        el("span", { class: "zone-count" }, count ? String(count) : "–"),
+        el("span", { class: "zone-label" }, SECTION_LABELS[s.type] || s.type),
+        el("span", { class: "zone-spacer" }),
+        el("label", { class: "toggle", onclick: (e) => e.stopPropagation() }, checkbox(s, "visible", true), L.visible),
+        menuWrap,
+        el("span", { class: "zone-caret" }));
+
+      row.append(head);
+      if (isOpen) row.append(el("div", { class: "zone-row-body" }, sectionEditor(s)));
+      list.append(row);
     });
+    container.append(list);
+
     // add-section control
     const sel = el("select", {});
     ADDABLE_SECTIONS.forEach((t) => sel.append(el("option", { value: t }, SECTION_LABELS[t] || t)));
-    const addBtn = el("button", { class: "btn btn-add", type: "button", onclick: () => { site.sections.push(defaultSection(sel.value)); draw(); markDirty(); } }, "+ " + L.add_section);
-    container.append(el("div", { class: "row", style: "margin-top:12px;align-items:center" }, sel, addBtn));
+    const addBtn = el("button", { class: "btn btn-add", type: "button", onclick: () => {
+      const s = defaultSection(sel.value);
+      site.sections.push(s); openZone = s; draw(); markDirty();
+    } }, "+ " + L.add_section);
+    container.append(el("div", { class: "row", style: "margin-top:14px;align-items:center" }, sel, addBtn));
   }
   draw();
   return panel(L.sections, container);
