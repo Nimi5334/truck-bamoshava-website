@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>עריכת האתר · טראק במושבה</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<script src="icons.js"></script>
+
+<div class="app">
+
+  <nav class="rail" aria-label="תפריט ראשי">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">ט</div>
+      <div>
+        <div class="brand-name">טראק במושבה</div>
+        <div class="brand-sub">ניהול האתר</div>
+      </div>
+    </div>
+
+    <a class="nav-item" href="index.html">
+      <svg><use href="#i-home"/></svg>
+      <span class="nav-txt"><span class="nav-lbl">בית</span><span class="nav-sub">מה כדאי לשפר</span></span>
+    </a>
+    <a class="nav-item on" href="edit.html" aria-current="page">
+      <svg><use href="#i-edit"/></svg>
+      <span class="nav-txt"><span class="nav-lbl">עריכת האתר</span><span class="nav-sub">לחיצה על כל חלק</span></span>
+    </a>
+    <a class="nav-item" href="edit.html?open=contact">
+      <svg><use href="#i-store"/></svg>
+      <span class="nav-txt"><span class="nav-lbl">פרטי העסק</span><span class="nav-sub">טלפון, כתובת, שעות</span></span>
+    </a>
+
+    <div class="grow"></div>
+    <hr>
+    <a class="nav-item" href="../login.html">
+      <svg><use href="#i-exit"/></svg>
+      <span class="nav-txt"><span class="nav-lbl">יציאה</span></span>
+    </a>
+  </nav>
+
+  <div class="main">
+    <header class="bar">
+      <span class="site-pill"><span class="live" aria-hidden="true"></span><span class="ltr">truck-bamoshava.co.il</span></span>
+      <span class="grow"></span>
+
+      <div role="group" aria-label="גודל התצוגה" style="display:flex;gap:8px">
+        <button class="btn btn-go" id="view-desktop" aria-pressed="true">מחשב</button>
+        <button class="btn" id="view-mobile" aria-pressed="false">טלפון</button>
+      </div>
+
+      <span class="state state-clean" id="state"><svg><use href="#i-check"/></svg> הכול מפורסם</span>
+      <button class="btn btn-go btn-lg" id="publish">פרסום השינויים</button>
+    </header>
+
+    <div class="hintbar" id="hintbar">
+      <svg aria-hidden="true"><use href="#i-tap"/></svg>
+      <span class="grow">זה האתר שלכם, בדיוק כמו שלקוחות רואים אותו. לחצו על כל חלק כדי לשנות אותו.</span>
+      <button type="button" id="hint-ok">הבנתי</button>
+    </div>
+
+    <div class="stage">
+      <div id="serpzone"></div>
+      <div class="paper" id="paper"></div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-title" hidden>
+  <div class="dr-head">
+    <div style="flex:1">
+      <h2 id="dr-title">—</h2>
+      <p id="dr-help"></p>
+    </div>
+    <button class="dr-close" id="dr-close" aria-label="סגירה בלי לשמור"><svg><use href="#i-close"/></svg></button>
+  </div>
+  <div class="dr-body" id="dr-body"></div>
+  <div class="dr-foot">
+    <button class="btn" id="dr-cancel">ביטול</button>
+    <button class="btn btn-go" id="dr-save">שמירה</button>
+  </div>
+</aside>
+
+<div class="crest" id="crest" role="status" aria-live="polite">
+  <div class="crest-in">
+    <div class="tick"><svg><use href="#i-check"/></svg></div>
+    <div class="big">פורסם</div>
+    <div class="sm">מעכשיו הלקוחות רואים את הגרסה החדשה</div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg aria-hidden="true"><use href="#i-check"/></svg>
+  <span id="toast-txt">נשמר</span>
+</div>
+
+<script src="edit.js"></script>
+</body>
+</html>

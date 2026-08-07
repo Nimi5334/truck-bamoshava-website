@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>בית · טראק במושבה</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<script src="icons.js"></script>
+
+<div class="app">
+
+  <nav class="rail" aria-label="תפריט ראשי">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">ט</div>
+      <div>
+        <div class="brand-name">טראק במושבה</div>
+        <div class="brand-sub">ניהול האתר</div>
+      </div>
+    </div>
+
+    <a class="nav-item on" href="index.html" aria-current="page">
+      <svg><use href="#i-home"/></svg>
+      <span class="nav-txt"><span class="nav-lbl">בית</span><span class="nav-sub">מה כדאי לשפר</span></span>
+    </a>
+    <a class="nav-item" href="edit.html">
+      <svg><use href="#i-edit"/></svg>
+      <span class="nav-txt"><span class="nav-lbl">עריכת האתר</span><span class="nav-sub">לחיצה על כל חלק</span></span>
+    </a>
+    <a class="nav-item" href="edit.html?open=contact">
+      <svg><use href="#i-store"/></svg>
+      <span class="nav-txt"><span class="nav-lbl">פרטי העסק</span><span class="nav-sub">טלפון, כתובת, שעות</span></span>
+    </a>
+
+    <div class="grow"></div>
+    <hr>
+    <a class="nav-item" href="../login.html">
+      <svg><use href="#i-exit"/></svg>
+      <span class="nav-txt"><span class="nav-lbl">יציאה</span></span>
+    </a>
+  </nav>
+
+  <div class="main">
+    <header class="bar">
+      <span class="site-pill"><span class="live" aria-hidden="true"></span><span class="ltr">truck-bamoshava.co.il</span></span>
+      <span class="grow"></span>
+      <span class="state state-clean"><svg><use href="#i-check"/></svg> האתר באוויר ומעודכן</span>
+      <a class="btn btn-go btn-lg" href="edit.html"><svg><use href="#i-eye"/></svg> תצוגה חיה של האתר</a>
+    </header>
+
+    <div class="page">
+
+      <!-- ── score + the one thing worth doing next ── -->
+      <section class="card headline">
+        <div>
+          <h1>ככה גוגל רואה את האתר שלכם היום</h1>
+          <p class="sub">הציון אומר כמה קל לאנשים באזור למצוא אתכם בחיפוש. כל תיקון ברשימה למטה מעלה אותו.</p>
+          <p class="next">
+            <svg aria-hidden="true"><use href="#i-idea"/></svg>
+            <span>הכי משתלם עכשיו: <b>להוסיף את שם היישוב לכותרת</b> — לוקח שתי דקות</span>
+          </p>
+        </div>
+
+        <div class="ring-wrap">
+          <svg width="148" height="148" viewBox="0 0 148 148" aria-hidden="true">
+            <circle class="ring-bg" cx="74" cy="74" r="62" fill="none" stroke-width="10"/>
+            <circle class="ring-fg" id="ring" cx="74" cy="74" r="62" fill="none" stroke-width="10"
+                    stroke-dasharray="390" stroke-dashoffset="390"/>
+          </svg>
+          <div class="ring-num">
+            <span class="n mono ltr" id="score">0</span>
+            <span class="l">מתוך 100 בחיפוש בגוגל</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── what the search result actually looks like ── -->
+      <section class="card serp" style="margin-top:16px">
+        <div class="serp-note">
+          <svg aria-hidden="true"><use href="#i-search"/></svg>
+          <span>ככה נראית השורה שלכם בגוגל כשמישהו מחפש "פוד טראק בזכרון יעקב"</span>
+          <span class="grow" style="flex:1"></span>
+        </div>
+
+        <div class="serp-box">
+          <div class="serp-url ltr">truck-bamoshava.co.il</div>
+          <div class="serp-title" id="serp-title">טראק במושבה | פוד־טראק אמיתי</div>
+          <div class="serp-desc" id="serp-desc">התחלנו ב־2019 עם טראק אחד וגריל ישן. היום אנחנו הכתובת לאוכל…</div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn" id="serp-now" aria-pressed="true">מה שיש היום</button>
+          <button class="btn" id="serp-after" aria-pressed="false">איך זה ייראה אחרי התיקונים</button>
+        </div>
+      </section>
+
+      <!-- ── the fixes, most valuable first ── -->
+      <section class="sec">
+        <div class="sec-head">
+          <h2>מה כדאי לתקן</h2>
+          <span class="cnt">5 דברים · בערך 18 דקות עבודה</span>
+        </div>
+
+        <div class="recs">
+
+          <article class="rec wide">
+            <div class="rec-head">
+              <span class="mark todo" aria-hidden="true"><svg><use href="#i-alert"/></svg></span>
+              <h3>שם היישוב לא מופיע בכותרת של האתר</h3>
+            </div>
+            <p class="why">אנשים לא מחפשים בגוגל "פוד טראק". הם מחפשים <b>"פוד טראק בזכרון יעקב"</b>. כשהיישוב לא כתוב בכותרת, גוגל לא יודע לקשר ביניכם לבין החיפוש הזה, ומציג במקומכם עסק אחר מהאזור.</p>
+            <div class="chips">
+              <span class="chip chip-high">השפעה גבוהה</span>
+              <span class="chip chip-time"><svg aria-hidden="true"><use href="#i-clock"/></svg> 2 דקות</span>
+            </div>
+            <div class="rec-foot">
+              <span class="grow"></span>
+              <a class="btn btn-go" href="edit.html?open=hero&amp;field=title">לתקן עכשיו</a>
+            </div>
+            <div class="meter"><i style="width:0%"></i></div>
+          </article>
+
+          <article class="rec">
+            <div class="rec-head">
+              <span class="mark todo" aria-hidden="true"><svg><use href="#i-alert"/></svg></span>
+              <h3>חסר המשפט שגוגל מציג מתחת לשם</h3>
+            </div>
+            <p class="why">זה הטקסט האפור בתוצאות החיפוש. כשלא כותבים אותו, גוגל חוטף משפט אקראי מהאתר — ולרוב הוא נחתך באמצע.</p>
+            <div class="chips">
+              <span class="chip chip-high">השפעה גבוהה</span>
+              <span class="chip chip-time"><svg aria-hidden="true"><use href="#i-clock"/></svg> 3 דקות</span>
+            </div>
+            <div class="rec-foot">
+              <span class="grow"></span>
+              <a class="btn btn-go" href="edit.html?open=search&amp;field=desc">לתקן עכשיו</a>
+            </div>
+            <div class="meter"><i style="width:0%"></i></div>
+          </article>
+
+          <article class="rec">
+            <div class="rec-head">
+              <span class="mark todo" aria-hidden="true"><svg><use href="#i-alert"/></svg></span>
+              <h3>אין אף תמונה בגלריה</h3>
+            </div>
+            <p class="why">דף עם תמונות אמיתיות של האוכל מקבל יותר לחיצות מגוגל, ואנשים נשארים בו יותר זמן. שלוש תמונות טובות מספיקות.</p>
+            <div class="chips">
+              <span class="chip chip-mid">השפעה בינונית</span>
+              <span class="chip chip-time"><svg aria-hidden="true"><use href="#i-clock"/></svg> 5 דקות</span>
+            </div>
+            <div class="rec-foot">
+              <span class="grow"></span>
+              <a class="btn btn-go" href="edit.html?open=gallery">לתקן עכשיו</a>
+            </div>
+            <div class="meter"><i style="width:0%"></i></div>
+          </article>
+
+          <article class="rec">
+            <div class="rec-head">
+              <span class="mark todo" aria-hidden="true"><svg><use href="#i-alert"/></svg></span>
+              <h3>שעות הפתיחה לא מלאות</h3>
+            </div>
+            <p class="why">גוגל מציג שעות פתיחה ישירות בתוצאות, לפני שבכלל נכנסים לאתר. חסר יום אחד — והוא מפסיק להציג את כולן.</p>
+            <div class="chips">
+              <span class="chip chip-mid">השפעה בינונית</span>
+              <span class="chip chip-time"><svg aria-hidden="true"><use href="#i-clock"/></svg> 2 דקות</span>
+            </div>
+            <div class="rec-foot">
+              <span class="grow"></span>
+              <a class="btn btn-go" href="edit.html?open=hours">לתקן עכשיו</a>
+            </div>
+            <div class="meter"><i style="width:66%"></i></div>
+          </article>
+
+          <article class="rec">
+            <div class="rec-head">
+              <span class="mark todo" aria-hidden="true"><svg><use href="#i-alert"/></svg></span>
+              <h3>הסיפור שלכם קצר מדי</h3>
+            </div>
+            <p class="why">יש שם 34 מילים. גוגל מבין טוב יותר עסקים שמסבירים על עצמם בכמה משפטים — מה מגישים, מאיפה הגעתם, לאיזה אזור מגיעים.</p>
+            <div class="chips">
+              <span class="chip chip-time">השפעה נמוכה</span>
+              <span class="chip chip-time"><svg aria-hidden="true"><use href="#i-clock"/></svg> 6 דקות</span>
+            </div>
+            <div class="rec-foot">
+              <span class="grow"></span>
+              <a class="btn btn-go" href="edit.html?open=story&amp;field=body">לתקן עכשיו</a>
+            </div>
+            <div class="meter"><i style="width:30%"></i></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ── already fine: short, quiet, no clicking needed ── -->
+      <section class="sec">
+        <div class="sec-head">
+          <h2>כבר בסדר</h2>
+          <span class="cnt">4 דברים שלא צריך לגעת בהם</span>
+        </div>
+
+        <div class="card done-list">
+          <div class="done-row">
+            <span class="mark done" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
+            <span class="t">אפשר להתקשר אליכם בלחיצה מהנייד</span>
+            <span class="d">רוב ההזמנות מגיעות ככה</span>
+          </div>
+          <div class="done-row">
+            <span class="mark done" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
+            <span class="t">הכתובת המלאה מופיעה באתר</span>
+            <span class="d">גוגל מזהה אותה כעסק מקומי</span>
+          </div>
+          <div class="done-row">
+            <span class="mark done" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
+            <span class="t">האתר נטען מהר</span>
+            <span class="d">1.2 שניות בנייד</span>
+          </div>
+          <div class="done-row">
+            <span class="mark done" aria-hidden="true"><svg><use href="#i-check"/></svg></span>
+            <span class="t">האתר נראה טוב גם בטלפון</span>
+            <span class="d">7 מכל 10 מבקרים</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script src="home.js"></script>
+</body>
+</html>
