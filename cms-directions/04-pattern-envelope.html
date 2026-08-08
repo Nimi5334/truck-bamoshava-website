@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>04 · The Sewing Pattern Envelope — Bright Smile Dental</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Work+Sans:wght@400;500;600&family=Azeret+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tissue:#FCFCFE; --ink:#191A2E; --pencil:#5A5C7A;
+  --indigo:#3B2FD6; --violet:#7C4CC4; --guide:#E8E8F5; --paper:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--tissue);color:var(--ink);font-family:'Work Sans',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:0 24px 70px}
+
+.top{display:flex;align-items:center;gap:16px;padding:28px 0 18px}
+.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:23px;letter-spacing:-.02em}
+.brand small{display:block;font-family:'Azeret Mono',monospace;font-weight:400;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--pencil);margin-top:5px}
+.newbtn{margin-left:auto;background:var(--indigo);color:#fff;border:none;border-radius:12px;padding:12px 20px;font-family:'Work Sans';font-weight:600;font-size:14.5px;cursor:pointer}
+.newbtn:hover{background:#2E23AC}
+
+.key{display:flex;flex-wrap:wrap;gap:16px;padding:14px 18px;background:var(--paper);border:2px dotted var(--indigo);border-radius:12px;margin-bottom:20px;align-items:center}
+.key h3{font-family:'Syne';font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.key span{display:flex;align-items:center;gap:7px;font-family:'Azeret Mono',monospace;font-size:11.5px;color:var(--pencil)}
+.n{width:12px;height:12px;border:2px solid var(--indigo);border-radius:2px;flex:none}
+.n.on{background:var(--indigo)}
+
+.list{display:flex;flex-direction:column;gap:0}
+.env{display:grid;grid-template-columns:1fr 232px 190px 104px;align-items:center;gap:20px;min-height:72px;padding:12px 18px;background:var(--paper);
+     border-bottom:2px dotted var(--guide)}
+.env:first-child{border-top-left-radius:12px;border-top-right-radius:12px;border-top:2px dotted var(--guide)}
+.env:last-child{border-bottom-left-radius:12px;border-bottom-right-radius:12px}
+.env:hover{background:#FBFBFF}
+.env.flag{border-left:4px solid var(--indigo);padding-left:14px}
+
+.ttl{font-family:'Syne',sans-serif;font-weight:700;font-size:16.5px;letter-spacing:-.01em}
+.sub{font-family:'Azeret Mono',monospace;font-size:11.5px;color:var(--pencil);margin-top:3px;letter-spacing:.02em}
+.sub em{font-style:normal;color:var(--indigo);font-weight:600}
+
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:'Azeret Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:5px 10px;border-radius:8px;white-space:nowrap}
+.chip i{width:10px;height:10px;flex:none}
+.chip.live{color:#1E2A6B;background:#EAEBFB;border:2px solid #3B2FD6}
+.chip.live i{background:var(--indigo);border-radius:50%}
+.chip.review{color:#4A1E6E;background:#F2EAFB;border:2px solid var(--violet)}
+.chip.review i{background:var(--violet);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.chip.draft{color:#3D3F55;background:#F1F1F6;border:2px solid #B6B8CC}
+.chip.draft i{background:#7B7E96;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+
+/* SIGNATURE — the notch strip */
+.notches{display:flex;flex-direction:column;gap:5px}
+.nrow{display:flex;align-items:center;gap:8px}
+.nlabel{font-family:'Azeret Mono',monospace;font-size:10.5px;letter-spacing:.04em;color:var(--pencil)}
+.nlabel.missing{color:var(--violet);font-weight:600}
+.strip{display:flex;gap:5px}
+.pill{width:34px;height:8px;border:2px solid var(--indigo);border-radius:4px;background:transparent}
+.pill.on{background:var(--indigo)}
+.pill.off{border-color:var(--violet);border-style:dashed}
+
+.act{justify-self:end;display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.act button{border-radius:10px;padding:8px 14px;font-family:'Work Sans';font-weight:600;font-size:13.5px;cursor:pointer;border:2px solid var(--guide);background:none;color:var(--ink);white-space:nowrap}
+.act button:hover{border-color:var(--ink)}
+.act button.prime{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.act button.prime:hover{background:#2E23AC}
+
+.note{margin-top:30px;font-size:13.5px;color:var(--pencil);max-width:660px;border-top:2px dotted var(--guide);padding-top:15px}
+.note b{font-family:'Syne';color:var(--ink);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Bright Smile Dental<small>Pattern envelopes · what's in each page</small></div>
+    <button class="newbtn">+ New page</button>
+  </header>
+
+  <div class="key">
+    <h3>Every page needs four pieces</h3>
+    <span><i class="n on"></i>Page title</span>
+    <span><i class="n on"></i>Written text</span>
+    <span><i class="n on"></i>A photo</span>
+    <span><i class="n on"></i>Phone &amp; address</span>
+    <span style="margin-left:auto"><i class="n"></i>dashed &amp; empty = still missing</span>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <p class="note"><b>Signature — the notch strip.</b> Four notches per page, one per required piece,
+  each labelled in plain words. Hollow dashed notches name what's missing before you publish —
+  because a half-empty page going live is the real failure, and no status chip catches it.</p>
+</div>
+
+<script src="data.js"></script>
+<script>
+const chip = s => `<span class="chip ${s==='published'?'live':s}"><i></i>${STATUS_WORD[s]}</span>`;
+const ORDER = ['headline','body','image','contact'];
+
+document.getElementById('list').innerHTML = sorted().map(it => {
+  const miss = missingPieces(it);
+  const done = piecesDone(it);
+  return `<div class="env ${needsAttention(it)?'flag':''}">
+    <div>
+      <div class="ttl">${it.title}</div>
+      <div class="sub">EDITED ${niceDate(it.edited)} · ${agoWords(it.days)}${
+        it.reason?` · <em>${it.reason}</em>`:''}</div>
+    </div>
+    <div class="notches">
+      <div class="strip">${ORDER.map(k =>
+        `<i class="pill ${it.pieces[k]?'on':'off'}" title="${PIECE_LABELS[k]}"></i>`).join('')}</div>
+      <div class="nrow"><span class="nlabel ${miss.length?'missing':''}">${
+        miss.length ? `${done}/4 · missing ${miss.join(' + ').toLowerCase()}` : '4/4 · all pieces in'
+      }</span></div>
+    </div>
+    <div>${chip(it.status)}</div>
+    <div class="act">
+      <button class="${needsAttention(it)?'prime':''}">${needsAttention(it)?'Fix it':'Edit'}</button>
+    </div>
+  </div>`;
+}).join('');
+</script>
+</body>
+</html>

@@ -12,6 +12,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["leverage-cms/tools/dev-mock.mjs"],
       "port": 8799
+    },
+    {
+      "name": "truck-kit",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8743", "--directory", "truck-site-kit"],
+      "port": 8743
     }
   ]
 }

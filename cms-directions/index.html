@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CMS Content List — 10 Directions</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0E0F12;color:#E8EAED;font-family:'Inter',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1500px;margin:0 auto;padding:28px 24px 80px}
+h1{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.sub{color:#9BA3AF;font-size:14.5px;margin-top:6px;max-width:760px;line-height:1.55}
+.controls{display:flex;gap:10px;align-items:center;margin:22px 0 18px;flex-wrap:wrap}
+.controls button{background:#1A1D23;border:1px solid #2A2F38;color:#E8EAED;border-radius:6px;padding:8px 14px;
+  font-family:'Inter';font-weight:500;font-size:13.5px;cursor:pointer}
+.controls button.on{background:#E8EAED;color:#0E0F12;border-color:#E8EAED}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(460px,1fr));gap:22px}
+.card{border:1px solid #22262E;border-radius:10px;overflow:hidden;background:#141720}
+.card header{display:flex;align-items:baseline;gap:10px;padding:12px 14px;border-bottom:1px solid #22262E}
+.card h2{font-size:15px;font-weight:600}
+.card .n{font-family:'JetBrains Mono',monospace;font-size:12px;color:#6F7783}
+.card .tag{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:#9BA3AF;border:1px solid #2A2F38;border-radius:3px;padding:2px 7px}
+.card p{padding:10px 14px 0;color:#9BA3AF;font-size:13px;line-height:1.5}
+.card .sig{padding:6px 14px 12px;color:#C7CCD4;font-size:13px}
+.card .sig b{color:#E8EAED}
+.frame{position:relative;height:420px;border-top:1px solid #22262E;background:#fff;overflow:hidden}
+.frame iframe{width:1400px;height:1050px;border:0;transform:scale(.4);transform-origin:top left;pointer-events:none}
+.frame a{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:flex-end;padding:12px;
+  background:linear-gradient(to top,rgba(14,15,18,.55),transparent 32%);text-decoration:none}
+.frame a span{background:#E8EAED;color:#0E0F12;border-radius:6px;padding:7px 13px;font-size:13px;font-weight:600}
+.hint{margin-top:26px;color:#6F7783;font-size:13px;border-top:1px solid #22262E;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>CMS content list — 10 visual directions</h1>
+  <p class="sub">Same screen, same 12 pages of data, same functional hierarchy: attention first, then
+  most-neglected first. Only the design language changes. Previews are scaled to 40% — click any one
+  to open it full size.</p>
+
+  <div class="controls">
+    <button class="on" data-f="all">All 10</button>
+    <button data-f="light">Light (5)</button>
+    <button data-f="dark">Dark (5)</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <p class="hint">Data lives in <code>data.js</code> — edit it once and all ten update together.</p>
+</div>
+
+<script>
+const DIRS = [
+ {n:'01',f:'01-pharmacy-rail.html',      t:'The Pharmacy Pickup Rail', m:'light',
+  th:'Racked at the front if it needs you; filed behind if it doesn\'t.',
+  sig:'the tear tab — names the one action in plain words, tears off when done'},
+ {n:'02',f:'02-kitchen-pass.html',        t:'The Kitchen Pass',        m:'dark',
+  th:'Content items are tickets. Age is the pressure, not status.',
+  sig:'the age bar — fills the longer a page sits untouched; BUMP publishes'},
+ {n:'03',f:'03-tide-chart.html',          t:'The Tide Chart',          m:'light',
+  th:'Every page has a rhythm; show what\'s drifted past its own.',
+  sig:'the waterline — one shared time axis, past-due markers turn plum and rise'},
+ {n:'04',f:'04-pattern-envelope.html',    t:'The Sewing Pattern Envelope', m:'light',
+  th:'A page is a garment in pieces. Show what\'s still missing.',
+  sig:'the notch strip — four labelled notches, hollow = missing piece'},
+ {n:'05',f:'05-on-air-console.html',      t:'The On-Air Console',      m:'dark',
+  th:'Exactly one thing is broadcasting. That is the whole mental model.',
+  sig:'the fader — publishing is a deliberate slide, both ends spelled out'},
+ {n:'06',f:'06-seed-tray.html',           t:'The Greenhouse Seed Tray', m:'light',
+  th:'Content grows. "Seedling" carries less shame than "draft".',
+  sig:'growth stage glyph — four shapes + words; neglected = "needs water"'},
+ {n:'07',f:'07-bowling-scoresheet.html',  t:'The Bowling Scoresheet',  m:'dark',
+  th:'A record of attempts, where unfinished frames are visibly open.',
+  sig:'the open frame — answers "did my change actually go live?" in-row'},
+ {n:'08',f:'08-key-board.html',           t:'The Hardware Store Key Board', m:'light',
+  th:'Everything on labelled hooks; new keys are cut from old ones.',
+  sig:'cut a copy — duplication as the real way non-technical users create'},
+ {n:'09',f:'09-proof-rack.html',          t:'The Night Bakery Proof Rack', m:'dark',
+  th:'Resting is craft; forgotten is not. Make waiting time the readout.',
+  sig:'the proof ring — resting / ready / over-proofed, forces a decision'},
+ {n:'10',f:'10-vacancy-sign.html',        t:'The Roadside Vacancy Sign', m:'dark',
+  th:'Nobody misreads VACANCY. The riskiest and most literal of the set.',
+  sig:'the status plate — lit vs unlit is luminance, not hue; glow quarantined'}
+];
+
+const grid = document.getElementById('grid');
+function render(filter){
+  grid.innerHTML = DIRS.filter(d => filter === 'all' || d.m === filter).map(d => `
+    <article class="card">
+      <header><span class="n">${d.n}</span><h2>${d.t}</h2><span class="tag">${d.m}</span></header>
+      <p>${d.th}</p>
+      <div class="sig"><b>Signature:</b> ${d.sig}</div>
+      <div class="frame">
+        <iframe src="${d.f}" loading="lazy" title="${d.t}" scrolling="no"></iframe>
+        <a href="${d.f}" target="_blank"><span>Open full size ↗</span></a>
+      </div>
+    </article>`).join('');
+}
+render('all');
+document.querySelectorAll('.controls button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.controls button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); render(b.dataset.f);
+}));
+</script>
+</body>
+</html>

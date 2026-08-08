@@ -1,0 +1,294 @@
+{
+  "schemaVersion": 1,
+  "siteId": "starter",
+  "meta": {
+    "lang": "he",
+    "dir": "rtl",
+    "title": "שם העסק שלכם | תיאור קצר של העסק",
+    "description": "כתבו כאן משפט תיאור קצר על העסק שלכם. הטקסט הזה מופיע בתוצאות החיפוש וברשתות החברתיות.",
+    "favicon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAzMiAzMicgd2lkdGg9JzMyJyBoZWlnaHQ9JzMyJyByb2xlPSdpbWcnIGFyaWEtbGFiZWw9J2ljb24nPgogIDxyZWN0IHdpZHRoPSczMicgaGVpZ2h0PSczMicgcng9JzcnIGZpbGw9JyM3QTdBODUnLz4KICA8dGV4dCB4PScxNicgeT0nMjEnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZvbnQtZmFtaWx5PSdBc3Npc3RhbnQsIEFyaWFsLCBzYW5zLXNlcmlmJyBmb250LXNpemU9JzEzJyBmb250LXdlaWdodD0nNzAwJyBmaWxsPScjRjRGNEY2Jz7XnNeV15LXlTwvdGV4dD4KPC9zdmc+",
+    "themeColor": "#EDEDF0",
+    "fontsHref": "https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@500;700;900&family=Amatic+SC:wght@700&display=swap"
+  },
+  "theme": {
+    "colors": {
+      "bg": "#EDEDF0",
+      "bgDeep": "#E2E2E7",
+      "surface": "#FFFFFF",
+      "ink": "#232328",
+      "inkSoft": "#5C5C66",
+      "sage": "#8A8A93",
+      "sageDeep": "#5C5C66",
+      "sageDark": "#3A3A42",
+      "olive": "#71717A",
+      "line": "#D6D6DC"
+    },
+    "radius": "14px",
+    "fonts": {
+      "head": "\"Frank Ruhl Libre\",serif",
+      "body": "\"Assistant\",sans-serif"
+    }
+  },
+  "brand": {
+    "name": "שם העסק",
+    "logo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0NDAgMjIwJyB3aWR0aD0nNDQwJyBoZWlnaHQ9JzIyMCcgcm9sZT0naW1nJyBhcmlhLWxhYmVsPSdwbGFjZWhvbGRlciBsb2dvJz4KICA8cmVjdCB3aWR0aD0nNDQwJyBoZWlnaHQ9JzIyMCcgZmlsbD0nbm9uZScvPgogIDxyZWN0IHg9JzYwJyB5PSc0MCcgd2lkdGg9JzMyMCcgaGVpZ2h0PScxNDAnIHJ4PScxNicgZmlsbD0nbm9uZScgc3Ryb2tlPScjN0E3QTg1JyBzdHJva2Utd2lkdGg9JzQnIHN0cm9rZS1kYXNoYXJyYXk9JzEyIDEwJy8+CiAgPHRleHQgeD0nMjIwJyB5PScxMTgnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZvbnQtZmFtaWx5PSdBc3Npc3RhbnQsIEFyaWFsLCBzYW5zLXNlcmlmJyBmb250LXNpemU9JzI2JyBmb250LXdlaWdodD0nNzAwJyBmaWxsPScjNTQ1NDVFJz7XlNec15XXkteVINep15zXmjwvdGV4dD4KICA8dGV4dCB4PScyMjAnIHk9JzE1MCcgdGV4dC1hbmNob3I9J21pZGRsZScgZm9udC1mYW1pbHk9J0Fzc2lzdGFudCwgQXJpYWwsIHNhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nMTUnIGZpbGw9JyM4QThBOTMnPteU16LXnNeVINeb15DXnyDXkdee16LXqNeb16og15TXoNeZ15TXldecPC90ZXh0Pgo8L3N2Zz4="
+  },
+  "nav": {
+    "links": [
+      {
+        "label": "אודות",
+        "href": "#story"
+      },
+      {
+        "label": "התפריט / השירותים",
+        "href": "#menu"
+      },
+      {
+        "label": "גלריה",
+        "href": "#gallery"
+      },
+      {
+        "label": "סניפים ושעות",
+        "href": "#locations"
+      },
+      {
+        "label": "צרו קשר",
+        "href": "#contact"
+      }
+    ],
+    "cta": {
+      "label": "לתפריט המלא",
+      "href": "#menu"
+    }
+  },
+  "sections": [
+    {
+      "id": "top",
+      "type": "hero",
+      "visible": true,
+      "data": {
+        "logo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0NDAgMjIwJyB3aWR0aD0nNDQwJyBoZWlnaHQ9JzIyMCcgcm9sZT0naW1nJyBhcmlhLWxhYmVsPSdwbGFjZWhvbGRlciBsb2dvJz4KICA8cmVjdCB3aWR0aD0nNDQwJyBoZWlnaHQ9JzIyMCcgZmlsbD0nbm9uZScvPgogIDxyZWN0IHg9JzYwJyB5PSc0MCcgd2lkdGg9JzMyMCcgaGVpZ2h0PScxNDAnIHJ4PScxNicgZmlsbD0nbm9uZScgc3Ryb2tlPScjN0E3QTg1JyBzdHJva2Utd2lkdGg9JzQnIHN0cm9rZS1kYXNoYXJyYXk9JzEyIDEwJy8+CiAgPHRleHQgeD0nMjIwJyB5PScxMTgnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZvbnQtZmFtaWx5PSdBc3Npc3RhbnQsIEFyaWFsLCBzYW5zLXNlcmlmJyBmb250LXNpemU9JzI2JyBmb250LXdlaWdodD0nNzAwJyBmaWxsPScjNTQ1NDVFJz7XlNec15XXkteVINep15zXmjwvdGV4dD4KICA8dGV4dCB4PScyMjAnIHk9JzE1MCcgdGV4dC1hbmNob3I9J21pZGRsZScgZm9udC1mYW1pbHk9J0Fzc2lzdGFudCwgQXJpYWwsIHNhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nMTUnIGZpbGw9JyM4QThBOTMnPteU16LXnNeVINeb15DXnyDXkdee16LXqNeb16og15TXoNeZ15TXldecPC90ZXh0Pgo8L3N2Zz4=",
+        "logoAlt": "הלוגו של העסק",
+        "background": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMjAwIDgwMCcgd2lkdGg9JzEyMDAnIGhlaWdodD0nODAwJyByb2xlPSdpbWcnIGFyaWEtbGFiZWw9J3BsYWNlaG9sZGVyJyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSd4TWlkWU1pZCBzbGljZSc+CiAgPHJlY3Qgd2lkdGg9JzEyMDAnIGhlaWdodD0nODAwJyBmaWxsPScjRURFREYwJy8+CiAgPHJlY3QgeD0nMicgeT0nMicgd2lkdGg9JzExOTYnIGhlaWdodD0nNzk2JyBmaWxsPSdub25lJyBzdHJva2U9JyM1NDU0NUUnIHN0cm9rZS13aWR0aD0nMycgc3Ryb2tlLWRhc2hhcnJheT0nMTAgOCcgb3BhY2l0eT0nMC41NScvPgogIDxnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzU0NTQ1RScgc3Ryb2tlLXdpZHRoPScyMCcgb3BhY2l0eT0nMC42NSc+CiAgICA8cmVjdCB4PSc1MzAnIHk9JzM0OCcgd2lkdGg9JzE0MCcgaGVpZ2h0PScxMDQnIHJ4PScxNCcvPgogICAgPGNpcmNsZSBjeD0nNTcwJyBjeT0nMzgyJyByPScxNicvPgogICAgPHBhdGggZD0nTSA1MzAgNDM2IGwgNDYgLTQwIGwgMzQgMjggbCA0MCAtMzQgbCA0MCA0NiB6Jy8+CiAgPC9nPgogIDx0ZXh0IHg9JzYwMCcgeT0nNDk2JyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nQXNzaXN0YW50LCBBcmlhbCwgc2Fucy1zZXJpZicgZm9udC1zaXplPSc0Mi44NTcxNDI4NTcxNDI4NTQnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9JyM1NDU0NUUnIG9wYWNpdHk9JzAuNzUnPtep15nXnteVINeb15DXnyDXqtee15XXoNeqINeo16fXojwvdGV4dD4KPC9zdmc+",
+        "headline": "כותרת ראשית\nשל האתר שלכם",
+        "lead": "זהו אזור הפתיחה של האתר. כתבו כאן משפט או שניים שמסבירים מי אתם ומה אתם מציעים. כל הטקסט הזה נערך במערכת הניהול.",
+        "ctas": [
+          {
+            "label": "לתפריט המלא",
+            "href": "#menu",
+            "style": "primary"
+          },
+          {
+            "label": "איך מגיעים אלינו",
+            "href": "#locations",
+            "style": "ghost"
+          }
+        ]
+      }
+    },
+    {
+      "id": "story",
+      "type": "richtext",
+      "visible": true,
+      "data": {
+        "heading": "כותרת אזור הסיפור",
+        "paragraphs": [
+          "זהו אזור טקסט חופשי לספר את הסיפור של העסק שלכם — מי אתם, מה אתם עושים, ולמה דווקא אתם. כתבו כאן שני-שלושה משפטים שמייצגים את העסק.",
+          "ניתן להוסיף כאן פסקה נוספת, למשל על השירות, המוצרים, או הערכים של העסק. כל הטקסט הזה נערך בקלות במערכת הניהול."
+        ]
+      }
+    },
+    {
+      "id": "menu",
+      "type": "menu",
+      "visible": true,
+      "data": {
+        "heading": "כותרת אזור התפריט",
+        "intro": "זהו אזור התפריט או רשימת השירותים שלכם. ערכו כאן את הקטגוריות, הפריטים והמחירים במערכת הניהול.",
+        "currency": "₪",
+        "categories": [
+          {
+            "id": "cat-1",
+            "navLabel": "קטגוריה 1",
+            "title": "קטגוריה 1",
+            "groups": [
+              {
+                "items": [
+                  {
+                    "name": "שם הפריט",
+                    "price": "0",
+                    "tags": [],
+                    "desc": "תיאור קצר של הפריט."
+                  },
+                  {
+                    "name": "שם הפריט",
+                    "price": "0",
+                    "tags": [],
+                    "desc": "תיאור קצר של הפריט."
+                  },
+                  {
+                    "name": "שם הפריט",
+                    "price": "0",
+                    "tags": [],
+                    "desc": "תיאור קצר של הפריט."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "cat-2",
+            "navLabel": "קטגוריה 2",
+            "title": "קטגוריה 2",
+            "groups": [
+              {
+                "items": [
+                  {
+                    "name": "שם הפריט",
+                    "price": "0",
+                    "tags": []
+                  },
+                  {
+                    "name": "שם הפריט",
+                    "price": "0",
+                    "tags": []
+                  },
+                  {
+                    "name": "שם הפריט",
+                    "price": "0",
+                    "tags": [],
+                    "desc": "תיאור קצר של הפריט."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "gallery",
+      "type": "gallery",
+      "visible": true,
+      "data": {
+        "heading": "כותרת אזור הגלריה",
+        "intro": "זהו אזור הגלריה. החליפו את התמונות האלה בתמונות אמיתיות של העסק שלכם דרך מערכת הניהול.",
+        "images": [
+          {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA4MDAgNjAwJyB3aWR0aD0nODAwJyBoZWlnaHQ9JzYwMCcgcm9sZT0naW1nJyBhcmlhLWxhYmVsPSdwbGFjZWhvbGRlcicgcHJlc2VydmVBc3BlY3RSYXRpbz0neE1pZFlNaWQgc2xpY2UnPgogIDxyZWN0IHdpZHRoPSc4MDAnIGhlaWdodD0nNjAwJyBmaWxsPScjRURFREYwJy8+CiAgPHJlY3QgeD0nMicgeT0nMicgd2lkdGg9Jzc5NicgaGVpZ2h0PSc1OTYnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzU0NTQ1RScgc3Ryb2tlLXdpZHRoPSczJyBzdHJva2UtZGFzaGFycmF5PScxMCA4JyBvcGFjaXR5PScwLjU1Jy8+CiAgPGcgZmlsbD0nbm9uZScgc3Ryb2tlPScjNTQ1NDVFJyBzdHJva2Utd2lkdGg9JzEzLjMzMzMzMzMzMzMzMzMzNCcgb3BhY2l0eT0nMC42NSc+CiAgICA8cmVjdCB4PSczMzAnIHk9JzI0OCcgd2lkdGg9JzE0MCcgaGVpZ2h0PScxMDQnIHJ4PScxNCcvPgogICAgPGNpcmNsZSBjeD0nMzcwJyBjeT0nMjgyJyByPScxNicvPgogICAgPHBhdGggZD0nTSAzMzAgMzM2IGwgNDYgLTQwIGwgMzQgMjggbCA0MCAtMzQgbCA0MCA0NiB6Jy8+CiAgPC9nPgogIDx0ZXh0IHg9JzQwMCcgeT0nMzk2JyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nQXNzaXN0YW50LCBBcmlhbCwgc2Fucy1zZXJpZicgZm9udC1zaXplPScyOC41NzE0Mjg1NzE0Mjg1NzMnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9JyM1NDU0NUUnIG9wYWNpdHk9JzAuNzUnPtep15nXnteVINeb15DXnyDXqtee15XXoNeUIDE8L3RleHQ+Cjwvc3ZnPg==",
+            "alt": "שימו כאן תמונה"
+          },
+          {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA4MDAgNjAwJyB3aWR0aD0nODAwJyBoZWlnaHQ9JzYwMCcgcm9sZT0naW1nJyBhcmlhLWxhYmVsPSdwbGFjZWhvbGRlcicgcHJlc2VydmVBc3BlY3RSYXRpbz0neE1pZFlNaWQgc2xpY2UnPgogIDxyZWN0IHdpZHRoPSc4MDAnIGhlaWdodD0nNjAwJyBmaWxsPScjRTRFNEU5Jy8+CiAgPHJlY3QgeD0nMicgeT0nMicgd2lkdGg9Jzc5NicgaGVpZ2h0PSc1OTYnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzRBNEE1NCcgc3Ryb2tlLXdpZHRoPSczJyBzdHJva2UtZGFzaGFycmF5PScxMCA4JyBvcGFjaXR5PScwLjU1Jy8+CiAgPGcgZmlsbD0nbm9uZScgc3Ryb2tlPScjNEE0QTU0JyBzdHJva2Utd2lkdGg9JzEzLjMzMzMzMzMzMzMzMzMzNCcgb3BhY2l0eT0nMC42NSc+CiAgICA8cmVjdCB4PSczMzAnIHk9JzI0OCcgd2lkdGg9JzE0MCcgaGVpZ2h0PScxMDQnIHJ4PScxNCcvPgogICAgPGNpcmNsZSBjeD0nMzcwJyBjeT0nMjgyJyByPScxNicvPgogICAgPHBhdGggZD0nTSAzMzAgMzM2IGwgNDYgLTQwIGwgMzQgMjggbCA0MCAtMzQgbCA0MCA0NiB6Jy8+CiAgPC9nPgogIDx0ZXh0IHg9JzQwMCcgeT0nMzk2JyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nQXNzaXN0YW50LCBBcmlhbCwgc2Fucy1zZXJpZicgZm9udC1zaXplPScyOC41NzE0Mjg1NzE0Mjg1NzMnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9JyM0QTRBNTQnIG9wYWNpdHk9JzAuNzUnPtep15nXnteVINeb15DXnyDXqtee15XXoNeUIDI8L3RleHQ+Cjwvc3ZnPg==",
+            "alt": "שימו כאן תמונה"
+          },
+          {
+            "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA4MDAgNjAwJyB3aWR0aD0nODAwJyBoZWlnaHQ9JzYwMCcgcm9sZT0naW1nJyBhcmlhLWxhYmVsPSdwbGFjZWhvbGRlcicgcHJlc2VydmVBc3BlY3RSYXRpbz0neE1pZFlNaWQgc2xpY2UnPgogIDxyZWN0IHdpZHRoPSc4MDAnIGhlaWdodD0nNjAwJyBmaWxsPScjRURFREYwJy8+CiAgPHJlY3QgeD0nMicgeT0nMicgd2lkdGg9Jzc5NicgaGVpZ2h0PSc1OTYnIGZpbGw9J25vbmUnIHN0cm9rZT0nIzU0NTQ1RScgc3Ryb2tlLXdpZHRoPSczJyBzdHJva2UtZGFzaGFycmF5PScxMCA4JyBvcGFjaXR5PScwLjU1Jy8+CiAgPGcgZmlsbD0nbm9uZScgc3Ryb2tlPScjNTQ1NDVFJyBzdHJva2Utd2lkdGg9JzEzLjMzMzMzMzMzMzMzMzMzNCcgb3BhY2l0eT0nMC42NSc+CiAgICA8cmVjdCB4PSczMzAnIHk9JzI0OCcgd2lkdGg9JzE0MCcgaGVpZ2h0PScxMDQnIHJ4PScxNCcvPgogICAgPGNpcmNsZSBjeD0nMzcwJyBjeT0nMjgyJyByPScxNicvPgogICAgPHBhdGggZD0nTSAzMzAgMzM2IGwgNDYgLTQwIGwgMzQgMjggbCA0MCAtMzQgbCA0MCA0NiB6Jy8+CiAgPC9nPgogIDx0ZXh0IHg9JzQwMCcgeT0nMzk2JyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LWZhbWlseT0nQXNzaXN0YW50LCBBcmlhbCwgc2Fucy1zZXJpZicgZm9udC1zaXplPScyOC41NzE0Mjg1NzE0Mjg1NzMnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9JyM1NDU0NUUnIG9wYWNpdHk9JzAuNzUnPtep15nXnteVINeb15DXnyDXqtee15XXoNeUIDM8L3RleHQ+Cjwvc3ZnPg==",
+            "alt": "שימו כאן תמונה"
+          }
+        ]
+      }
+    },
+    {
+      "id": "photo-band",
+      "type": "media",
+      "visible": true,
+      "data": {
+        "poster": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxOTIwIDEwODAnIHdpZHRoPScxOTIwJyBoZWlnaHQ9JzEwODAnIHJvbGU9J2ltZycgYXJpYS1sYWJlbD0ncGxhY2Vob2xkZXInIHByZXNlcnZlQXNwZWN0UmF0aW89J3hNaWRZTWlkIHNsaWNlJz4KICA8cmVjdCB3aWR0aD0nMTkyMCcgaGVpZ2h0PScxMDgwJyBmaWxsPScjRURFREYwJy8+CiAgPHJlY3QgeD0nMicgeT0nMicgd2lkdGg9JzE5MTYnIGhlaWdodD0nMTA3NicgZmlsbD0nbm9uZScgc3Ryb2tlPScjNTQ1NDVFJyBzdHJva2Utd2lkdGg9JzMnIHN0cm9rZS1kYXNoYXJyYXk9JzEwIDgnIG9wYWNpdHk9JzAuNTUnLz4KICA8ZyBmaWxsPSdub25lJyBzdHJva2U9JyM1NDU0NUUnIHN0cm9rZS13aWR0aD0nMzInIG9wYWNpdHk9JzAuNjUnPgogICAgPHJlY3QgeD0nODkwJyB5PSc0ODgnIHdpZHRoPScxNDAnIGhlaWdodD0nMTA0JyByeD0nMTQnLz4KICAgIDxjaXJjbGUgY3g9JzkzMCcgY3k9JzUyMicgcj0nMTYnLz4KICAgIDxwYXRoIGQ9J00gODkwIDU3NiBsIDQ2IC00MCBsIDM0IDI4IGwgNDAgLTM0IGwgNDAgNDYgeicvPgogIDwvZz4KICA8dGV4dCB4PSc5NjAnIHk9JzYzNicgdGV4dC1hbmNob3I9J21pZGRsZScgZm9udC1mYW1pbHk9J0Fzc2lzdGFudCwgQXJpYWwsIHNhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nNjguNTcxNDI4NTcxNDI4NTcnIGZvbnQtd2VpZ2h0PSc3MDAnIGZpbGw9JyM1NDU0NUUnIG9wYWNpdHk9JzAuNzUnPtep15nXnteVINeb15DXnyDXqtee15XXoNeUINeQ15Ug15XXmdeT15DXlTwvdGV4dD4KPC9zdmc+",
+        "video": "",
+        "sectionLabel": "שימו כאן תמונה או וידאו של העסק",
+        "videoLabel": "וידאו של העסק"
+      }
+    },
+    {
+      "id": "locations",
+      "type": "locations",
+      "visible": true,
+      "data": {
+        "heading": "כותרת אזור הסניפים",
+        "intro": "זהו אזור המיקומים והשעות. הוסיפו כאן את הסניפים, הכתובות והשעות שלכם דרך מערכת הניהול.",
+        "footnote": "ניתן להוסיף כאן הערה כללית, למשל שהשעות עשויות להשתנות.",
+        "branches": [
+          {
+            "id": "main",
+            "name": "שם הסניף",
+            "desc": "כתבו כאן איפה הסניף נמצא ומה מסביב. לחיצה על הכפתור פותחת ניווט בוויז.",
+            "waze": {
+              "lat": 32.0853,
+              "lng": 34.7818
+            },
+            "hours": {
+              "0": [
+                9,
+                17
+              ],
+              "1": [
+                9,
+                17
+              ],
+              "2": [
+                9,
+                17
+              ],
+              "3": [
+                9,
+                17
+              ],
+              "4": [
+                9,
+                17
+              ],
+              "5": [
+                9,
+                14
+              ],
+              "6": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "contact",
+      "type": "social",
+      "visible": true,
+      "data": {
+        "heading": "כותרת אזור הקשר",
+        "intro": "זהו אזור הרשתות החברתיות ויצירת הקשר. עדכנו כאן את הקישורים שלכם דרך מערכת הניהול.",
+        "links": [
+          {
+            "network": "instagram",
+            "label": "@your_business",
+            "url": "https://instagram.com/"
+          },
+          {
+            "network": "whatsapp",
+            "label": "שלחו הודעה",
+            "url": "https://wa.me/972500000000"
+          }
+        ]
+      }
+    }
+  ],
+  "footer": {
+    "logo": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA0NDAgMjIwJyB3aWR0aD0nNDQwJyBoZWlnaHQ9JzIyMCcgcm9sZT0naW1nJyBhcmlhLWxhYmVsPSdwbGFjZWhvbGRlciBsb2dvJz4KICA8cmVjdCB3aWR0aD0nNDQwJyBoZWlnaHQ9JzIyMCcgZmlsbD0nbm9uZScvPgogIDxyZWN0IHg9JzYwJyB5PSc0MCcgd2lkdGg9JzMyMCcgaGVpZ2h0PScxNDAnIHJ4PScxNicgZmlsbD0nbm9uZScgc3Ryb2tlPScjN0E3QTg1JyBzdHJva2Utd2lkdGg9JzQnIHN0cm9rZS1kYXNoYXJyYXk9JzEyIDEwJy8+CiAgPHRleHQgeD0nMjIwJyB5PScxMTgnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGZvbnQtZmFtaWx5PSdBc3Npc3RhbnQsIEFyaWFsLCBzYW5zLXNlcmlmJyBmb250LXNpemU9JzI2JyBmb250LXdlaWdodD0nNzAwJyBmaWxsPScjNTQ1NDVFJz7XlNec15XXkteVINep15zXmjwvdGV4dD4KICA8dGV4dCB4PScyMjAnIHk9JzE1MCcgdGV4dC1hbmNob3I9J21pZGRsZScgZm9udC1mYW1pbHk9J0Fzc2lzdGFudCwgQXJpYWwsIHNhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nMTUnIGZpbGw9JyM4QThBOTMnPteU16LXnNeVINeb15DXnyDXkdee16LXqNeb16og15TXoNeZ15TXldecPC90ZXh0Pgo8L3N2Zz4=",
+    "logoAlt": "שם העסק",
+    "links": [
+      {
+        "label": "התפריט",
+        "href": "#menu"
+      },
+      {
+        "label": "סניפים ושעות",
+        "href": "#locations"
+      },
+      {
+        "label": "אינסטגרם",
+        "href": "https://instagram.com/",
+        "external": true
+      }
+    ],
+    "copyright": "שם העסק. כל הזכויות שמורות.",
+    "regions": "ערכו את הפוטר במערכת הניהול"
+  }
+}

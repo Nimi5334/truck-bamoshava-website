@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>09 · The Night Bakery Proof Rack — Bright Smile Dental</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Petrona:wght@500;600;700&family=Figtree:wght@400;500;600&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#14161D; --rack:#1C1F29; --rack2:#232734;
+  --flour:#F1EEE9; --dusk:#9AA0B0;
+  --peri:#7B8CFF; --baked:#E4B363; --line:#2A2F3D;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--night);color:var(--flour);font-family:'Figtree',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px 66px}
+
+.top{display:flex;align-items:flex-end;gap:16px;padding:26px 0 16px;border-bottom:1px solid var(--line)}
+.brand{font-family:'Petrona',serif;font-weight:600;font-size:26px;letter-spacing:-.01em}
+.brand small{display:block;font-family:'Martian Mono',monospace;font-size:10.5px;letter-spacing:.03em;color:var(--dusk);margin-top:5px;font-weight:400}
+.newbtn{margin-left:auto;background:var(--baked);color:#14161D;border:none;border-radius:8px;padding:11px 20px;font-family:'Figtree';font-weight:600;font-size:14.5px;cursor:pointer}
+.newbtn:hover{background:#F0C377}
+
+.summary{display:flex;gap:28px;padding:18px 0 4px}
+.summary div{}
+.summary .num{font-family:'Petrona',serif;font-size:30px;font-weight:700;line-height:1}
+.summary .num.hot{color:var(--peri)}
+.summary .lbl{font-family:'Martian Mono',monospace;font-size:10.5px;color:var(--dusk);letter-spacing:.02em;margin-top:6px}
+
+.rackhead{display:flex;align-items:center;gap:12px;margin:26px 0 8px}
+.rackhead h2{font-family:'Petrona',serif;font-size:17px;font-weight:600}
+.rackhead hr{flex:1;border:none;border-top:1px solid var(--line)}
+.rackhead span{font-family:'Martian Mono',monospace;font-size:10.5px;color:var(--dusk)}
+
+.rack{}
+.shelf{display:grid;grid-template-columns:46px 1fr 168px 132px 96px;align-items:center;gap:16px;min-height:52px;padding:6px 12px 6px 0;
+       border-bottom:1px solid var(--line);border-left:2px solid var(--line)}
+.shelf:hover{background:var(--rack)}
+.shelf.over{border-left-color:var(--peri);background:rgba(123,140,255,.06)}
+
+/* SIGNATURE — proof ring */
+.ring{position:relative;width:38px;height:38px;justify-self:center}
+.ring svg{transform:rotate(-90deg);display:block}
+.ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+        font-family:'Martian Mono',monospace;font-size:9.5px;font-weight:500;color:var(--dusk)}
+.shelf.over .ring b{color:var(--peri)}
+
+.ttl{font-weight:500;font-size:15.5px}
+.ttl small{display:block;font-family:'Martian Mono',monospace;font-size:10.5px;color:var(--peri);margin-top:3px;font-weight:400}
+.ttl em{font-style:normal;color:var(--dusk)}
+
+.state{display:inline-flex;align-items:center;gap:8px;font-family:'Martian Mono',monospace;font-size:10px;letter-spacing:.02em;
+       padding:5px 10px;border-radius:14px;white-space:nowrap}
+.state i{width:10px;height:10px;flex:none}
+.state.baked{color:var(--baked);border:1.5px solid var(--baked)} .state.baked i{background:var(--baked);border-radius:50%}
+.state.resting{color:var(--dusk);border:1.5px solid #3B4252} .state.resting i{background:var(--dusk);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.state.overproof{color:#14161D;background:var(--peri)} .state.overproof i{background:#14161D;clip-path:polygon(50% 0,100% 100%,0 100%)}
+
+.date{font-family:'Martian Mono',monospace;font-size:10.5px;color:var(--dusk);text-align:right}
+.act{justify-self:end;background:none;border:1.5px solid #3B4252;color:var(--flour);border-radius:8px;padding:7px 14px;
+     font-family:'Figtree';font-weight:600;font-size:13.5px;cursor:pointer;white-space:nowrap}
+.act:hover{border-color:var(--flour)}
+.act.prime{background:var(--peri);border-color:var(--peri);color:#14161D}
+
+.note{margin-top:30px;font-size:13.5px;color:var(--dusk);max-width:680px;border-top:1px solid var(--line);padding-top:15px}
+.note b{font-family:'Petrona',serif;color:var(--flour);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Bright Smile Dental<small>proof rack · 12 pages resting</small></div>
+    <button class="newbtn">+ New page</button>
+  </header>
+
+  <div class="summary" id="sum"></div>
+
+  <div class="rackhead"><h2>Over-proofed — deal with these</h2><hr><span>oldest first</span></div>
+  <div class="rack" id="rackA"></div>
+
+  <div class="rackhead"><h2>Resting nicely</h2><hr><span>nothing needed</span></div>
+  <div class="rack" id="rackB"></div>
+
+  <p class="note"><b>Signature — the proof ring.</b> Each ring shows how long a page has sat against how
+  long it should sit, with the state written beside it: Resting, Ready, Over-proofed. It turns an
+  invisible metadata field into a decision — publish it or throw it out. Nothing sits forever by accident.</p>
+</div>
+
+<script src="data.js"></script>
+<script>
+function proof(it){ return Math.min(1.35, it.days / it.cadence); }
+function stateOf(it){
+  const p = proof(it);
+  if (p > 1) return 'overproof';
+  if (it.status === 'published') return 'baked';
+  return 'resting';
+}
+const WORD = { overproof:'Over-proofed', baked:'Baked · live', resting:'Resting' };
+
+function ring(it){
+  const p = Math.min(1, proof(it)), R = 16, C = 2 * Math.PI * R;
+  const over = proof(it) > 1;
+  return `<div class="ring">
+    <svg width="38" height="38" viewBox="0 0 38 38">
+      <circle cx="19" cy="19" r="${R}" fill="none" stroke="#2A2F3D" stroke-width="3"/>
+      <circle cx="19" cy="19" r="${R}" fill="none" stroke="${over?'#7B8CFF':'#E4B363'}" stroke-width="3"
+        stroke-dasharray="${(p*C).toFixed(1)} ${C.toFixed(1)}" stroke-linecap="round"/>
+    </svg><b>${Math.round(proof(it)*100)}%</b></div>`;
+}
+
+function shelf(it){
+  const st = stateOf(it);
+  return `<div class="shelf ${st==='overproof'?'over':''}">
+    ${ring(it)}
+    <div class="ttl">${it.title}
+      <small>${it.reason ? it.reason + ' · ' : ''}<em>rested ${it.days} of ${it.cadence} days</em></small></div>
+    <div><span class="state ${st}"><i></i>${WORD[st]}</span></div>
+    <div class="date">${niceDate(it.edited)}</div>
+    <button class="act ${st==='overproof'?'prime':''}">${st==='overproof'?'Deal with it':'Open'}</button>
+  </div>`;
+}
+
+const over = sorted().filter(i => proof(i) > 1);
+const rest = sorted().filter(i => proof(i) <= 1);
+document.getElementById('rackA').innerHTML = over.map(shelf).join('');
+document.getElementById('rackB').innerHTML = rest.map(shelf).join('');
+
+const c = counts();
+document.getElementById('sum').innerHTML = `
+  <div><div class="num hot">${over.length}</div><div class="lbl">over-proofed</div></div>
+  <div><div class="num">${c.live}</div><div class="lbl">live on the site</div></div>
+  <div><div class="num">${c.draft}</div><div class="lbl">drafts resting</div></div>`;
+</script>
+</body>
+</html>

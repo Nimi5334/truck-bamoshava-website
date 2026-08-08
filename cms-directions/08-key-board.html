@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>08 · The Hardware Store Key Board — Bright Smile Dental</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Asap:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --board:#F6F4F1; --stencil:#22201D; --marker:#63605A;
+  --orange:#E2570F; --galv:#2E5FA3; --peg:#DFDBD4; --panel:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--board);color:var(--stencil);font-family:'Asap',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle,rgba(34,32,29,.055) 1.4px,transparent 1.5px);background-size:22px 22px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px 64px}
+
+.top{display:flex;align-items:center;gap:16px;padding:20px 0 14px;border-bottom:3px solid var(--stencil)}
+.brand{font-family:'Oswald',sans-serif;font-weight:700;font-size:22px;letter-spacing:.03em;text-transform:uppercase}
+.brand small{display:block;font-family:'Roboto Mono',monospace;font-weight:400;font-size:11px;letter-spacing:.08em;color:var(--marker);text-transform:none;margin-top:3px}
+.newbtn{margin-left:auto;background:var(--stencil);color:#fff;border:none;border-radius:3px;padding:11px 18px;font-family:'Oswald';font-weight:600;font-size:14px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+
+.shell{display:grid;grid-template-columns:196px 1fr;gap:0;margin-top:18px;border:2px solid var(--stencil);background:var(--panel)}
+@media (max-width:840px){.shell{grid-template-columns:1fr}}
+.aisles{border-right:2px solid var(--stencil);padding:14px 0;background:#FBFAF8}
+.aisles h3{font-family:'Oswald';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--marker);padding:0 16px 8px}
+.aisle{display:flex;align-items:center;gap:9px;padding:9px 16px;font-size:14.5px;cursor:pointer;border-left:4px solid transparent}
+.aisle:hover{background:#F1EFEB}
+.aisle.on{border-left-color:var(--orange);background:#FBF0E8;font-weight:600}
+.aisle .ct{margin-left:auto;font-family:'Roboto Mono',monospace;font-size:11.5px;color:var(--marker)}
+
+.hooks{}
+.hrow{display:grid;grid-template-columns:38px 1fr 136px 118px 218px;align-items:center;gap:12px;min-height:42px;padding:5px 14px 5px 0;border-bottom:1px solid var(--peg)}
+.hrow:hover{background:#FBFAF8}
+.hrow.flag{background:#FDF3EC}
+.hrow:last-child{border-bottom:none}
+.hdr{display:grid;grid-template-columns:38px 1fr 136px 118px 218px;gap:12px;padding:8px 14px 8px 0;border-bottom:2px solid var(--stencil);
+     font-family:'Oswald';font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--marker);background:#F5F3F0}
+
+/* SIGNATURE — the hook */
+.hook{display:flex;justify-content:center}
+.hook svg{width:22px;height:26px;display:block}
+
+.ttl{font-weight:500;font-size:15px}
+.ttl small{display:block;font-family:'Roboto Mono',monospace;font-size:11.5px;color:#A8410B;margin-top:1px}
+.tag{display:inline-flex;align-items:center;gap:7px;font-family:'Oswald';font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;padding:4px 9px;border-radius:2px;white-space:nowrap}
+.tag i{width:10px;height:10px;flex:none}
+.tag.live{color:#1E4272;background:#E7EEF7;border:1.5px solid var(--galv)}
+.tag.live i{background:var(--galv);border-radius:50%}
+.tag.review{color:#fff;background:var(--orange);border:1.5px solid var(--orange)}
+.tag.review i{background:#fff;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.tag.draft{color:#4A4741;background:#F1EFEB;border:1.5px solid #B9B4AB}
+.tag.draft i{background:#7A756D;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+.date{font-family:'Roboto Mono',monospace;font-size:12px;color:var(--marker);text-align:right}
+
+.acts{justify-self:end;display:flex;gap:7px}
+.acts button{border:1.5px solid #CFCAC2;background:none;border-radius:3px;padding:6px 12px;font-family:'Asap';font-weight:600;font-size:13px;cursor:pointer;color:var(--stencil);white-space:nowrap}
+.acts button:hover{border-color:var(--stencil)}
+.acts button.copy{border-color:var(--stencil);border-width:2px}
+.acts button.prime{background:var(--orange);border-color:var(--orange);color:#fff}
+
+.note{margin-top:28px;font-size:13.5px;color:var(--marker);max-width:680px;border-top:2px solid var(--stencil);padding-top:14px}
+.note b{font-family:'Oswald';font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--stencil);display:block;margin-bottom:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Bright Smile Dental<small>key board · 12 pages on hooks</small></div>
+    <button class="newbtn">+ New page</button>
+  </header>
+
+  <div class="shell">
+    <nav class="aisles">
+      <h3>Aisles</h3>
+      <div class="aisle on">All pages <span class="ct">12</span></div>
+      <div class="aisle">Needs attention <span class="ct" id="cA"></span></div>
+      <div class="aisle">Live <span class="ct" id="cL"></span></div>
+      <div class="aisle">Drafts <span class="ct" id="cD"></span></div>
+    </nav>
+
+    <div class="hooks">
+      <div class="hdr"><div></div><div>Page</div><div>State</div><div style="text-align:right">Last edit</div><div></div></div>
+      <div id="rows"></div>
+    </div>
+  </div>
+
+  <p class="note"><b>Signature — cut a copy</b>Every row's second action is "Cut a copy": start a new page
+  from one that already works, pre-filled. Duplication is how non-technical owners actually create —
+  a blank "New page" is where they freeze. Orange hooks carry a stamped tag saying what's wrong.</p>
+</div>
+
+<script src="data.js"></script>
+<script>
+function hook(flag){
+  const c = flag ? '#E2570F' : '#8E8880';
+  return `<svg viewBox="0 0 22 26" aria-hidden="true">
+    <path d="M11 3v9" stroke="${c}" stroke-width="2.4" fill="none"/>
+    <path d="M11 12c0 4-6 3-6 7" stroke="${c}" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <circle cx="11" cy="3" r="2.4" fill="${c}"/></svg>`;
+}
+const cls = s => s==='published'?'live':s;
+const word = s => s==='published'?'Live':s==='draft'?'Draft':'Needs attention';
+
+document.getElementById('rows').innerHTML = sorted().map(it => {
+  const flag = needsAttention(it);
+  return `<div class="hrow ${flag?'flag':''}">
+    <div class="hook">${hook(flag)}</div>
+    <div class="ttl">${it.title}${
+      it.reason ? `<small>${it.reason}</small>`
+      : flag ? `<small>Not looked at in ${agoWords(it.days).replace(' ago','')}</small>` : ''}</div>
+    <div><span class="tag ${cls(it.status)}"><i></i>${word(it.status)}</span></div>
+    <div class="date">${niceDate(it.edited)}</div>
+    <div class="acts">
+      <button class="${flag?'prime':''}">${flag?'Fix it':'Edit'}</button>
+      <button class="copy">Cut a copy</button>
+    </div>
+  </div>`;
+}).join('');
+
+const c = counts();
+cA.textContent = c.attention; cL.textContent = c.live; cD.textContent = c.draft;
+</script>
+</body>
+</html>

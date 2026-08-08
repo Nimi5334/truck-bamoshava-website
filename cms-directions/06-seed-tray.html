@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>06 · The Greenhouse Seed Tray — Bright Smile Dental</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Recursive:slnt,wght,CASL,MONO@-15..0,400..800,0..1,0..1&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bench:#F7F8F3; --soil:#20261B; --stem:#5D6B52;
+  --grow:#3F7D20; --beet:#A63A6B; --tray:#E4E9DC; --cell:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bench);color:var(--soil);font-family:'Nunito Sans',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px 70px}
+.casual{font-family:'Recursive',sans-serif;font-variation-settings:'CASL' 1,'wght' 700}
+.mono{font-family:'Recursive',monospace;font-variation-settings:'MONO' 1,'CASL' 0,'wght' 500}
+
+.top{display:flex;align-items:center;gap:16px;padding:26px 0 16px}
+.brand{font-family:'Recursive',sans-serif;font-variation-settings:'CASL' 1,'wght' 800;font-size:24px;letter-spacing:-.01em}
+.brand small{display:block;font-family:'Recursive',monospace;font-variation-settings:'MONO' 1,'wght' 500;font-size:11.5px;letter-spacing:.05em;color:var(--stem);margin-top:3px}
+.newbtn{margin-left:auto;background:var(--grow);color:#fff;border:none;border-radius:22px;padding:12px 22px;font-family:'Nunito Sans';font-weight:700;font-size:14.5px;cursor:pointer}
+.newbtn:hover{background:#336618}
+
+.legend{display:flex;flex-wrap:wrap;gap:20px;align-items:center;background:#fff;border:2px solid var(--tray);border-radius:14px;padding:12px 18px;margin-bottom:8px}
+.legend h3{font-family:'Recursive';font-variation-settings:'CASL' 1,'wght' 700;font-size:13px}
+.legend span{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--stem)}
+
+/* tray grid */
+.tray{display:grid;grid-template-columns:1fr 1fr;gap:0;border:2px solid var(--tray);border-radius:14px;overflow:hidden;background:#fff;margin-top:14px}
+@media (max-width:860px){.tray{grid-template-columns:1fr}}
+.cell{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;min-height:56px;padding:8px 14px;border-bottom:2px solid var(--tray);border-right:2px solid var(--tray);position:relative}
+.cell:hover{background:#FAFBF7}
+.cell.thirsty{background:#FDF4F8}
+
+/* SIGNATURE — growth stage glyph */
+.glyph{width:34px;height:34px;position:relative;flex:none}
+.glyph svg{width:34px;height:34px;display:block}
+.stage{font-family:'Recursive',monospace;font-variation-settings:'MONO' 1,'wght' 600;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:11px;white-space:nowrap}
+.stage.s-seed{color:#3D4736;background:#EFF2EA;border:1.5px solid #A9B79C}
+.stage.s-grow{color:#2C5A16;background:#EAF3E3;border:1.5px solid var(--grow)}
+.stage.s-bloom{color:#fff;background:var(--grow);border:1.5px solid var(--grow)}
+.stage.s-water{color:#fff;background:var(--beet);border:1.5px solid var(--beet)}
+
+.ttl{font-weight:700;font-size:15.5px}
+.sub{font-family:'Recursive',monospace;font-variation-settings:'MONO' 1;font-size:11.5px;color:var(--stem);margin-top:2px}
+.sub em{font-style:normal;color:var(--beet);font-weight:600}
+.right{display:flex;align-items:center;gap:10px;justify-self:end}
+.right button{background:none;border:2px solid var(--tray);border-radius:18px;padding:7px 15px;font-family:'Nunito Sans';font-weight:700;font-size:13.5px;cursor:pointer;color:var(--soil);white-space:nowrap}
+.right button:hover{border-color:var(--soil)}
+.right button.prime{background:var(--beet);border-color:var(--beet);color:#fff}
+.right button.prime:hover{background:#8B2E59}
+
+.tag{position:absolute;left:-2px;top:0;bottom:0;width:5px;background:var(--beet)}
+.note{margin-top:30px;font-size:13.5px;color:var(--stem);max-width:680px;border-top:2px solid var(--tray);padding-top:15px}
+.note b{font-family:'Recursive';font-variation-settings:'CASL' 1,'wght' 700;color:var(--soil)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Bright Smile Dental<small>seed tray · 12 pages growing</small></div>
+    <button class="newbtn">+ Plant a new page</button>
+  </header>
+
+  <div class="legend">
+    <h3>Four stages</h3>
+    <span><b class="mono">Seed</b> just started</span>
+    <span><b class="mono">Growing</b> being written</span>
+    <span><b class="mono">Ready</b> finished, not live</span>
+    <span><b class="mono">Live</b> on your website</span>
+    <span style="color:#A63A6B"><b class="mono">Needs water</b> gone too long without a look</span>
+  </div>
+
+  <div class="tray" id="tray"></div>
+
+  <p class="note"><b>Signature — the growth stage marker.</b> Four states, each a different shape with
+  its word printed beside it, so nothing depends on colour. "Needs water" replaces the anxious language
+  of drafts and errors with something a shop owner recognises: this one has been neglected, go tend it.</p>
+</div>
+
+<script src="data.js"></script>
+<script>
+function stageOf(it){
+  if (needsAttention(it)) return 'water';
+  if (it.status === 'published') return 'bloom';
+  if (piecesDone(it) === 4) return 'grow';
+  return 'seed';
+}
+const WORD = { seed:'Seed', grow:'Growing', bloom:'Live', water:'Needs water' };
+
+function glyph(st){
+  const g = { grow:'#3F7D20', water:'#A63A6B', seed:'#7B8A6E', bloom:'#3F7D20' }[st];
+  if (st === 'seed') return `<svg viewBox="0 0 34 34"><ellipse cx="17" cy="21" rx="7" ry="9" fill="${g}"/><path d="M17 30v-4" stroke="${g}" stroke-width="2"/></svg>`;
+  if (st === 'grow') return `<svg viewBox="0 0 34 34"><path d="M17 30V13" stroke="${g}" stroke-width="2.5"/><path d="M17 18C13 18 10 15 10 11c4 0 7 3 7 7z" fill="${g}"/></svg>`;
+  if (st === 'bloom') return `<svg viewBox="0 0 34 34"><path d="M17 30V15" stroke="${g}" stroke-width="2.5"/><circle cx="17" cy="10" r="6" fill="${g}"/><circle cx="17" cy="10" r="2.4" fill="#fff"/><path d="M17 21c-4 0-7-2-7-6 4 0 7 2 7 6z" fill="${g}" opacity=".65"/></svg>`;
+  return `<svg viewBox="0 0 34 34"><path d="M17 30V16" stroke="${g}" stroke-width="2.5"/><path d="M17 20c-4 0-7-3-7-7 4 0 7 3 7 7z" fill="${g}" opacity=".5"/><path d="M24 6c2.5 3.4 3.8 5.6 3.8 7a3.8 3.8 0 11-7.6 0c0-1.4 1.3-3.6 3.8-7z" fill="${g}"/></svg>`;
+}
+
+document.getElementById('tray').innerHTML = sorted().map(it => {
+  const st = stageOf(it);
+  return `<div class="cell ${st==='water'?'thirsty':''}">
+    ${st==='water'?'<i class="tag"></i>':''}
+    <div class="glyph">${glyph(st)}</div>
+    <div>
+      <div class="ttl">${it.title}</div>
+      <div class="sub">Last tended ${agoWords(it.days)}${it.reason?` · <em>${it.reason}</em>`:''}</div>
+    </div>
+    <div class="right">
+      <span class="stage s-${st==='bloom'?'bloom':st==='grow'?'grow':st==='seed'?'seed':'water'}">${WORD[st]}</span>
+      <button class="${st==='water'?'prime':''}">${st==='water'?'Tend it':'Open'}</button>
+    </div>
+  </div>`;
+}).join('');
+</script>
+</body>
+</html>

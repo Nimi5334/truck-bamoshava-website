@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>07 · The Bowling Scoresheet — Bright Smile Dental</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Chivo:wght@400;500;700&family=Chivo+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lane:#181410; --frame:#241E17; --frame2:#2C251C;
+  --pin:#F4EFE7; --maple:#A79883;
+  --bronze:#C08A2E; --spare:#6FA8A0; --line:#3A3025;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--lane);color:var(--pin);font-family:'Chivo',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1140px;margin:0 auto;padding:0 20px 64px}
+
+.top{display:flex;align-items:center;gap:16px;padding:22px 0 16px;border-bottom:2px solid var(--line)}
+.brand{font-family:'Bungee',sans-serif;font-size:19px;letter-spacing:.01em;color:var(--bronze)}
+.brand small{display:block;font-family:'Chivo Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--maple);margin-top:5px}
+.newbtn{margin-left:auto;background:var(--bronze);color:#181410;border:none;border-radius:2px;padding:11px 18px;font-family:'Chivo';font-weight:700;font-size:14px;cursor:pointer}
+.newbtn:hover{background:#D89C36}
+
+.key{display:flex;flex-wrap:wrap;gap:20px;align-items:center;padding:12px 0;font-family:'Chivo Mono',monospace;font-size:11.5px;color:var(--maple);letter-spacing:.04em}
+.key span{display:flex;align-items:center;gap:7px}
+.kbox{width:16px;height:16px;border:1.5px solid var(--maple);flex:none}
+.kbox.filled{background:var(--spare);border-color:var(--spare)}
+.kbox.open{border-color:var(--bronze);border-width:2px}
+
+.sheet{border:2px solid var(--line);background:var(--frame)}
+.hdr{display:grid;grid-template-columns:1fr 176px 132px 118px 104px;gap:14px;padding:8px 14px;border-bottom:2px solid var(--line);
+     font-family:'Chivo Mono',monospace;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--maple)}
+.hdr .c{text-align:center}
+.line{display:grid;grid-template-columns:1fr 176px 132px 118px 104px;gap:14px;align-items:center;padding:6px 14px;border-bottom:1px solid var(--line);min-height:44px}
+.line:last-child{border-bottom:none}
+.line:hover{background:var(--frame2)}
+.line.open{background:rgba(192,138,46,.07)}
+
+.ttl{font-weight:500;font-size:15px;display:flex;align-items:baseline;gap:9px}
+.ttl .num{font-family:'Bungee',sans-serif;font-size:12px;color:var(--maple)}
+.ttl small{display:block;font-family:'Chivo Mono',monospace;font-size:11.5px;color:var(--bronze);margin-top:2px;font-weight:400}
+
+/* SIGNATURE — frame strip */
+.frames{display:flex;gap:0;justify-content:center}
+.fbox{width:24px;height:24px;border:1px solid #4A3E2E;border-right:none;display:flex;align-items:center;justify-content:center;
+      font-family:'Chivo Mono',monospace;font-size:10px;color:var(--maple)}
+.fbox:last-child{border-right:1px solid #4A3E2E}
+.fbox.hit{background:var(--spare);border-color:var(--spare);color:#12201E;font-weight:600}
+.fbox.hit + .fbox{border-left-color:#4A3E2E}
+.fbox.openframe{border:2px solid var(--bronze);color:var(--bronze);font-weight:600;cursor:help}
+
+.state{display:inline-flex;align-items:center;gap:7px;font-family:'Chivo Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:4px 8px;border-radius:2px;white-space:nowrap}
+.state i{width:10px;height:10px;flex:none}
+.state.live{color:var(--spare);border:1.5px solid var(--spare)} .state.live i{background:var(--spare);border-radius:50%}
+.state.review{color:#181410;background:var(--bronze)} .state.review i{background:#181410;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.state.draft{color:var(--maple);border:1.5px solid #564A38} .state.draft i{background:var(--maple);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%)}
+
+.date{font-family:'Chivo Mono',monospace;font-size:12px;color:var(--maple);text-align:right}
+.act{justify-self:end;background:none;border:1.5px solid #4A3E2E;color:var(--pin);border-radius:2px;padding:6px 13px;font-family:'Chivo';font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
+.act:hover{border-color:var(--pin)}
+.act.prime{background:var(--bronze);border-color:var(--bronze);color:#181410}
+
+.note{margin-top:28px;font-size:13.5px;color:var(--maple);max-width:680px;border-top:2px solid var(--line);padding-top:14px}
+.note b{font-family:'Bungee';font-size:12px;color:var(--bronze);display:block;margin-bottom:6px;letter-spacing:.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">Bright Smile Dental<small>scoresheet · last 6 edits per page</small></div>
+    <button class="newbtn">+ New page</button>
+  </header>
+
+  <div class="key">
+    <span><i class="kbox filled"></i>an edit you saved and published</span>
+    <span><i class="kbox"></i>nothing yet</span>
+    <span><i class="kbox open"></i><b style="color:#C08A2E">open frame — you changed this but never published it</b></span>
+  </div>
+
+  <div class="sheet">
+    <div class="hdr">
+      <div>Page</div><div class="c">Frames · oldest → newest</div><div class="c">State</div>
+      <div style="text-align:right">Last edit</div><div></div>
+    </div>
+    <div id="rows"></div>
+  </div>
+
+  <p class="note"><b>Signature — the open frame</b>The rightmost box is left open and outlined in bronze
+  when a page has changes that were never published. It answers the single most common small-business
+  CMS confusion — "did my change actually go live?" — inside the row, with no version-control vocabulary.</p>
+</div>
+
+<script src="data.js"></script>
+<script>
+const cls = s => s==='published'?'live':s;
+const word = s => s==='published'?'Live':s==='draft'?'Draft':'Needs review';
+
+function frames(it){
+  const boxes = [];
+  for (let i = 0; i < 6; i++) {
+    const hit = i < it.sessions;
+    const isLast = i === it.sessions - 1;
+    if (hit && isLast && it.unpublished)
+      boxes.push(`<i class="fbox openframe" title="Changed but never published">!</i>`);
+    else if (hit) boxes.push(`<i class="fbox hit">✓</i>`);
+    else boxes.push(`<i class="fbox"></i>`);
+  }
+  return boxes.join('');
+}
+
+document.getElementById('rows').innerHTML = sorted().map((it, n) => `
+  <div class="line ${it.unpublished?'open':''}">
+    <div class="ttl"><span class="num">${String(n+1).padStart(2,'0')}</span>
+      <div>${it.title}${it.reason?`<small>${it.reason}</small>`:
+        it.unpublished?`<small>You have unpublished changes</small>`:''}</div>
+    </div>
+    <div class="frames">${frames(it)}</div>
+    <div style="text-align:center"><span class="state ${cls(it.status)}"><i></i>${word(it.status)}</span></div>
+    <div class="date">${niceDate(it.edited)}</div>
+    <button class="act ${it.unpublished||needsAttention(it)?'prime':''}">${
+      it.unpublished ? 'Publish' : needsAttention(it) ? 'Review' : 'Open'}</button>
+  </div>`).join('');
+</script>
+</body>
+</html>
