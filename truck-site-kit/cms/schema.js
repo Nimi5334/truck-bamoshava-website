@@ -55,6 +55,7 @@ export const SECTION_LABELS = {
   media: "וידאו / תמונה",
   locations: "סניפים ושעות",
   social: "רשתות חברתיות",
+  dynamic: "אזור מהאתר שהועלה",
 };
 
 // Which section types can be ADDED from the editor, in menu order.

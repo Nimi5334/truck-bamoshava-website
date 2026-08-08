@@ -47,12 +47,23 @@ const state = {
   dirty: false,
   busy: false,
   unlocked: !EDIT_PASSWORD,
+  mode: "fixed",       // "fixed" (7-type schema, render.mjs) | "dynamic" (universal.js, per-site fields)
+  universal: null,     // { docs, sections, registry, mutatedDocs, fileMap } — only set in "dynamic" mode
 };
 
 /* ---------------- persistence (browser only) ---------------- */
 function loadDraft() {
   const s = localStorage.getItem(STORAGE_KEY);
-  if (s) { try { return JSON.parse(s); } catch {} }
+  if (s) {
+    try {
+      const parsed = JSON.parse(s);
+      // A "dynamic" draft only has meaning alongside its live universal.js
+      // session (Documents, registry) — that's never in localStorage, so a
+      // stub loaded after a reload can't actually be edited. Ignore it.
+      if ((parsed.sections || []).some((sec) => sec.type === "dynamic")) return null;
+      return parsed;
+    } catch {}
+  }
   return null;
 }
 function saveDraft(site) {
@@ -119,6 +130,7 @@ async function boot() {
 let $previewFrame = null;
 function renderEditor() {
   const site = state.site;
+  const isDynamic = state.mode === "dynamic";
   $status = el("div", { class: "status-msg" });
 
   const topbar = el("div", { class: "topbar" },
@@ -126,27 +138,32 @@ function renderEditor() {
     el("span", { class: "site-id" }, site.brand?.name || SITE_ID),
     el("span", { class: "spacer" }),
     $status,
-    el("button", { class: "btn btn-sm", onclick: importFromFile }, L.import),
+    el("button", { class: "btn btn-sm", onclick: openImportModal }, L.import),
     el("button", { class: "btn btn-sm", onclick: togglePreview }, L.preview),
     EDIT_PASSWORD ? el("button", { class: "btn btn-sm", onclick: () => { state.unlocked = false; renderLogin(); } }, L.logout) : null
   );
 
   const editor = el("div", { class: "editor" },
-    panelGeneral(site),
-    panelTheme(site),
-    panelNav(site),
+    isDynamic ? null : panelGeneral(site),
+    isDynamic ? null : panelTheme(site),
+    isDynamic ? null : panelNav(site),
     panelSections(site),
-    panelFooter(site)
+    isDynamic ? null : panelFooter(site)
   );
 
-  const saveBtn = el("button", { class: "btn", onclick: save }, L.save);
-  const ghBtn   = el("button", { class: "btn btn-primary", onclick: publishToGitHub }, "פרסם לאינטרנט");
-  const dlBtn   = el("button", { class: "btn", onclick: downloadFile }, L.publish);
-  const note    = el("span", { class: "muted", style: "font-size:.82rem" },
-    GITHUB_TOKEN
-      ? "פרסם לאינטרנט ← Vercel מעדכן את האתר תוך שניות."
-      : "הורדת קובץ ← שלחו למוכר האתר לפרסום.");
-  const savebar = el("div", { class: "savebar" }, ghBtn, dlBtn, saveBtn, note);
+  const note = el("span", { class: "muted", style: "font-size:.82rem" },
+    isDynamic
+      ? "עריכה זו אינה נשמרת בין רענונים — הורידו ZIP כדי לשמור."
+      : (GITHUB_TOKEN
+        ? "פרסם לאינטרנט ← Vercel מעדכן את האתר תוך שניות."
+        : "הורדת קובץ ← שלחו למוכר האתר לפרסום."));
+  const savebar = isDynamic
+    ? el("div", { class: "savebar" }, el("button", { class: "btn btn-primary", onclick: downloadZip }, "הורדת אתר (ZIP)"), note)
+    : el("div", { class: "savebar" },
+        el("button", { class: "btn btn-primary", onclick: publishToGitHub }, "פרסם לאינטרנט"),
+        el("button", { class: "btn", onclick: downloadFile }, L.publish),
+        el("button", { class: "btn", onclick: save }, L.save),
+        note);
 
   const left = el("div", {}, editor, savebar);
   const preview = el("div", { class: "preview-pane hide" }, el("iframe", { title: "preview" }));
@@ -210,7 +227,7 @@ function checkbox(obj, key, defaultTrue = false) {
 
 function imageField(obj, key, label, hint) {
   const thumb = el("img", { class: "thumb", alt: "" });
-  const setThumb = () => { thumb.src = obj[key] ? resolveAssetForPreview(obj[key]) : ""; };
+  const setThumb = () => { thumb.src = obj[key] ? resolveAssetForPreview(obj[key], obj.__docPath) : ""; };
   setThumb();
   const file = el("input", { type: "file", accept: "image/*", style: "display:none" });
   const upBtn = el("button", { class: "btn btn-sm", type: "button", onclick: () => file.click() }, "העלאת תמונה");
@@ -264,14 +281,14 @@ function videoField(obj, key, label) {
 }
 
 /* ---------------- repeater ---------------- */
-function repeater(arr, { title, make, render, addLabel }) {
+function repeater(arr, { title, make, render, addLabel, locked }) {
   const wrap = el("div", {});
   function draw() {
     wrap.replaceChildren();
     arr.forEach((item, i) => {
       const head = el("div", { class: "item-head" },
         el("span", { class: "grip" }, title ? title(item, i) : `#${i + 1}`),
-        el("div", { class: "icon-btns" },
+        locked ? null : el("div", { class: "icon-btns" },
           el("button", { class: "btn btn-sm", type: "button", disabled: i === 0, onclick: () => { move(arr, i, -1); draw(); markDirty(); } }, L.up),
           el("button", { class: "btn btn-sm", type: "button", disabled: i === arr.length - 1, onclick: () => { move(arr, i, 1); draw(); markDirty(); } }, L.down),
           el("button", { class: "btn btn-sm btn-danger", type: "button", onclick: () => { arr.splice(i, 1); draw(); markDirty(); } }, "✕")
@@ -279,7 +296,7 @@ function repeater(arr, { title, make, render, addLabel }) {
       );
       wrap.append(el("div", { class: "repeater-item" }, head, render(item, i)));
     });
-    wrap.append(el("button", { class: "btn btn-add", type: "button", onclick: () => { arr.push(make()); draw(); markDirty(); } }, "+ " + (addLabel || L.add)));
+    if (!locked) wrap.append(el("button", { class: "btn btn-add", type: "button", onclick: () => { arr.push(make()); draw(); markDirty(); } }, "+ " + (addLabel || L.add)));
   }
   draw();
   return wrap;
@@ -371,6 +388,7 @@ function zoneCount(s) {
     case "gallery": return (d.images || []).length;
     case "locations": return (d.branches || []).length;
     case "social": return (d.links || []).length;
+    case "dynamic": return (d.fieldIds || []).length;
     default: return null; // e.g. "media"
   }
 }
@@ -398,6 +416,15 @@ function countSiteImages(site) {
     if (s.type === "hero") { if (has(d.logo)) n++; if (has(d.background)) n++; }
     if (s.type === "gallery") n += (d.images || []).filter((im) => has(im.src)).length;
     if (s.type === "media" && has(d.poster)) n++;
+    if (s.type === "dynamic" && state.universal) {
+      const countMeta = (id) => {
+        const meta = state.universal.registry.getFieldMeta(id);
+        if (!meta) return;
+        if (meta.kind === "image") n++;
+        else if (meta.kind === "group") for (const item of meta.items) item.fieldIds.forEach(countMeta);
+      };
+      (d.fieldIds || []).forEach(countMeta);
+    }
   }
   return n;
 }
@@ -452,7 +479,9 @@ function panelSections(site) {
     });
     container.append(list);
 
-    // add-section control
+    // add-section control — only meaningful for the fixed 7-type schema;
+    // a "dynamic" (universal-ingestion) site's zones come only from import.
+    if (state.mode === "dynamic") return;
     const sel = el("select", {});
     ADDABLE_SECTIONS.forEach((t) => sel.append(el("option", { value: t }, SECTION_LABELS[t] || t)));
     const addBtn = el("button", { class: "btn btn-add", type: "button", onclick: () => {
@@ -522,6 +551,8 @@ function sectionEditor(s) {
         textField(d, "videoLabel", "תיאור הוידאו (נגישות)"));
     case "locations":
       return locationsEditor(d);
+    case "dynamic":
+      return dynamicSectionEditor(s);
     case "social":
       d.links = d.links || [];
       return el("div", {},
@@ -537,6 +568,42 @@ function sectionEditor(s) {
     default:
       return el("div", { class: "muted" }, "אזור מסוג זה אינו נתמך לעריכה.");
   }
+}
+
+/* ---------------- dynamic (universal-ingestion) fields ---------------- */
+// Adapts a universal.js field id to the {obj,key} shape textField/imageField
+// expect, so those existing builders work unmodified against a live DOM node.
+function bindField(id) {
+  const o = {};
+  Object.defineProperty(o, "value", {
+    get: () => state.universal.registry.getFieldValue(id),
+    set: (v) => { state.universal.registry.setFieldValue(id, v); markDirty(); },
+  });
+  return o;
+}
+
+function dynamicSectionEditor(s) {
+  return el("div", {}, ...(s.data.fieldIds || []).map(dynamicFieldRow));
+}
+
+function dynamicFieldRow(id) {
+  const meta = state.universal.registry.getFieldMeta(id);
+  if (!meta) return el("div", {});
+  if (meta.kind === "image") {
+    const adapter = bindField(id);
+    adapter.__docPath = meta.docPath;
+    return imageField(adapter, "value", meta.label);
+  }
+  if (meta.kind === "group") {
+    return el("div", {},
+      el("p", { class: "muted", style: "font-size:.85rem" }, meta.label + ":"),
+      repeater(meta.items, {
+        locked: true,
+        title: (_item, i) => `#${i + 1}`,
+        render: (item) => el("div", {}, ...item.fieldIds.map(dynamicFieldRow)),
+      }));
+  }
+  return textField(bindField(id), "value", meta.label, meta.label.length > 30 ? { area: true, rows: 2 } : {});
 }
 
 function menuEditor(d) {
@@ -668,6 +735,10 @@ function defaultSection(type) {
 /* ---------------- save / publish / import ---------------- */
 function save() {
   if (state.busy) return;
+  if (state.mode === "dynamic") {
+    setStatus("עריכה זו אינה נשמרת בין רענונים — הורידו ZIP כדי לשמור.", "warn");
+    return;
+  }
   try {
     saveDraft(state.site);
     state.dirty = false;
@@ -750,41 +821,250 @@ async function publishToGitHub() {
   } finally { state.busy = false; }
 }
 
-function importFromFile() {
-  const inp = el("input", { type: "file", accept: ".html,.json,text/html,application/json", style: "display:none" });
-  inp.addEventListener("change", async () => {
-    const f = inp.files[0];
-    if (!f) return;
-    try {
-      const text = await f.text();
-      let site;
-      if (/\.json$/i.test(f.name) || text.trim().startsWith("{")) site = JSON.parse(text);
-      else site = extractEmbedded(text);
-      if (!site || !site.sections) throw new Error("לא נמצא תוכן אתר בקובץ");
-      state.site = site;
-      saveDraft(site);
-      state.dirty = false;
-      renderEditor();
-      setStatus("האתר נטען לעריכה ✓", "ok");
-    } catch (err) {
-      setStatus("טעינה נכשלה: " + err.message, "err");
-    }
-  });
-  document.body.appendChild(inp); inp.click(); inp.remove();
-}
-
+/* ---------------- import: folder upload, classification, routing ---------------- */
 function extractEmbedded(html) {
   const m = html.match(/<script[^>]*id=["']cms-data["'][^>]*>([\s\S]*?)<\/script>/i);
   if (!m) return null;
   return JSON.parse(m[1].replace(/\\u003c/g, "<"));
 }
 
+function openImportModal() {
+  const backdrop = el("div", { class: "modal-backdrop" });
+  const close = () => backdrop.remove();
+
+  const folderInput = el("input", { type: "file", webkitdirectory: true, directory: true, multiple: true, style: "display:none" });
+  const fileInput = el("input", { type: "file", accept: ".html,.json,text/html,application/json", style: "display:none" });
+
+  const dropzone = el("div", { class: "dropzone" },
+    el("p", {}, "גררו לכאן תיקיית אתר"),
+    el("p", { class: "muted", style: "font-size:.8rem;margin:2px 0 0" }, "או"));
+
+  const modal = el("div", { class: "import-modal card" },
+    el("h2", {}, "טעינת אתר"),
+    el("p", { class: "muted" }, "בחרו תיקייה עם קבצי האתר (HTML, CSS, תמונות...), או גררו אותה לכאן. לא צריך לדעת איזה קובץ בדיוק — המערכת תזהה את זה לבד."),
+    dropzone,
+    el("div", { class: "row", style: "margin-top:14px" },
+      el("button", { class: "btn btn-primary", type: "button", onclick: () => folderInput.click() }, "בחירת תיקייה"),
+      el("button", { class: "btn btn-sm", type: "button", onclick: () => fileInput.click() }, "בחירת קובץ בודד")),
+    folderInput, fileInput,
+    el("button", { class: "btn btn-sm", type: "button", style: "margin-top:18px", onclick: close }, "ביטול"));
+
+  backdrop.append(modal);
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) close(); });
+
+  const go = async (files) => { close(); await handleIncomingFiles(files); };
+  folderInput.addEventListener("change", () => folderInput.files.length && go([...folderInput.files]));
+  fileInput.addEventListener("change", () => fileInput.files.length && go([...fileInput.files]));
+
+  dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("drag-over"); });
+  dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag-over"));
+  dropzone.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("drag-over");
+    const files = await filesFromDataTransfer(e.dataTransfer);
+    await go(files);
+  });
+
+  document.body.append(backdrop);
+}
+
+function openPagePicker(candidates, onChoose) {
+  const backdrop = el("div", { class: "modal-backdrop" });
+  const close = () => backdrop.remove();
+  const modal = el("div", { class: "import-modal card" },
+    el("h2", {}, "כמה עמודים נמצאו"),
+    el("p", { class: "muted" }, "בחרו את עמוד הבית של האתר:"),
+    el("div", { class: "picker-list" },
+      ...candidates.map((c) =>
+        el("button", { class: "btn", type: "button", style: "display:flex;justify-content:space-between;width:100%;margin:4px 0", onclick: () => { close(); onChoose(c.path); } },
+          el("span", {}, c.title || c.path), el("span", { class: "muted" }, c.path)))),
+    el("button", { class: "btn btn-sm", type: "button", style: "margin-top:14px", onclick: close }, "ביטול"));
+  backdrop.append(modal);
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) close(); });
+  document.body.append(backdrop);
+}
+
+// Recursively reads a dropped folder via the (Chromium-family) FileSystem
+// Entry API; falls back to a flat file list (no nested folders) elsewhere.
+async function filesFromDataTransfer(dt) {
+  const items = dt.items ? [...dt.items] : [];
+  if (items.length && items[0].webkitGetAsEntry) {
+    const entries = items.map((it) => it.webkitGetAsEntry()).filter(Boolean);
+    if (entries.length) {
+      const files = [];
+      await Promise.all(entries.map((entry) => walkEntry(entry, "", files)));
+      if (files.length) return files;
+    }
+  }
+  return dt.files ? [...dt.files] : [];
+}
+function walkEntry(entry, prefix, out) {
+  return new Promise((resolve) => {
+    if (entry.isFile) {
+      entry.file((file) => {
+        try { Object.defineProperty(file, "relativePath", { value: prefix + entry.name, configurable: true }); } catch {}
+        out.push(file);
+        resolve();
+      }, () => resolve());
+    } else if (entry.isDirectory) {
+      const reader = entry.createReader();
+      const readBatch = () => {
+        reader.readEntries(async (batch) => {
+          if (!batch.length) { resolve(); return; }
+          await Promise.all(batch.map((e) => walkEntry(e, prefix + entry.name + "/", out)));
+          readBatch(); // one call can return a partial batch — keep reading until empty
+        }, () => resolve());
+      };
+      readBatch();
+    } else resolve();
+  });
+}
+
+const TEXT_FILE_RE = /\.(html?|css|m?js|json|svg|txt|xml|map)$/i;
+function filePath(file) { return file.webkitRelativePath || file.relativePath || file.name; }
+
+async function buildFileMap(rawFiles) {
+  const paths = rawFiles.map(filePath);
+  // Strip a single shared leading folder segment (e.g. "my-site/") if every
+  // path has one, so map keys are root-relative regardless of how the
+  // folder was picked.
+  const firstSegs = paths.map((p) => p.split("/")[0]);
+  const stripPrefix = paths.every((p) => p.includes("/")) && firstSegs.every((s) => s === firstSegs[0])
+    ? firstSegs[0] + "/" : "";
+
+  const map = new Map();
+  for (let i = 0; i < rawFiles.length; i++) {
+    const file = rawFiles[i];
+    let path = paths[i];
+    if (stripPrefix && path.startsWith(stripPrefix)) path = path.slice(stripPrefix.length);
+    if (!path) continue;
+    const kind = TEXT_FILE_RE.test(path) ? "text" : "binary";
+    const entry = { path, kind, file };
+    if (kind === "text") { try { entry.text = await file.text(); } catch { entry.text = ""; } }
+    map.set(path, entry);
+  }
+  return map;
+}
+
+function pageTitle(html) {
+  const m = /<title>([\s\S]*?)<\/title>/i.exec(html);
+  return m ? m[1].trim() : "";
+}
+
+// Never rejects with a hard error — only routes to one of: an existing
+// round-trip/leverage-cms site (fixed schema), a generic site (universal.js),
+// an ambiguous multi-page picker, or the one friendly "no HTML found" note.
+function classifySite(fileMap) {
+  const entries = [...fileMap.values()];
+  const htmlEntries = entries.filter((e) => e.kind === "text" && /\.html?$/i.test(e.path));
+
+  if (htmlEntries.length === 0) {
+    for (const e of entries.filter((x) => x.kind === "text" && /\.json$/i.test(x.path))) {
+      try {
+        const parsed = JSON.parse(e.text);
+        if (parsed && Array.isArray(parsed.sections)) return { kind: "fixed", site: parsed };
+      } catch {}
+    }
+    return { kind: "none" };
+  }
+
+  for (const e of htmlEntries) {
+    const embedded = extractEmbedded(e.text);
+    if (embedded && embedded.sections) return { kind: "fixed", site: embedded };
+  }
+
+  const siteJson = fileMap.get("content/site.json") || fileMap.get("site.json");
+  if (siteJson) {
+    try {
+      const parsed = JSON.parse(siteJson.text);
+      if (parsed && Array.isArray(parsed.sections)) return { kind: "fixed", site: parsed };
+    } catch {}
+  }
+
+  const depth = (p) => (p.match(/\//g) || []).length;
+  const shallowest = Math.min(...htmlEntries.map((e) => depth(e.path)));
+  let candidates = htmlEntries.filter((e) => depth(e.path) === shallowest);
+  const indexCandidate = candidates.find((e) => /(^|\/)index\.html?$/i.test(e.path));
+  if (indexCandidate) candidates = [indexCandidate];
+
+  if (candidates.length === 1) {
+    const rootPath = candidates[0].path;
+    return { kind: "generic", rootPath, otherHtmlPaths: htmlEntries.map((e) => e.path).filter((p) => p !== rootPath) };
+  }
+  return { kind: "ambiguous", candidates: candidates.map((e) => ({ path: e.path, title: pageTitle(e.text) })) };
+}
+
+async function handleIncomingFiles(rawFiles) {
+  if (!rawFiles || !rawFiles.length) return;
+  setStatus("קורא קבצים…", "");
+  try {
+    const fileMap = await buildFileMap(rawFiles);
+    await routeFileMap(fileMap);
+  } catch (err) {
+    setStatus("טעינה נכשלה: " + err.message, "err");
+  }
+}
+
+async function routeFileMap(fileMap, chosenRootPath) {
+  const result = chosenRootPath
+    ? { kind: "generic", rootPath: chosenRootPath, otherHtmlPaths: [...fileMap.values()]
+        .filter((e) => e.kind === "text" && /\.html?$/i.test(e.path) && e.path !== chosenRootPath)
+        .map((e) => e.path) }
+    : classifySite(fileMap);
+
+  if (result.kind === "none") {
+    setStatus("לא נמצא קובץ HTML בתיקייה שנבחרה. ודאו שהתיקייה מכילה את קבצי האתר.", "err");
+    return;
+  }
+  if (result.kind === "ambiguous") {
+    openPagePicker(result.candidates, (chosen) => routeFileMap(fileMap, chosen));
+    return;
+  }
+  if (result.kind === "fixed") {
+    state.mode = "fixed";
+    state.universal = null;
+    state.site = result.site;
+    saveDraft(state.site);
+    state.dirty = false;
+    renderEditor();
+    setStatus("האתר נטען לעריכה ✓", "ok");
+    return;
+  }
+
+  setStatus("מנתח את מבנה האתר…", "");
+  const { analyzeSite } = await import("./universal.js");
+  const analysis = analyzeSite(fileMap, { rootPath: result.rootPath, otherHtmlPaths: result.otherHtmlPaths });
+  state.mode = "dynamic";
+  state.universal = analysis;
+  state.site = { meta: {}, sections: analysis.sections };
+  state.dirty = false;
+  renderEditor();
+  setStatus(`האתר נטען לעריכה ✓ (${analysis.sections.length} אזורי תוכן זוהו)`, analysis.sections.length ? "ok" : "warn");
+}
+
 function download(name, text, type) {
-  const blob = new Blob([text], { type: type + ";charset=utf-8" });
+  downloadBlob(name, new Blob([text], { type: type + ";charset=utf-8" }));
+}
+function downloadBlob(name, blob) {
   const url = URL.createObjectURL(blob);
   const a = el("a", { href: url, download: name });
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+async function downloadZip() {
+  if (state.busy || !state.universal) return;
+  state.busy = true;
+  setStatus("מכין קובץ ZIP…", "");
+  try {
+    const [{ serializeForZip }, { zipFiles }] = await Promise.all([import("./universal.js"), import("./zip.js")]);
+    const entries = await serializeForZip(state.universal);
+    const blob = await zipFiles(entries);
+    downloadBlob((SITE_ID || "site") + ".zip", blob);
+    setStatus("האתר הורד! מוכן להעלאה ✓", "ok");
+  } catch (err) {
+    setStatus("ההורדה נכשלה: " + err.message, "err");
+  } finally { state.busy = false; }
 }
 
 /* ---------------- image / video to data-URI ---------------- */
@@ -836,6 +1116,10 @@ async function togglePreview() {
   if (previewOn) await refreshPreview();
 }
 async function refreshPreview() {
+  if (state.mode === "dynamic") {
+    $previewFrame.srcdoc = `<!doctype html><meta charset=utf-8><body style="font-family:sans-serif;padding:24px;color:#444">תצוגה מקדימה אינה זמינה לאתרים כלליים שהועלו. השתמשו ב"הורדת אתר (ZIP)" ופתחו את index.html שבפנים.</body>`;
+    return;
+  }
   try {
     const [{ render }, tplRes] = await Promise.all([
       import("../render.mjs"),
@@ -872,10 +1156,38 @@ function buildFontsHref(fonts) {
   fams.add("Amatic+SC:wght@700");
   return "https://fonts.googleapis.com/css2?" + [...fams].filter(Boolean).map((f) => "family=" + f).join("&") + "&display=swap";
 }
-function resolveAssetForPreview(p) {
+function resolveAssetForPreview(p, docPath) {
   if (/^https?:|^data:|^blob:/.test(p)) return p;
+  if (state.mode === "dynamic") return docPath ? resolveDynamicAsset(p, docPath) : p;
   const base = new URL(templateUrl());
   return base.origin + base.pathname.replace(/[^/]+$/, "") + p;
+}
+
+// Resolves a generic uploaded site's own relative asset path (e.g.
+// "assets/photo.jpg") against its own file map for thumbnail previews —
+// the kit's own resolveAssetForPreview base is wrong for these, since the
+// image lives in the uploaded folder, not next to this CMS.
+const dynamicAssetUrlCache = new Map();
+function normalizeAssetPath(p) {
+  const parts = [];
+  for (const seg of p.split("/")) {
+    if (seg === "." || seg === "") continue;
+    if (seg === "..") parts.pop(); else parts.push(seg);
+  }
+  return parts.join("/");
+}
+function resolveDynamicAsset(rawPath, docPath) {
+  const fileMap = state.universal && state.universal.fileMap;
+  if (!fileMap) return rawPath;
+  const dir = docPath.includes("/") ? docPath.slice(0, docPath.lastIndexOf("/") + 1) : "";
+  for (const candidate of [rawPath, normalizeAssetPath(dir + rawPath)]) {
+    const entry = fileMap.get(candidate);
+    if (entry) {
+      if (!dynamicAssetUrlCache.has(candidate)) dynamicAssetUrlCache.set(candidate, URL.createObjectURL(entry.file));
+      return dynamicAssetUrlCache.get(candidate);
+    }
+  }
+  return rawPath;
 }
 function defaultHours() { const h = {}; for (let i = 0; i < 7; i++) h[String(i)] = [9, 17]; return h; }
 

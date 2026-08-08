@@ -8,16 +8,16 @@
       "port": 8741
     },
     {
-      "name": "cms-dev-mock",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["leverage-cms/tools/dev-mock.mjs"],
-      "port": 8799
-    },
-    {
       "name": "truck-kit",
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8743", "--directory", "truck-site-kit"],
       "port": 8743
+    },
+    {
+      "name": "cms-redesign",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8745", "--directory", "cms-dashboard-redesign"],
+      "port": 8745
     }
   ]
 }
