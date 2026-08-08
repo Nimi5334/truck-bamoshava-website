@@ -6,36 +6,36 @@
 <title>עריכת האתר · Truck Site Kit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ─── Tokens ─────────────────────────────────────────────── */
+/* ─── Tokens (V4 design system: cream / teal / gold) ────────── */
 :root {
-  --bg:           #f5f0e8;
+  --bg:           #FBF8F3;
   --surface:      #ffffff;
-  --surface-2:    #ede8df;
-  --surface-3:    #e4ddd2;
-  --border:       #d6cec2;
-  --border-soft:  #e6dfd5;
+  --surface-2:    #F1EDE4;
+  --surface-3:    #E8E2D5;
+  --border:       #DEDAD0;
+  --border-soft:  #E7E3DA;
 
-  --ink:          #28201a;
-  --ink-2:        #6b5c4f;
-  --ink-3:        #a8978a;
+  --ink:          #141F1C;
+  --ink-2:        #5F6B67;
+  --ink-3:        #5E6963;
 
-  --clay:         #bf6e3a;   /* main accent */
-  --clay-dark:    #9e5626;
-  --clay-light:   #f7ece1;
-  --clay-line:    #e8c4a4;
+  --clay:         #14564C;   /* main accent (teal) */
+  --clay-dark:    #0E4239;
+  --clay-light:   rgba(20,86,76,.09);
+  --clay-line:    rgba(20,86,76,.35);
 
   --ok:           #3d7a52;
   --ok-bg:        #ebf5ef;
-  --warn:         #a97318;
-  --warn-bg:      #fdf6e3;
-  --err:          #b83a28;
-  --err-bg:       #fdf0ed;
+  --warn:         #9A6E14;
+  --warn-bg:      rgba(154,110,20,.11);
+  --err:          #A8412C;
+  --err-bg:       rgba(168,65,44,.09);
 
-  --r:    14px;
-  --r-sm: 8px;
-  --r-xs: 5px;
+  --r:    16px;
+  --r-sm: 11px;
+  --r-xs: 6px;
 }
 
 /* ─── Base ───────────────────────────────────────────────── */
@@ -45,7 +45,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Rubik", system-ui, sans-serif;
+  font-family: "Heebo", system-ui, sans-serif;
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -62,8 +62,8 @@ a { color: var(--clay-dark); }
   justify-content: center;
   padding: 24px;
   background:
-    radial-gradient(ellipse 60% 40% at 15% 20%, rgba(191,110,58,.10) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 85% 75%, rgba(61,122,82,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 15% 20%, rgba(20,86,76,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 75%, rgba(154,110,20,.07) 0%, transparent 60%),
     var(--bg);
 }
 
@@ -73,8 +73,8 @@ a { color: var(--clay-dark); }
   border-radius: var(--r);
   overflow: hidden;
   box-shadow:
-    0 4px 24px rgba(40,32,26,.10),
-    0 1px 4px  rgba(40,32,26,.06);
+    0 4px 24px rgba(20,31,28,.10),
+    0 1px 4px  rgba(20,31,28,.06);
 }
 
 .login-card { width: min(400px, 100%); }
@@ -82,7 +82,7 @@ a { color: var(--clay-dark); }
   content: "";
   display: block;
   height: 6px;
-  background: linear-gradient(90deg, var(--clay) 0%, #d4885a 100%);
+  background: linear-gradient(90deg, var(--clay) 0%, #2D7A6C 100%);
 }
 .login-card > *:not(:first-child) { padding-inline: 32px; }
 .login-card h1 {
@@ -103,7 +103,7 @@ a { color: var(--clay-dark); }
   color: var(--ink) !important;
   margin: 6px 0 16px !important;
   font-size: 15px !important;
-  font-family: "Rubik", sans-serif !important;
+  font-family: "Heebo", sans-serif !important;
   outline: none !important;
   transition: border-color .18s, box-shadow .18s !important;
 }
@@ -126,7 +126,7 @@ a { color: var(--clay-dark); }
   background: var(--surface);
   border-bottom: 1px solid var(--border-soft);
   border-top: 3px solid var(--clay);
-  box-shadow: 0 1px 6px rgba(40,32,26,.07);
+  box-shadow: 0 1px 6px rgba(20,31,28,.07);
 }
 .topbar .title { font-weight: 800; font-size: .88rem; letter-spacing: -.01em; color: var(--clay); }
 .topbar .site-id {
@@ -167,10 +167,10 @@ a { color: var(--clay-dark); }
   border-radius: var(--r);
   margin-bottom: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(40,32,26,.06);
+  box-shadow: 0 1px 4px rgba(20,31,28,.06);
   transition: box-shadow .2s, border-color .2s;
 }
-.panel[open] { border-color: var(--clay-line); box-shadow: 0 3px 14px rgba(40,32,26,.09); }
+.panel[open] { border-color: var(--clay-line); box-shadow: 0 3px 14px rgba(20,31,28,.09); }
 .panel > summary {
   list-style: none;
   cursor: pointer;
@@ -202,14 +202,14 @@ a { color: var(--clay-dark); }
   flex-shrink: 0;
   width: 20px;
   height: 20px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23a8978a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%235e6963' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
   transition: transform .2s;
 }
 .panel[open] > summary::before {
   transform: rotate(180deg);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%239e5626' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%230e4239' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
 }
 .panel .panel-body { padding: 8px 18px 22px; border-top: 1px solid var(--border-soft); animation: slideIn .18s ease; }
 @keyframes slideIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
@@ -290,13 +290,13 @@ a { color: var(--clay-dark); }
   border-color: var(--clay);
   color: #fff;
   font-weight: 700;
-  box-shadow: 0 1px 3px rgba(40,32,26,.15);
+  box-shadow: 0 1px 3px rgba(20,31,28,.15);
 }
-.btn-primary:hover { background: var(--clay-dark); border-color: var(--clay-dark); color: #fff; box-shadow: 0 2px 8px rgba(40,32,26,.20); }
+.btn-primary:hover { background: var(--clay-dark); border-color: var(--clay-dark); color: #fff; box-shadow: 0 2px 8px rgba(20,31,28,.20); }
 .btn-primary:active { transform: scale(.96); }
 
 .btn-sm { padding: 4px 10px; font-size: .77rem; border-radius: 6px; }
-.btn-danger:hover { background: var(--err-bg); border-color: #e0b0a8; color: var(--err); }
+.btn-danger:hover { background: var(--err-bg); border-color: rgba(168,65,44,.35); color: var(--err); }
 
 .btn-add {
   width: 100%;
@@ -399,7 +399,7 @@ a { color: var(--clay-dark); }
 }
 .zone-row.status-ok   { border-inline-end-color: var(--ok); }
 .zone-row.status-warn { border-inline-end-color: var(--warn); border-inline-end-style: dashed; }
-.zone-row:hover { box-shadow: 0 1px 6px rgba(40,32,26,.08); }
+.zone-row:hover { box-shadow: 0 1px 6px rgba(20,31,28,.08); }
 .zone-row-head {
   display: flex;
   align-items: center;
@@ -427,7 +427,7 @@ a { color: var(--clay-dark); }
 .zone-row-head .toggle { font-size: .78rem; }
 .zone-row-head .zone-caret {
   width: 18px; height: 18px; flex-shrink: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23a8978a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%235e6963' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
   transition: transform .18s;
@@ -443,7 +443,7 @@ a { color: var(--clay-dark); }
   background: var(--surface);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-sm);
-  box-shadow: 0 6px 20px rgba(40,32,26,.16);
+  box-shadow: 0 6px 20px rgba(20,31,28,.16);
   min-width: 150px;
   padding: 5px;
   z-index: 10;
@@ -488,7 +488,7 @@ a { color: var(--clay-dark); }
   bottom: 0;
   background: var(--surface);
   border-top: 1px solid var(--border-soft);
-  box-shadow: 0 -2px 14px rgba(40,32,26,.07);
+  box-shadow: 0 -2px 14px rgba(20,31,28,.07);
   padding: 12px 22px;
   display: flex;
   gap: 12px;
@@ -497,9 +497,40 @@ a { color: var(--clay-dark); }
 }
 .savebar .btn-primary { padding: 11px 26px; font-size: .94rem; border-radius: var(--r-sm); }
 
+/* ─── Import modal / folder upload ───────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(20,31,28,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.import-modal {
+  width: min(440px, 100%);
+  padding: 26px 28px 22px;
+}
+.import-modal h2 { margin: 0 0 6px; font-size: 1.2rem; font-weight: 800; color: var(--ink); }
+.import-modal > p.muted { margin: 0 0 16px; font-size: .88rem; }
+
+.dropzone {
+  border: 2px dashed var(--border);
+  border-radius: var(--r);
+  padding: 26px 16px;
+  text-align: center;
+  color: var(--ink-2);
+  transition: border-color .15s, background .15s;
+}
+.dropzone p { margin: 0; font-size: .88rem; }
+.dropzone.drag-over { border-color: var(--clay); background: var(--clay-light); }
+
+.picker-list { display: flex; flex-direction: column; gap: 6px; max-height: 320px; overflow-y: auto; }
+
 /* ─── Select custom arrow ────────────────────────────────── */
 .field select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23a8978a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%235e6963' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: left 10px center;
   background-size: 18px;
